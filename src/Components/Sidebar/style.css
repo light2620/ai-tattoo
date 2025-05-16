@@ -1,0 +1,46 @@
+.sidebar {
+    width: 200px;
+    background-color: white;
+    padding: 20px;
+    height: 100vh; /* full height */
+    box-sizing: border-box;
+    border-right: 2px solid #FFCC4A; /* yellow accent */
+    width : 20%;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color:rgb(37, 45, 56);
+    margin-bottom: 10px;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-left: 4px solid transparent;
+    border-radius: 4px 0 0 4px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  
+  .nav-link:hover {
+    background-color: #e0e7ff; /* light blue */
+    color: #2563eb; /* blue */
+  }
+  
+  .nav-link.active {
+    background-color: #2563eb; /* blue */
+    color: white;
+  /* purple accent for active left border */
+    border-radius: 10px;
+  }
+  
+  .nav-icon {
+    margin-right: 10px;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .title{
+    font-size: 1.2rem;
+    font-weight: 600;
+
+  }
+  

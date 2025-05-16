@@ -1,24 +1,26 @@
-import logo from './logo.svg';
+import Logo from './Components/Logo';
 import './App.css';
-
+import { UserProvider } from './Context/userContext';
+import { Outlet } from 'react-router-dom';
+import  { Toaster } from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 function App() {
+  const location = useLocation();
+ const isDasboard = location.pathname.includes('/dashboard');
+ console.log(isDasboard);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+    <UserProvider>
+      <div className="App">
+       <Logo />
+        <div className='view-container'>
+          <Outlet />
+        </div>
+     
+      </div>
+      <Toaster />
+      </UserProvider>
+    
   );
 }
 

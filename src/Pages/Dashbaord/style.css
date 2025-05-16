@@ -1,0 +1,55 @@
+.home-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+  
+  .input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap; /* responsive wrap */
+  }
+  
+  .dashed-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px dashed #6b7280; /* gray dashed border */
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    min-width: 200px;
+  }
+  
+  .dashed-input:focus {
+    border-color: #2563eb; /* blue on focus */
+  }
+  
+  .generate-btn {
+    padding: 10px 20px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex-shrink: 0;
+  }
+  
+  .generate-btn:hover {
+    background-color: #1e40af;
+  }
+  
+  .image-preview {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
