@@ -9,7 +9,8 @@ import { setUserData } from "../Redux/Slice/userSlice";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const {post ,loading} = useApi();
+  const {post} = useApi();
+  const [loading, setLoading] = useState(false);
   const [user,setUser] = useState(null);
   const [isAdmin,setIsAdmin] = useState(false);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
@@ -55,6 +56,7 @@ export const UserProvider = ({ children }) => {
 
   const login = async (credentials,setCredentials) => {
     try {
+      setLoading(true);
       const response =  await post("https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/signinUser", credentials);
       console.log("Login response:", response);
       if (response.status === 200) {
@@ -72,11 +74,15 @@ export const UserProvider = ({ children }) => {
           email: "",
           password: ""
         });
+        setLoading(false);
         toast.success("Login successful");
         navigate("/dashboard");
+
       }
     } catch (error) {
       console.error("Login failed:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,6 +108,7 @@ export const UserProvider = ({ children }) => {
 
   const register = async(credentials,setCredentials) => {
     try{
+      setLoading(true);
          const response = await post("https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/signupUser", credentials);
          console.log(response)
          if (response.data?.result?.success) {                                      
@@ -110,15 +117,18 @@ export const UserProvider = ({ children }) => {
             password: ""
           });
           toast.success(response.data?.message);
+          setLoading(false);
           navigate("/signin");
         }
     }catch(err){
       console.error("Registration failed:", err.message);
       toast.error(err.response.data.error);
+    } finally {
+      setLoading(false);
     }
   }
   return (
-    <UserContext.Provider value={{  login, logout, register,user,loading,isAdmin,resetPassword}}>
+    <UserContext.Provider value={{  login, logout, register,user,isAdmin,resetPassword,loading}}>
       {children}
     </UserContext.Provider>
   );

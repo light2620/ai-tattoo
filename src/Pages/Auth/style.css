@@ -76,6 +76,12 @@
     justify-content: center;
     gap: 1rem;
   }
+  .login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
   
   .login-panel .p-button::after {
     content: "";

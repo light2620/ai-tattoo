@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './style.css';
+import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Link } from 'react-router-dom'; // for routing
@@ -9,12 +10,16 @@ const SignIn = () => {
           email: "",
           password: ""
       })
-  const { login} = useUser(); 
+      
+
+  const { login,loading} = useUser(); 
   
-  function handleLogin(e) {
-    e.preventDefault();
-    login(credentials,setCredentials);
-  }
+ const handleLogin = async (e) => {
+  e.preventDefault();
+
+    await login(credentials, setCredentials);
+   
+};
 
   return (
     <div className="login">
@@ -52,7 +57,11 @@ const SignIn = () => {
           <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
         </div>
 
-        <Button type="submit" onClick={handleLogin}>LOGIN</Button>
+        <Button type="submit" disabled={loading} className="login-btn">
+  {loading && <i className="pi pi-spin pi-spinner"></i>}
+  <span>{loading ? 'Logging In...' : 'LOGIN'}</span>
+</Button>
+
       </form>
     </div>
   );
