@@ -6,20 +6,20 @@ import { InputText } from 'primereact/inputtext';
 import { Link } from 'react-router-dom'; // for routing
 import { useUser } from '../../Context/userContext';
 const SignIn = () => {
-   const [ credentials, setCredentials ] = useState({
-          email: "",
-          password: ""
-      })
-      
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: ""
+  })
 
-  const { login,loading} = useUser(); 
-  
- const handleLogin = async (e) => {
-  e.preventDefault();
 
-    await login(credentials, setCredentials);
-   
-};
+  const { login, loading } = useUser();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    login(credentials, setCredentials);
+
+  };
 
   return (
     <div className="login">
@@ -57,10 +57,10 @@ const SignIn = () => {
           <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
         </div>
 
-        <Button type="submit" disabled={loading} className="login-btn">
-  {loading && <i className="pi pi-spin pi-spinner"></i>}
-  <span>{loading ? 'Logging In...' : 'LOGIN'}</span>
-</Button>
+        <Button type="submit" disabled={loading} className="auth-btn">
+          {loading && <i className="pi pi-spin pi-spinner"></i>}
+          <span>Login</span>
+        </Button>
 
       </form>
     </div>

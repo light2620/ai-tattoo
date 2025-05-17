@@ -18,6 +18,10 @@ export const router = createBrowserRouter([
       {
         element: <UnProtectedRoute />, // 👈 wrapper
         children: [
+           {
+            path: "/",
+            element: <SignIn />
+          },
           {
             path: "signin",
             element: <SignIn />

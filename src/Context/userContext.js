@@ -92,6 +92,7 @@ export const UserProvider = ({ children }) => {
   };
   const resetPassword = async(credentials,setCredentials)=>{
         try{
+          setLoading(true);
             const response = await post("https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/forgotPassword",credentials);
           
             if(response.status === 200){
@@ -99,10 +100,13 @@ export const UserProvider = ({ children }) => {
                 setCredentials({
                     email: ""
                 });
+                setLoading(false);
                 navigate("/signin");
             }
         }catch(err){
           console.log(err);
+        }finally{
+          setLoading(false);
         }
   }
 

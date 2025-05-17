@@ -4,11 +4,11 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Link } from 'react-router-dom'; // for routing
 import { useUser } from '../../Context/userContext';
-const SignIn = () => {
+const ForgotPassword = () => {
    const [ credentials, setCredentials ] = useState({
           email: ""
       })
-  const { resetPassword} = useUser(); 
+  const { resetPassword,loading} = useUser(); 
   
   function handleLogin(e) {
     e.preventDefault();
@@ -34,10 +34,13 @@ const SignIn = () => {
         <div>
             <Link className="auth-link" to="/signin">Back to Sign In</Link>
         </div>
-        <Button type="submit" onClick={handleLogin}>Submit</Button>
+        <Button type="submit" disabled={loading} className="auth-btn">
+                  {loading && <i className="pi pi-spin pi-spinner"></i>}
+                  <span>Submit</span>
+                </Button>
       </form>
     </div>
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

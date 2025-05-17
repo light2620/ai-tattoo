@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button } from 'primereact/button';
+import 'primeicons/primeicons.css';
 import { InputText } from 'primereact/inputtext';
-import { Link } from 'react-router-dom'; // for routing
+import { Link } from 'react-router-dom'; 
 import { useState } from 'react';   
 import './style.css'
 import { useUser } from '../../Context/userContext';
@@ -11,7 +12,7 @@ const SignUp = () => {
         email: "",
         password: ""
     })
-    const { register } = useUser();
+    const { register,loading } = useUser();
     function handleLogin(e) {
         e.preventDefault()
         register(credentials, setCredentials);
@@ -63,7 +64,10 @@ const SignUp = () => {
           <p >Already have a account?<Link to="/signin"  className="auth-link"> Sign In</Link></p>
         </div>
 
-        <Button type="submit">Sign Up</Button>
+        <Button type="submit" disabled={loading} className="auth-btn">
+          {loading && <i className="pi pi-spin pi-spinner"></i>}
+          <span>Sign up</span>
+        </Button>
       </form>
     </div>
   )

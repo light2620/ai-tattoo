@@ -76,11 +76,18 @@
     justify-content: center;
     gap: 1rem;
   }
-  .login-btn {
+  .auth-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+.auth-btn:disabled {
+  background-color: #ffffff !important;      
+  opacity: 0.6;                          
+  cursor: not-allowed !important;        
+  border: 1px solid #ccc;                
 }
   
   .login-panel .p-button::after {
