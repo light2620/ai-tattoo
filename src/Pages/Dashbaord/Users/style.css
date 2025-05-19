@@ -40,3 +40,12 @@
 .user-table tbody tr:hover {
   background-color: #e0e7ff; /* Light blue hover */
 }
+
+.delete-user{ 
+    color: red;
+    cursor : pointer;
+}
+.delete-user:hover{
+    text-decoration : underline;
+
+}
