@@ -5,17 +5,19 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { jwtDecode } from 'jwt-decode'; 
 import { getUserDetails } from "../Api/getUserDataApi";
-
+import { useMemo } from "react";  
+import { useDispatch } from "react-redux";
+import { setImages } from "../Redux/ImagesSlice";
+import { setImageLoading } from "../Redux/ImagesSlice";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const {post} = useApi();
   const [loading, setLoading] = useState(false);
   const [user,setUser] = useState(null);
-  const [images, setImages] = useState([]); 
   const [role,setRole] = useState("");
   const [isLoggedIn,setIsLoggedIn] = useState(false);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   console.log(user);
   useEffect(() => {
@@ -32,12 +34,12 @@ export const UserProvider = ({ children }) => {
           return;
         }
 
-        const userData = await getUserDetails(post);
+        const userData = await getUserDetails(dispatch, post, setImageLoading);
         if (userData) {
           setUser(userData);
           setRole(userData.role);  
           setIsLoggedIn(true);
-          setImages(userData.generateImages);
+          dispatch(setImages(userData.generateImages));
         } else {
           console.error("Failed to fetch user details");
         }
@@ -122,8 +124,19 @@ export const UserProvider = ({ children }) => {
       setLoading(false);
     }
   }
+    const value = useMemo(() => ({
+    login,
+    logout,
+    register,
+    user,
+    role,
+    resetPassword,
+    loading,
+
+
+  }), [user, role, loading,]);
   return (
-    <UserContext.Provider value={{  login, logout, register,user,role,resetPassword,loading,setImages,images}}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );

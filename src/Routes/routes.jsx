@@ -1,13 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
-import SignUp from '../Pages/Auth/SignUp';
-import SignIn from '../Pages/Auth/SignIn';
-import ForgotPassword from '../Pages/Auth/ForgotPassword';
-import DashboardLayout from '../Layout/Dashboard/DashboardLayout';
-import Home from '../Pages/Dashbaord/Home';
+import {lazy } from 'react'
 import UnProtectedRoute from './UnProtectedRoute';
 import ProtectedRoute from './ProtectedRoute';
-import GenratedImages from '../Pages/Dashbaord/GenratedImages/Genrated-Images';
+
+const App = lazy(() => import('../App'));
+
+const SignUp = lazy(() => import('../Pages/Auth/SignUp'));
+const SignIn = lazy(() => import('../Pages/Auth/SignIn'));  
+const ForgotPassword = lazy(() => import('../Pages/Auth/ForgotPassword'));
+const DashboardLayout = lazy(() => import('../Layout/Dashboard/DashboardLayout'));
+const Home = lazy(() => import('../Pages/Dashbaord/Home'));
+const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genrated-Images'));
+
+
+
+
 
 export const router = createBrowserRouter([
   {
@@ -16,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       // Unprotected routes
       {
-        element: <UnProtectedRoute />, // 👈 wrapper
+        element: <UnProtectedRoute />, 
         children: [
            {
             path: "/",

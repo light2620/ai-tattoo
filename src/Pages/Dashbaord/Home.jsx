@@ -2,29 +2,31 @@ import { useState } from 'react';
 import './style.css';
 import { useApi } from '../../Api/apiProvider';
 import Spinner from '../../utils/Spinner/Spinner';
-import { useUser } from '../../Context/userContext';
 import { getUserDetails } from '../../Api/getUserDataApi';
+import { useDispatch } from 'react-redux';
+import { setImages, setImageLoading } from '../../Redux/ImagesSlice';
 const Home = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const { post } = useApi();
-  const { setImages } = useUser();
-  
+
+  const dispatch = useDispatch();
   const handleGenerate = async () => {
     try {
       if (input.trim()) {
         setLoading(true);
-        setImageUrl(''); // clear previous image
+        setImageUrl(''); 
         const response = await post(
           'https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage',
           { prompt: input }
         );
         if (response.data.type === 'success') {
           setImageUrl(response.data.imageUrl);
-          const userResponse = await getUserDetails();
-          if (userResponse.status === 200) {
-            setImages(userResponse.data.user.generateImages);
+          const userResponse = await getUserDetails(dispatch, post, setImageLoading);
+          if (userResponse) {
+            console.log(userResponse)
+            dispatch(setImages(userResponse.generateImages));
           }
         }
       } else {

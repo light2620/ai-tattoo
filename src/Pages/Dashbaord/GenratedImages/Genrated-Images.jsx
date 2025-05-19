@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { FiDownload } from 'react-icons/fi';
 import Spinner from '../../../utils/Spinner/Spinner';
 import './style.css';
-import { useUser } from '../../../Context/userContext';
+import { useSelector } from 'react-redux';
 const GenratedImages = () => {
-  const [loading, setLoading] = useState(true);
-  const {images} = useUser();
-   
 
-  useEffect(() => {
-    if (images && images.length > 0) {
-      setLoading(false);
-    }
-  }, [images]);
-
-
+   const images = useSelector((state) => state.images.images);
+   const loading = useSelector((state) => state.images.imagesLoading);
+   useEffect(() => {},[images]);
   if (loading) {
     return (
       <div className="images-wrapper">
