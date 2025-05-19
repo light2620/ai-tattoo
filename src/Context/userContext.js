@@ -1,23 +1,23 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import {useApi} from "../Api/apiProvider";              
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { jwtDecode } from 'jwt-decode'; 
-import { useDispatch } from "react-redux";
-import { setGenratedImagesData } from "../Redux/Slice/genratedImageSlice";
-import { getGeneratedImages } from "../Api/genratedImagesApi";
+import { getUserDetails } from "../Api/getUserDataApi";
+
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const {post} = useApi();
   const [loading, setLoading] = useState(false);
   const [user,setUser] = useState(null);
-  const [isAdmin,setIsAdmin] = useState(false);
+  const [images, setImages] = useState([]); 
+  const [role,setRole] = useState("");
   const [isLoggedIn,setIsLoggedIn] = useState(false);
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
-  
+  console.log(user);
   useEffect(() => {
     const checkAndFetchUser = async () => {
       const token = localStorage.getItem("Authorization");
@@ -31,9 +31,18 @@ export const UserProvider = ({ children }) => {
           logout();
           return;
         }
-        await getGeneratedImages(dispatch,post,setGenratedImagesData );
+
+        const userData = await getUserDetails(post);
+        if (userData) {
+          setUser(userData);
+          setRole(userData.role);  
+          setIsLoggedIn(true);
+          setImages(userData.generateImages);
+        } else {
+          console.error("Failed to fetch user details");
+        }
+
       } catch (error) {
-        
         console.error("Error validating token or fetching user:", error);
 
       }
@@ -50,14 +59,7 @@ export const UserProvider = ({ children }) => {
       console.log("Login response:", response);
       if (response.status === 200) {
         const token = response.data.idToken
-        console.log("Token:", token);
-        const userData = jwtDecode(token);
         localStorage.setItem('Authorization', token);
-        if(userData.role === "admin"){
-          setIsAdmin(true);
-        }
-        
-        setUser(response.data.userData) 
         setIsLoggedIn(true);                                               
         setCredentials({
           email: "",
@@ -121,7 +123,7 @@ export const UserProvider = ({ children }) => {
     }
   }
   return (
-    <UserContext.Provider value={{  login, logout, register,user,isAdmin,resetPassword,loading}}>
+    <UserContext.Provider value={{  login, logout, register,user,role,resetPassword,loading,setImages,images}}>
       {children}
     </UserContext.Provider>
   );

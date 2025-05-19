@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './style.css';
 import { useApi } from '../../Api/apiProvider';
 import Spinner from '../../utils/Spinner/Spinner';
-import { useDispatch } from 'react-redux';
-import { setGenratedImagesData } from '../../Redux/Slice/genratedImageSlice';
-import { getGeneratedImages } from '../../Api/genratedImagesApi';
+import { useUser } from '../../Context/userContext';
+import { getUserDetails } from '../../Api/getUserDataApi';
 const Home = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const { post } = useApi();
-  const dispatch = useDispatch();
-
+  const { setImages } = useUser();
+  
   const handleGenerate = async () => {
     try {
       if (input.trim()) {
@@ -23,7 +22,10 @@ const Home = () => {
         );
         if (response.data.type === 'success') {
           setImageUrl(response.data.imageUrl);
-          getGeneratedImages(dispatch, post, setGenratedImagesData);
+          const userResponse = await getUserDetails();
+          if (userResponse.status === 200) {
+            setImages(userResponse.data.user.generateImages);
+          }
         }
       } else {
         setImageUrl('');

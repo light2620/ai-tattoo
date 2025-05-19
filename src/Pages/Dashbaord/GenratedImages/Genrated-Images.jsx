@@ -3,19 +3,17 @@ import { useSelector } from 'react-redux';
 import { FiDownload } from 'react-icons/fi';
 import Spinner from '../../../utils/Spinner/Spinner';
 import './style.css';
-
+import { useUser } from '../../../Context/userContext';
 const GenratedImages = () => {
   const [loading, setLoading] = useState(true);
-  const [images, setImages] = useState([]);
-  const generatedImages = useSelector((state) => state.generatedImages.generatedImages);  
+  const {images} = useUser();
+   
 
   useEffect(() => {
-    if (generatedImages && generatedImages.length > 0) {
-      setLoading(true);
-        setImages(generatedImages);
+    if (images && images.length > 0) {
       setLoading(false);
     }
-  }, [generatedImages]);
+  }, [images]);
 
 
   if (loading) {
