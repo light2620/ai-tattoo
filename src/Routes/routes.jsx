@@ -11,6 +11,7 @@ const ForgotPassword = lazy(() => import('../Pages/Auth/ForgotPassword'));
 const DashboardLayout = lazy(() => import('../Layout/Dashboard/DashboardLayout'));
 const Home = lazy(() => import('../Pages/Dashbaord/Home'));
 const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genrated-Images'));
+const User = lazy (() =>  import ("../Pages/Dashbaord/Users/User"))
 
 
 
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
               },{
                 path : "generated-images",
                 element : <GenratedImages />
+              },{
+                path : "users",
+                element : <User />
+
               }
             ]
           }

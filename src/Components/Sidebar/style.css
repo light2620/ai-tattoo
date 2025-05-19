@@ -2,7 +2,7 @@
     width: 200px;
     background-color: white;
     padding: 20px;
-    height: 100vh; /* full height */
+    height: 100%;
     box-sizing: border-box;
     border-right: 2px solid #FFCC4A; /* yellow accent */
     width : 20%;
