@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./style.css";
 import { useApi } from "../../Api/apiProvider";
 import toast from "react-hot-toast";
-import 'primeicons/primeicons.css'; // Make sure this is imported in your project somewhere
-
+import 'primeicons/primeicons.css'; 
 const CreateUserPopup = ({ onClose, fetchUserList }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -41,7 +40,7 @@ const CreateUserPopup = ({ onClose, fetchUserList }) => {
 
   return (
     <div className="popup-overlay">
-      <div className="popup-container">
+      <div className="popup-container-create">
         <h2>Create User</h2>
         <form onSubmit={handleSubmit}>
           <label>
@@ -74,7 +73,7 @@ const CreateUserPopup = ({ onClose, fetchUserList }) => {
             </select>
           </label>
 
-          <div className="popup-buttons">
+          <div className="popup-buttons-create">
             <button type="submit" className="add-user-btn" disabled={loading}>
               Create User
               {loading && (
@@ -89,7 +88,7 @@ const CreateUserPopup = ({ onClose, fetchUserList }) => {
                 />
               )}
             </button>
-            <button type="button" className="cancel-btn" onClick={onClose} disabled={loading}>
+            <button type="button" className="cancel-btn-create" onClick={onClose} disabled={loading}>
               Cancel
             </button>
           </div>

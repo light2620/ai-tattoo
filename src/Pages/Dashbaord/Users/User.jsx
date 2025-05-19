@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css";
 import { useApi } from "../../../Api/apiProvider";
-import CreateUserPopup from "../../../Components/CreateUserPopup/CreateUserPopup";
+import CreateUserPopup from "../../../Components/CreateAndEditUserPopup/CreateUserPopup";
 import DeleteUserPopup from "../../../Components/DeleteUserPopup/DeleteUserPopup";
 import toast from "react-hot-toast";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import EditUserPopup from "../../../Components/CreateAndEditUserPopup/EidtUserPopup";
 const User = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showCreatePopup, setShowCreatePopup] = useState(false);
-  const [showDeleteUserPopup,setShowDeleteUserPopup] = useState(false);
-  const [deleteUserData,setDeleteUserData] = useState({
-    name : "",
-    uid : ""
+  const [showEditUserPopup, setEditUserPopup] = useState(false);
+  const [showDeleteUserPopup, setShowDeleteUserPopup] = useState(false)
+  const [editUserData, setEditUserData] = useState({
+    uid: "",
+    updates: {}
+  })
+  const [deleteUserData, setDeleteUserData] = useState({
+    name: "",
+    uid: ""
   })
   const { post } = useApi();
 
@@ -21,7 +29,7 @@ const User = () => {
       const response = await post(
         "https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/listAllAIUsers"
       );
-      console.log(response);
+
       if (response.status === 200) {
         setUsers(response.data.users);
       }
@@ -31,27 +39,27 @@ const User = () => {
       setLoading(false);
     }
   }
-  async function onDelete(){
-    try{
-        setLoading(true);
-        const response = await post(`https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/deleteAIUser?uid=${deleteUserData.uid}`)
-        if(response.status === 200){
-          toast.success(response.data.message);
-          setDeleteUserData({
-              name : "",
-              uid : ""
-          })
-          setShowDeleteUserPopup(false);
-          setLoading(false);
-          await fetchUserList();
-        }
-    }catch(err){
-        console.log(err)
-    }finally{
+  async function onDelete() {
+    try {
+      setLoading(true);
+      const response = await post(`https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/deleteAIUser?uid=${deleteUserData.uid}`)
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setDeleteUserData({
+          name: "",
+          uid: ""
+        })
+        setShowDeleteUserPopup(false);
+        setLoading(false);
+        await fetchUserList();
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
       setLoading(false);
     }
   }
-  
+
   useEffect(() => {
     fetchUserList();
   }, []);
@@ -63,7 +71,8 @@ const User = () => {
         className="create-user-btn"
         onClick={() => {
           console.log("Pop-up opens")
-          setShowCreatePopup(true)}}
+          setShowCreatePopup(true)
+        }}
       >
         Create User
       </button>
@@ -115,13 +124,36 @@ const User = () => {
                   <td>{generateImages ? generateImages.length : 0}</td>
                   <td>{creditScore !== undefined ? creditScore : "-"}</td>
                   <td>{phoneNumber || "-"}</td>
-                  <td className="delete-user" onClick={() =>{
-                    setShowDeleteUserPopup(true);
-                    setDeleteUserData({
-                      name : displayName,
-                      uid,
-                    })
-                  }}>delete</td>
+                  <td className="action">
+                    <span
+                      className="delete-user"
+                      onClick={() => {
+                        setShowDeleteUserPopup(true);
+                        setDeleteUserData({
+                          name: displayName,
+                          uid,
+                        })
+                      }}>
+                      <MdDelete size={25} />
+                    </span>
+
+                    <span
+                      className="edit-user"
+                      onClick={() => {
+                        setEditUserData({
+                          uid,
+                          updates: {
+                            userName: displayName || "",
+                            phoneNumber: phoneNumber || "",
+                            role: role || "user",
+                          }
+                        });
+                        setEditUserPopup(true);
+                      }}
+                    >
+                      <FaEdit size={23} />
+                    </span>
+                  </td>
                 </tr>
               )
             )
@@ -133,24 +165,34 @@ const User = () => {
       {showCreatePopup && (
         <CreateUserPopup
           onClose={() => setShowCreatePopup(false)}
-          fetchUserList = {fetchUserList}
+          fetchUserList={fetchUserList}
         />
       )}
 
-     {
-    showDeleteUserPopup  &&
-    <DeleteUserPopup
-        userName={deleteUserData.name}
-        onDelete={() => {
-          onDelete()
-        }}
-        onClose={() => {
-          setShowDeleteUserPopup(false);
-        }}
-        loading = {loading}
-/>
-     }
-      
+      {
+        showDeleteUserPopup &&
+        <DeleteUserPopup
+          userName={deleteUserData.name}
+          onDelete={() => {
+            onDelete()
+          }}
+          onClose={() => {
+            setShowDeleteUserPopup(false);
+          }}
+          loading={loading}
+        />
+      }
+
+      {
+        showEditUserPopup &&
+        <EditUserPopup
+          editUserData={editUserData}
+          setEditUserData={setEditUserData}
+          fetchUserList={fetchUserList}
+          onClose={() => setEditUserPopup(false)}
+        />
+      }
+
     </div>
   );
 }

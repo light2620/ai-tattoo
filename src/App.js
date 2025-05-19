@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 function App() {
   const location = useLocation();
  const isDasboard = location.pathname.includes('/dashboard');
- console.log(isDasboard);
+
   return (
     
     <UserProvider>

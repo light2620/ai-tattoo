@@ -1,19 +1,7 @@
-/* Overlay background */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+
 
 /* Popup container */
-.popup-container {
+.popup-container-delete {
   background-color: white;
   padding: 24px 32px;
   border-radius: 8px;
@@ -30,14 +18,14 @@
 }
 
 /* Paragraph text */
-.popup-container p {
+.popup-container-delete p {
   margin-bottom: 24px;
   font-size: 1rem;
   color: #333;
 }
 
 /* Buttons container */
-.popup-buttons {
+.popup-buttons-delete {
   display: flex;
   justify-content: space-around;
 }
@@ -64,12 +52,12 @@
 }
 
 /* Cancel button - gray */
-.btn-cancel {
+.btn-cancel-delete {
   background-color: #e0e0e0;
   color: #333;
 }
 
-.btn-cancel:hover {
+.btn-cancel-delete:hover {
   background-color: #bdbdbd;
 }
 

@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
   const [isLoggedIn,setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(user);
+
   useEffect(() => {
     const checkAndFetchUser = async () => {
       const token = localStorage.getItem("Authorization");
@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
         const decoded = jwtDecode(token);
         const currentTime = Date.now() / 1000;
         if (decoded.exp < currentTime) {
-          console.log("Token expired");
+
           logout();
           return;
         }
@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) => {
     try {
       setLoading(true);
       const response =  await post("https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/signinUser", credentials);
-      console.log("Login response:", response);
+   
       if (response.status === 200) {
         const token = response.data.idToken
         localStorage.setItem('Authorization', token);
@@ -107,7 +107,7 @@ export const UserProvider = ({ children }) => {
     try{
       setLoading(true);
          const response = await post("https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/signupUser", credentials);
-         console.log(response)
+ 
          if (response.data?.result?.success) {                                      
           setCredentials({
             email: "",

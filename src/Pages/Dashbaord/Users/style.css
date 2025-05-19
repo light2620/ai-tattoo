@@ -49,3 +49,16 @@
     text-decoration : underline;
 
 }
+.action{
+    display : flex;
+    gap : 10px;
+}
+
+.edit-user{
+    color :rgb(59, 126, 64);
+    cursor: pointer;
+}
+
+.edit-user:hover{
+    color : rgb(77, 151, 82);
+}
