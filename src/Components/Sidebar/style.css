@@ -22,12 +22,12 @@
   }
   
   .nav-link:hover {
-    background-color: #e0e7ff; /* light blue */
-    color: #2563eb; /* blue */
+    background-color:rgb(255, 231, 169);
+  
   }
   
   .nav-link.active {
-    background-color: #2563eb; /* blue */
+    background-color: #EDAA00; /* blue */
     color: white;
   /* purple accent for active left border */
     border-radius: 10px;

@@ -3,7 +3,7 @@ import './style.css';
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
-import { Link } from 'react-router-dom'; // for routing
+import { Link } from 'react-router-dom'; 
 import { useUser } from '../../Context/userContext';
 const SignIn = () => {
   const [credentials, setCredentials] = useState({
