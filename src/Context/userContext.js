@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { jwtDecode } from 'jwt-decode'; 
 import { useDispatch } from "react-redux";
-import { setUserData } from "../Redux/Slice/userSlice";
+import { setGenratedImagesData } from "../Redux/Slice/genratedImageSlice";
+import { getGeneratedImages } from "../Api/genratedImagesApi";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -25,28 +26,16 @@ export const UserProvider = ({ children }) => {
       try {
         const decoded = jwtDecode(token);
         const currentTime = Date.now() / 1000;
-
         if (decoded.exp < currentTime) {
           console.log("Token expired");
           logout();
           return;
         }
-        const response = await post(
-          "https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/getUserDetails"
-        );
-
-        if (response.status === 200) {
-          const userData = response.data;
-          setUser(userData);
-          dispatch(setUserData(userData));
-          setIsLoggedIn(true);
-          if (userData.role === "admin") {
-            setIsAdmin(true);
-          }
-        }
+        await getGeneratedImages(dispatch,post,setGenratedImagesData );
       } catch (error) {
+        
         console.error("Error validating token or fetching user:", error);
-       
+
       }
     };
 

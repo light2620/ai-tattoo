@@ -52,4 +52,13 @@
     height: auto;
     border-radius: 8px;
   }
+
+  .loading-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; 
+
+  }
   

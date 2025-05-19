@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './Slice/userSlice'
+import generatedImageReducer from './Slice/genratedImageSlice'
 export const store = configureStore({
   reducer: {
     
-    user: userReducer,
+    generatedImages:generatedImageReducer,
   },
 })
