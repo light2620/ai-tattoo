@@ -58,7 +58,7 @@ const Home = () => {
         {loading ? (
         <div className="loading-container">
           <Spinner />
-          <p>Generating image...</p>
+          <p>Generating Tattoo...</p>
         </div>
 
         ) : imageUrl ? (
