@@ -69,20 +69,7 @@
 /* ---------------------------------- */
 /* 📏 Shrink Elements as Screen Shrinks */
 /* ---------------------------------- */
-@media (max-width: 1024px) {
-  .title {
-    font-size: 0.95rem;
-  }
 
-  .nav-icon {
-    font-size: 1.3rem;
-  }
-
-  .nav-link {
-    padding: 10px 12px;
-  }
-
-}
  
 @media (max-width: 900px) {
   .title {
@@ -98,8 +85,27 @@
   }
 
   .sidebar{
-    border : none;
- 
+
+    width:30%;
   }
   
+}
+
+@media (max-width: 769px) {
+  .title {
+    font-size: 0.95rem;
+  }
+
+  .nav-icon {
+    font-size: 1.3rem;
+  }
+
+  .nav-link {
+    padding: 10px 12px;
+  }
+  .sidebar{
+    border: none;
+    width:100%;
+  }
+
 }
