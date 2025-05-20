@@ -81,9 +81,7 @@
   .nav-link {
     padding: 10px 12px;
   }
-  .sidebar {
-    width : 30%;
-}
+
 }
  
 @media (max-width: 900px) {
@@ -101,7 +99,7 @@
 
   .sidebar{
     border : none;
-
+ 
   }
   
 }

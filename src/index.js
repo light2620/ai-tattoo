@@ -9,6 +9,14 @@ import Spinner from './utils/Spinner/Spinner';
 import store from './Redux/store.js';
 import { Provider } from 'react-redux';
 const root = ReactDOM.createRoot(document.getElementById('root'));
+window.addEventListener('error', (event) => {
+  const isChunkLoadError = event.message && event.message.includes('Loading CSS chunk');
+
+  if (isChunkLoadError) {
+    
+    window.location.reload();
+  }
+});
 root.render(
   <ApiProvider>
     <Provider store={store}>
