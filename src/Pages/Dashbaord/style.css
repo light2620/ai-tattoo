@@ -69,6 +69,9 @@
   background-color: #1f1f1f;
 }
 
+
+
+
 /* IMAGE PREVIEW: Flexible space */
 .image-preview {
   flex: 1; /* Take remaining space */
