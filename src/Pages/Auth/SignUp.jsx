@@ -19,7 +19,7 @@ const SignUp = () => {
      
     }
   return (
-<div className="login">
+
       <form onSubmit={handleLogin} className="login-panel">
         <h1 className="heading">Sign Up</h1>
          
@@ -69,7 +69,7 @@ const SignUp = () => {
           <span>Sign up</span>
         </Button>
       </form>
-    </div>
+
   )
 }
 

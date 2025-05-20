@@ -53,7 +53,10 @@ const Home = () => {
             onChange={(e) => setInput(e.target.value)}
             className="custom-input"
           />
-          <OptionSelector selected={quality} onChange={setQuality} />
+        
+             <OptionSelector selected={quality} onChange={setQuality} />
+     
+          
           <button onClick={handleGenerate} className="black-btn">
             Generate
           </button>

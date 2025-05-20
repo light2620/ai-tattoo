@@ -1,7 +1,6 @@
 .custom-select {
   position: relative;
   width: 9rem;
-  margin: auto;
   font-size: 0.875rem; /* 14px */
 }
 
@@ -9,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5em 0.75em;
+  padding: 1em 0.75em;
   border: 1px solid #ccc;
   border-radius: 0.3125rem;
   cursor: pointer;
