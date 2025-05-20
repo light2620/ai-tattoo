@@ -8,6 +8,7 @@ import { ApiProvider } from './Api/apiProvider.js';
 import Spinner from './utils/Spinner/Spinner';
 import store from './Redux/store.js';
 import { Provider } from 'react-redux';
+import Loader from './utils/Loader/Loader.jsx';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 window.addEventListener('error', (event) => {
   const isChunkLoadError = event.message && event.message.includes('Loading CSS chunk');
@@ -20,7 +21,7 @@ window.addEventListener('error', (event) => {
 root.render(
   <ApiProvider>
     <Provider store={store}>
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Loader />}>
         <RouterProvider router={router} />
       </Suspense>
     </Provider>

@@ -1,0 +1,11 @@
+.loader-container{
+display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background-color: #f9f9f9;
+}
+
+.loader-container svg circle {
+  stroke: #FFCC4A !important;
+}
