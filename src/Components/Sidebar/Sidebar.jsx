@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './style.css';
 import sidebarItems from '../../utils/Sidebar';
 import { useUser } from '../../Context/userContext';
+import Logo from '../Logo';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -17,6 +18,10 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
+      <div className="sidebar-logo">
+        <Logo />
+      </div>
+
       {sidebarItems
         .filter(item => !item.adminOnly || role === 'admin') 
         .map(({ name, icon: Icon, path }) => (

@@ -1,0 +1,58 @@
+/* Base Styles */
+.navbar {
+  position: relative;
+  height: 10vh;
+    z-index: 999;
+}
+
+/* Mobile Styles (<= 768px) */
+@media (max-width: 768px) {
+  .burger-menu {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .navbar-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .navbar-logo img {
+    max-height: 40px;
+    width: auto;
+    display: block;
+  }
+
+  .navbar-profile {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+/* Desktop Styles (> 768px) */
+@media (min-width: 769px) {
+  .navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 1rem;
+  }
+
+  .navbar-logo {
+    display: none; /* Hide logo on desktop */
+  }
+
+  .burger-menu {
+    display: none; /* Hide burger on desktop */
+  }
+}
+

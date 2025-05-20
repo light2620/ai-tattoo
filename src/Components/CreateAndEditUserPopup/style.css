@@ -62,12 +62,12 @@
 
 /* Create User button */
 .add-user-btn {
-  background-color: #FFCC4A;
+  background-color: black;
   color: white;
 }
 
 .add-user-btn:hover {
-  background-color: #EDAA00;
+  background-color:rgb(48, 47, 44);
 }
 
 /* Cancel button */

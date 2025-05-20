@@ -5,6 +5,7 @@ import Spinner from '../../utils/Spinner/Spinner';
 import { getUserDetails } from '../../Api/getUserDataApi';
 import { useDispatch } from 'react-redux';
 import { setImages, setImageLoading } from '../../Redux/ImagesSlice';
+
 const Home = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,11 +13,12 @@ const Home = () => {
   const { post } = useApi();
 
   const dispatch = useDispatch();
+
   const handleGenerate = async () => {
     try {
       if (input.trim()) {
         setLoading(true);
-        setImageUrl(''); 
+        setImageUrl('');
         const response = await post(
           'https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage',
           { prompt: input }
@@ -25,7 +27,6 @@ const Home = () => {
           setImageUrl(response.data.imageUrl);
           const userResponse = await getUserDetails(dispatch, post, setImageLoading);
           if (userResponse) {
-            console.log(userResponse)
             dispatch(setImages(userResponse.generateImages));
           }
         }
@@ -40,32 +41,34 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container">
-      <div className="input-group">
-        <input
-          type="text"
-          placeholder="Enter text here..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="dashed-input"
-        />
-        <button onClick={handleGenerate} className="generate-btn">
-          Generate
-        </button>
-      </div>
-
-      <div className="image-preview">
-        {loading ? (
-        <div className="loading-container">
-          <Spinner />
-          <p>Generating Tattoo...</p>
+    <div className="home-wrapper">
+      <div className="home-content">
+        <h2 className="home-title">Tattoo Generator</h2>
+        <div className="input-group">
+          <input
+            type="text"
+            placeholder="Describe your tattoo idea..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="custom-input"
+          />
+          <button onClick={handleGenerate} className="black-btn">
+            Generate
+          </button>
         </div>
 
-        ) : imageUrl ? (
-          <img src={imageUrl} alt="Generated" />
-        ) : (
-          <p>No image generated yet.</p>
-        )}
+        <div className="image-preview">
+          {loading ? (
+            <div className="loading-container">
+              <Spinner />
+              <p>Generating Tattoo...</p>
+            </div>
+          ) : imageUrl ? (
+            <img src={imageUrl} alt="Generated" />
+          ) : (
+            <p className="no-image-text">No image generated yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );

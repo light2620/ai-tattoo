@@ -81,6 +81,7 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('Authorization');
+    navigate("/");
   
   };
   const resetPassword = async(credentials,setCredentials)=>{

@@ -1,12 +1,21 @@
 .dashboard-container {
-    display: flex;
-    height: 100%;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative; /* important for stacking context */
+}
 
-  }
-  
-  .dashboard-content {
-    flex: 1;
-    padding: 20px;
+.right-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  }
-  
+.dashboard-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+
+}

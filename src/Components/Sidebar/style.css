@@ -1,46 +1,107 @@
 .sidebar {
-    width: 200px;
-    background-color: white;
-    padding: 20px;
-    height: 100%;
-    box-sizing: border-box;
-    border-right: 2px solid #FFCC4A; /* yellow accent */
-    width : 20%;
-  }
   
-  .nav-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color:rgb(37, 45, 56);
-    margin-bottom: 10px;
-    font-weight: 500;
-    padding: 10px 15px;
-    border-left: 4px solid transparent;
-    border-radius: 4px 0 0 4px;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-  }
-  
-  .nav-link:hover {
-    background-color:rgb(255, 231, 169);
-  
-  }
-  
-  .nav-link.active {
-    background-color: #EDAA00; /* blue */
-    color: white;
-  /* purple accent for active left border */
-    border-radius: 10px;
-  }
-  
-  .nav-icon {
-    margin-right: 10px;
-    font-size: 1.5rem;
-    flex-shrink: 0;
-  }
-  .title{
-    font-size: 1.2rem;
-    font-weight: 600;
+  width : full; 
+  background-color: white;
+  padding: 20px;
+  height: 100vh;
+  box-sizing: border-box;
+  border-right: 2px solid #FFCC4A;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+}
 
+/* Logo Section */
+.sidebar-logo {
+  text-align: center;
+  margin: 2em 0 3em;
+}
+
+.sidebar-logo img {
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Navigation Links */
+.nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #252D38;
+  margin-bottom: 12px;
+  font-weight: 500;
+  padding: 12px 14px;
+  border-left: 4px solid transparent;
+  border-radius: 6px 0 0 6px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background-color: #FFE7A9;
+}
+
+.nav-link.active {
+  background-color: #EDAA00;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Icons */
+.nav-icon {
+  margin-right: 10px;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+/* Text */
+.title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------- */
+/* 📏 Shrink Elements as Screen Shrinks */
+/* ---------------------------------- */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 0.95rem;
+  }
+
+  .nav-icon {
+    font-size: 1.3rem;
+  }
+
+  .nav-link {
+    padding: 10px 12px;
+  }
+  .sidebar {
+    width : 30%;
+}
+}
+ 
+@media (max-width: 900px) {
+  .title {
+    font-size: 0.9rem;
+  }
+
+  .nav-icon {
+    font-size: 1.2rem;
+  }
+
+  .nav-link {
+    padding: 8px 10px;
+  }
+
+  .sidebar{
+    border : none;
+    width: 100%;
   }
   
+}

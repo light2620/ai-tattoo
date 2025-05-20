@@ -1,18 +1,19 @@
 import { createBrowserRouter } from 'react-router-dom';
-import {lazy } from 'react'
+import { lazy } from 'react'
 import UnProtectedRoute from './UnProtectedRoute';
 import ProtectedRoute from './ProtectedRoute';
 
 const App = lazy(() => import('../App'));
 
 const SignUp = lazy(() => import('../Pages/Auth/SignUp'));
-const SignIn = lazy(() => import('../Pages/Auth/SignIn'));  
+const SignIn = lazy(() => import('../Pages/Auth/SignIn'));
 const ForgotPassword = lazy(() => import('../Pages/Auth/ForgotPassword'));
 const DashboardLayout = lazy(() => import('../Layout/Dashboard/DashboardLayout'));
 const Home = lazy(() => import('../Pages/Dashbaord/Home'));
 const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genrated-Images'));
-const User = lazy (() =>  import ("../Pages/Dashbaord/Users/User"))
-
+const User = lazy(() => import("../Pages/Dashbaord/Users/User"))
+const AuthLayout = lazy(() => import("../Layout/AuthLayout/AuthLayout"))
+const ProfilePage = lazy(() => import("../Pages/Dashbaord/ProfilePage/Profile"))
 
 
 
@@ -24,24 +25,31 @@ export const router = createBrowserRouter([
     children: [
       // Unprotected routes
       {
-        element: <UnProtectedRoute />, 
+        element: <UnProtectedRoute />,
         children: [
-           {
-            path: "/",
-            element: <SignIn />
-          },
           {
-            path: "signin",
-            element: <SignIn />
-          },
-          {
-            path: "signup",
-            element: <SignUp />
-          },
-          {
-            path: "forgot-password",
-            element: <ForgotPassword />
-          },
+            path: "",
+            element: <AuthLayout />,
+            children: [
+              {
+                path: "/",
+                element: <SignIn />
+              },
+              {
+                path: "signin",
+                element: <SignIn />
+              },
+              {
+                path: "signup",
+                element: <SignUp />
+              },
+              {
+                path: "forgot-password",
+                element: <ForgotPassword />
+              }
+            ]
+          }
+
         ]
       },
 
@@ -60,13 +68,15 @@ export const router = createBrowserRouter([
               {
                 path: "",
                 element: <Home />
+              }, {
+                path: "generated-images",
+                element: <GenratedImages />
+              }, {
+                path: "users",
+                element: <User />
               },{
-                path : "generated-images",
-                element : <GenratedImages />
-              },{
-                path : "users",
-                element : <User />
-
+                path:"profile",
+                element: <ProfilePage />
               }
             ]
           }

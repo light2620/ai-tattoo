@@ -11,13 +11,11 @@ function App() {
   return (
     
     <UserProvider>
-      <div className="App">
-       <Logo />
-        <div className='view-container'>
+   
+        <div>
           <Outlet />
         </div>
-     
-      </div>
+   
       <Toaster />
       </UserProvider>
     

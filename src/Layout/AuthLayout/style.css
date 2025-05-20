@@ -1,0 +1,81 @@
+/* Main auth layout container */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding-left : 1em;
+  padding-right:1em;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  gap: 10px;
+
+}
+
+/* Logo wrapper at the top */
+.auth-logo {
+  text-align: center;
+  width: 100%;
+  padding-top : 1em;
+}
+
+.auth-logo img {
+  width: 100%;
+  max-width: 400px; /* Larger logo on desktop */
+  height: auto;
+  object-fit: contain;
+}
+
+/* Content wrapper with background image */
+.auth-content {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  background-image: url("../../Assets/LoginBg.png");
+  background-size: cover;       
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 50px 30px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-top: 1em;
+}
+
+/* Tablet responsiveness */
+@media (max-width: 768px) {
+  .auth-container {
+      
+  }
+
+  .auth-content {
+  }
+  
+  .auth-logo img {
+    max-width: 250px;
+  }
+  .auth-logo{
+    paddin-top: 0;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .auth-content{
+
+  }
+  .auth-container {
+    padding-top: 1em;
+  }
+  .auth-logo{
+    padding-top: 0;
+
+  }
+  .auth-logo img {
+    max-width: 200px; 
+  }
+
+  .auth-content {
+    padding: 30px 16px;
+  }
+}

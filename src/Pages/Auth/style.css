@@ -1,183 +1,197 @@
-/* style.css */
+
+/* =============================
+   Login Form Container
+============================= */
 
 .login {
-     /* NEW - to fill the .view-container */
-    width: 100%;
-    height: 100%; /* NEW - to fill the .view-container */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    box-sizing: border-box;
-  
-    
-  }
-  
-  .login-panel {
-    background: #fff;
-    box-shadow: 0px 6px 8px 0px rgba(0, 0, 0, 0.1);
-    border-radius: 0.4rem;
-    padding: 1.5rem; /* Base padding for mobile */
-    width: 90%;     /* More flexible width for mobile */
-    max-width: 450px; /* Max width to prevent it from becoming too wide on large screens */
-    box-sizing: border-box;
-    border: 2px solid #FFCC4A; /* Panel border */
-  }
-  
-  .heading {
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    font-size: 1.8rem; /* Adjusted for smaller screens */
-  }
-  
-  .lab-inp-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-  
-  label {
-    font-weight: 500;
-    color: #333333;
-    font-size: 0.9rem; /* Adjusted for smaller screens */
-  }
-  
-  /* Style PrimeReact InputText */
-  .login-panel .p-inputtext {
-    font-size: 1rem;
-    border: 1px solid #DEDEDE;
-    border-radius: 0.6rem;
-    padding: 0.75em 1em;
-    width: 100%; /* Make input take full width of its container */
-    box-sizing: border-box;
-  }
-  
-  /* Style PrimeReact Button */
-  .login-panel .p-button {
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 800;
-    color: #fff; /* Ensure text color is white */
-    border-radius: 0.6rem;
-    border: none; /* Override PrimeReact default border if any */
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    margin: 1.5rem 0 0 0;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 100%);
-    z-index: 1;
-    display: flex;
-    flex-direction: row-reverse; /* As per your original style */
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-  }
-  .auth-btn {
+.login-panel {
+  background: #fff;
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.4rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+  border: 2px solid #FFCC4A;
+}
+
+/* =============================
+   Headings & Typography
+============================= */
+
+.heading {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.forgot-password-heading {
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* =============================
+   Inputs & Labels
+============================= */
+
+.lab-inp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+label {
+  font-weight: 500;
+  color: #333333;
+  font-size: 0.9rem;
+}
+
+.login-panel .p-inputtext {
+  font-size: 1rem;
+  border: 1px solid #DEDEDE;
+  border-radius: 0.6rem;
+  padding: 0.75em 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =============================
+   Button Styles
+============================= */
+
+.login-panel .p-button {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 0.6rem;
+  border: none;
+  padding: 0.8rem 1rem;
+  margin-top: 1.5rem;
+  background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.auth-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
 }
-.auth-btn:disabled {
-  background-color: #ffffff !important;      
-  opacity: 0.6;                          
-  cursor: not-allowed !important;        
-  border: 1px solid #ccc;                
-}
-  
-  .login-panel .p-button::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 10%); /* Slightly different shade for hover effect */
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    z-index: -1;
-  }
-  
-  .login-panel .p-button:hover::after {
-    opacity: 1;
-  }
-  .login-panel .p-button:hover, .login-panel .p-button:focus {
-      background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 100%); /* Maintain background on hover/focus */
-      color: #fff;
-      border: none;
-  }
-  
-  
-  .auth-links {
-    display: flex;
-    flex-direction: column; /* Stack links on small screens */
-    align-items: center;    /* Center them when stacked */
-    gap: 0.5rem;            /* Reduced gap for stacked layout */
-    margin: 1rem 0 1.5rem;
-    font-size: 0.9rem;
-  }
-  
-  .auth-links .divider {
-    display: none; /* Hide divider when links are stacked */
-  }
-  
-  .auth-link {
-    text-decoration: none;
-    transition: color 0.3s;
-    color: black;
-  }
-  
-  .auth-link:hover {
-    text-decoration: underline;
-  }
-  
-  .login-panel p .auth-link { /* For "Already have an account? Sign In" */
-    margin-left: 0.3rem;
-  }
-  
-  .forgot-password-heading{
 
-    margin-bottom: 2rem;
-    text-align: center;
-    font-size: 1rem; /* Adjusted for smaller screens */
+.auth-btn:disabled {
+  background-color: #ffffff !important;
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  border: 1px solid #ccc;
+}
+
+.login-panel .p-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 10%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.login-panel .p-button:hover::after {
+  opacity: 1;
+}
+
+.login-panel .p-button:hover,
+.login-panel .p-button:focus {
+  background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 100%);
+  color: #fff;
+  border: none;
+}
+
+/* =============================
+   Auth Links
+============================= */
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.auth-links .divider {
+  display: none;
+}
+
+.auth-link {
+  text-decoration: none;
+  transition: color 0.3s;
+  color: black;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.login-panel p .auth-link {
+  margin-left: 0.3rem;
+}
+
+/* =============================
+   Media Queries
+============================= */
+
+@media (min-width: 600px) {
+  .auth-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
   }
-  /* Medium screens (tablets) */
-  @media (min-width: 600px) {
-    .login-panel {
-      padding: 2.5rem;
-    }
-  
-    .heading {
-      font-size: 2.2rem;
-      margin-bottom: 2.5rem;
-    }
-  
-    .auth-links {
-      flex-direction: row; /* Links side-by-side */
-      justify-content: center;
-      gap: 10px;
-    }
-  
-    .auth-links .divider {
-      display: inline; /* Show divider again */
-    }
-    .forgot-password-heading{
-      font-size: 1.5rem; /* Adjusted for smaller screens */
-    }
+
+  .auth-links .divider {
+    display: inline;
   }
-  
-  /* Large screens (desktops) */
-  @media (min-width: 992px) {
-    .login-panel {
-      /* Original padding for large screens */
-    }
-    .heading {
-      font-size: 2.5rem; /* Original font size */
-      margin-bottom: 3rem; /* Original margin */
-    }
-    .forgot-password-heading{
-      font-size: 1.5rem; /* Adjusted for smaller screens */
-    }
+
+  .login-panel {
+    padding: 2.5rem;
   }
+
+  .heading {
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .forgot-password-heading {
+    font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .heading {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .forgot-password-heading {
+    font-size: 1.5rem;
+  }
+}
