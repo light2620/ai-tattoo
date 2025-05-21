@@ -1,19 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { lazy } from 'react';
 import UnProtectedRoute from './UnProtectedRoute';
 import ProtectedRoute from './ProtectedRoute';
+import App from '../App';
 
-const App = lazy(() => import('../App'));
-const SignUp = lazy(() => import('../Pages/Auth/SignUp'));
-const SignIn = lazy(() => import('../Pages/Auth/SignIn'));
-const ForgotPassword = lazy(() => import('../Pages/Auth/ForgotPassword'));
-const DashboardLayout = lazy(() => import('../Layout/Dashboard/DashboardLayout'));
-const Home = lazy(() => import('../Pages/Dashbaord/Home'));
-const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genrated-Images'));
-const User = lazy(() => import("../Pages/Dashbaord/Users/User"));
-const AuthLayout = lazy(() => import("../Layout/AuthLayout/AuthLayout"));
-const ProfilePage = lazy(() => import("../Pages/Dashbaord/ProfilePage/Profile"));
-const NotFound = lazy(() => import("../Pages/NotFound/NotFound")); 
+import SignUp from '../Pages/Auth/SignUp';
+import SignIn from '../Pages/Auth/SignIn';
+import ForgotPassword from '../Pages/Auth/ForgotPassword';
+import DashboardLayout from '../Layout/Dashboard/DashboardLayout';
+import Home from '../Pages/Dashbaord/Home';
+import GenratedImages from '../Pages/Dashbaord/GenratedImages/Genrated-Images';
+import User from "../Pages/Dashbaord/Users/User";
+import AuthLayout from "../Layout/AuthLayout/AuthLayout";
+import ProfilePage from "../Pages/Dashbaord/ProfilePage/Profile";
+import NotFound from "../Pages/NotFound/NotFound";
 
 export const router = createBrowserRouter([
   {
