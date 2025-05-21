@@ -23,11 +23,12 @@ const SignIn = () => {
 
   return (
    
-      <form onSubmit={handleLogin} className="login-panel">
-        <h1 className="heading">Sign-In</h1>
-        <div className="lab-inp-container">
+      <form onSubmit={handleLogin} className="auth-panel">
+        <h1 className="auth-heading">Sign-In</h1>
+        <div className="auth-input-container">
+        <div className="auth-input">
           <label htmlFor="login-email">Email</label>
-          <InputText
+          <input
             className="input"
             type="email"
             value={credentials.email}
@@ -38,9 +39,9 @@ const SignIn = () => {
           />
         </div>
 
-        <div className="lab-inp-container">
+        <div className="auth-input">
           <label htmlFor="login-password">Password</label>
-          <InputText
+          <input
             className="input"
             type="password"
             value={credentials.password}
@@ -50,6 +51,8 @@ const SignIn = () => {
             required
           />
         </div>
+        </div>
+
 
         <div className="auth-links">
           <Link to="/signup" className="auth-link">Sign Up</Link>
@@ -57,10 +60,10 @@ const SignIn = () => {
           <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
         </div>
 
-        <Button type="submit" disabled={loading} className="auth-btn">
-          {loading && <i className="pi pi-spin pi-spinner"></i>}
+        <button type="submit" disabled={loading} className="auth-btn">
           <span>Login</span>
-        </Button>
+          {loading && <i className="pi pi-spin pi-spinner"></i>}
+        </button>
 
       </form>
  

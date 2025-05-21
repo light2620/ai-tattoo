@@ -16,12 +16,12 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="login">
-      <form onSubmit={handleLogin} className="login-panel">
+
+      <form onSubmit={handleLogin} className="auth-panel">
         <h1 className="forgot-password-heading">Forgot Password</h1>
-        <div className="lab-inp-container">
+        <div className="auth-input">
           <label htmlFor="login-email">Email</label>
-          <InputText
+          <input
             className="input"
             type="email"
             value={credentials.email}
@@ -31,15 +31,15 @@ const ForgotPassword = () => {
             required
           />
         </div>
-        <div>
+        <div className="auth-links">
             <Link className="auth-link" to="/signin">Back to Sign In</Link>
         </div>
-        <Button type="submit" disabled={loading} className="auth-btn">
+        <button type="submit" disabled={loading} className="auth-btn">
                   {loading && <i className="pi pi-spin pi-spinner"></i>}
                   <span>Submit</span>
-                </Button>
+                </button>
       </form>
-    </div>
+
   );
 };
 

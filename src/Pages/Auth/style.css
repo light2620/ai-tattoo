@@ -1,40 +1,29 @@
 /* =============================
    Login Form Container
 ============================= */
-
-/* REMOVE THIS ENTIRE BLOCK or comment it out
-.login {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-}
-*/
-
-.login-panel {
+.auth-panel {
   background: #fff;
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);
   border-radius: 0.4rem;
-  padding: 1.5rem;
-  width: 100%; /* Will be constrained by parent's max-width and its own max-width */
-  max-width: 450px; /* This is key for controlling form size */
+  width: 100%; 
+  max-width: 450px; 
   box-sizing: border-box;
   border: 2px solid #FFCC4A;
-  margin: auto; /* Ensures it's centered if AuthLayout doesn't use flex for centering */
-                /* but AuthLayout WILL use flex, so this is a fallback/belt-and-suspenders */
+  padding: 1em 3em 3em 3em;
+  display :flex;
+  flex-direction : column;
+
 }
 
 /* =============================
    Headings & Typography
 ============================= */
 
-.heading {
+.auth-heading {
   font-weight: 700;
-  margin-bottom: 1.5rem;
   text-align: center;
   font-size: 1.8rem;
+
 }
 
 .forgot-password-heading {
@@ -46,12 +35,16 @@
 /* =============================
    Inputs & Labels
 ============================= */
-
-.lab-inp-container {
+.auth-input-container {
+   display: flex;
+   flex-direction : column;
+   gap:1em;
+}
+.auth-input{
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin: 1rem 0;
+
 }
 
 label {
@@ -60,7 +53,7 @@ label {
   font-size: 0.9rem;
 }
 
-.login-panel .p-inputtext {
+input {
   font-size: 1rem;
   border: 1px solid #DEDEDE;
   border-radius: 0.6rem;
@@ -73,7 +66,7 @@ label {
    Button Styles
 ============================= */
 
-.login-panel .p-button {
+button {
   width: 100%;
   font-size: 1rem;
   font-weight: 800;
@@ -81,47 +74,20 @@ label {
   border-radius: 0.6rem;
   border: none;
   padding: 0.8rem 1rem;
-  margin-top: 1.5rem;
   background: linear-gradient(180deg, #FFCC4A 0%, #EDAA00 100%);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  /* flex-direction: row-reverse; -- Removed this, as the icon is typically on the left */
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem; /* Adjusted from 1rem to 0.5rem for icon-text spacing */
+  cursor: pointer;
+  display:flex;
+  justify-content:center;
+  gap: .5em;
+  align-items : center;
 }
 
-/* .auth-btn class was defined but not widely used,
-   .login-panel .p-button already targets the button.
-   If you want to keep .auth-btn for specificity, ensure it's on the Button component.
-   The spinner icon should be placed before the text for standard UX.
-*/
-.login-panel .p-button .pi-spinner { /* Specificity for spinner icon */
-  margin-right: 0.5rem; /* Space between spinner and text */
-}
-.login-panel .p-button span { /* Ensure text is aligned */
-  display: inline-block;
-}
-
-
-.login-panel .p-button:disabled { /* Keep your disabled styles */
-  background: #e9ecef !important; /* PrimeReact default disabled, or your preference */
-  color: #adb5bd !important;
+.auth-panel button:disabled { 
+  color:rgb(255, 255, 255) !important;
   opacity: 0.6;
   cursor: not-allowed !important;
-  border: 1px solid #ccc;
-}
 
-/* Hover/focus effects (simplified, ::after trick can be complex to maintain) */
-.login-panel .p-button:not(:disabled):hover,
-.login-panel .p-button:not(:disabled):focus {
-  background: linear-gradient(180deg, #EDAA00 0%, #FFCC4A 100%); /* Slightly darker or different on hover */
-  color: #fff;
-  border: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Optional: add subtle shadow on hover */
 }
-
 
 /* =============================
    Auth Links
@@ -129,15 +95,12 @@ label {
 
 .auth-links {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  margin: 1rem 0 1.5rem;
+  margin-top : 1em;
+  margin-bottom: 1em;
   font-size: 0.9rem;
-}
-
-.auth-links .divider {
-  display: none;
 }
 
 .auth-link {
@@ -148,43 +111,34 @@ label {
 
 .auth-link:hover {
   text-decoration: underline;
-  color: #EDAA00; /* Match button color for consistency */
+  color: #EDAA00; 
 }
 
-.login-panel p .auth-link {
-  margin-left: 0.3rem;
-}
 
-/* =============================
-   Media Queries
-============================= */
+@media(max-width:420px){
 
-@media (min-width: 600px) {
-  .auth-links {
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
+  .auth-panel  {
+    padding: 0.5em 1.5em 1.5em 1.5em;
+  }
+  .auth-heading {
+    font-size: 1.6rem; /* Slightly smaller heading */
   }
 
-  .auth-links .divider {
-    display: inline;
+  .auth-panel {
+    gap: 1.25rem; /* Slightly reduce gap within the form */
   }
 
-  .login-panel {
-    padding: 2rem; /* Slightly increase padding on larger screens */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 0.65rem 0.9rem; /* Slightly smaller padding in inputs */
+    font-size: 0.95rem;
   }
 
-  .heading {
-    font-size: 2rem; /* Adjusted from 2.2rem for better fit */
-    margin-bottom: 2rem; /* Adjusted from 2.5rem */
-  }
-
-  .forgot-password-heading {
-    font-size: 1.2rem; /* Adjusted */
+  .auth-btn {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
   }
 }
 
-/* No need for 992px specific changes for heading, 
-   the 600px ones are likely sufficient given max-width of panel.
-   If needed, they can be added back.
-*/
+
