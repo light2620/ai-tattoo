@@ -5,21 +5,22 @@ const options = ['simple', 'medium', 'high'];
 
 const OptionSelector = ({ selected, onChange }) => {
   const [open, setOpen] = useState(false);
-  const dropdownRef = useRef();
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
     <div className="custom-select" ref={dropdownRef}>
-      <div className="select-box" onClick={() => setOpen(!open)}>
+      <div className="select-box" onClick={() => setOpen((prev) => !prev)}>
         <span>{selected.charAt(0).toUpperCase() + selected.slice(1)}</span>
         <span className="arrow">&#9662;</span>
       </div>

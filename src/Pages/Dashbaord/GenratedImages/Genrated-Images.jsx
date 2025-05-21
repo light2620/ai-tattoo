@@ -7,27 +7,19 @@ import { useSelector } from 'react-redux';
 const GenratedImages = () => {
   const images = useSelector((state) => state.images.images);
   const loading = useSelector((state) => state.images.imagesLoading);
-  console.log(images);
-
   useEffect(() => {
 
   }, [images]);
 
-  const handleDownload = (imageUrl, imageName) => {
-
-    fetch(imageUrl)
-      .then(response => response.blob())
-      .then(blob => {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = imageName || 'generated-image.png'; 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href); 
-      })
-      .catch(console.error);
-  };
+const handleDownload = (imageUrl, imageName) => {
+  const link = document.createElement('a');
+  link.href = imageUrl;
+  link.setAttribute('download', imageName || 'generated-image.png');
+  link.setAttribute('target', '_blank'); // optional: open in new tab if not downloadable
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
   if (loading) {
     return (
