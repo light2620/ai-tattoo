@@ -15,7 +15,7 @@ const handleDownload = (imageUrl, imageName) => {
   const link = document.createElement('a');
   link.href = imageUrl;
   link.setAttribute('download', imageName || 'generated-image.png');
-  link.setAttribute('target', '_blank'); // optional: open in new tab if not downloadable
+  link.setAttribute('target', '_blank'); 
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

@@ -60,7 +60,7 @@ const Home = () => {
       {loading && (
         <div className="generating-img-loading ">
           <Spinner />
-          <p>Generating...</p>
+          <p>Generating Tattoo...</p>
         </div>
       )}
 

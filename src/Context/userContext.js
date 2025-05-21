@@ -119,7 +119,6 @@ export const UserProvider = ({ children }) => {
           navigate("/signin");
         }
     }catch(err){
-      console.error("Registration failed:", err.message);
       toast.error(err.response.data.error);
     } finally {
       setLoading(false);
