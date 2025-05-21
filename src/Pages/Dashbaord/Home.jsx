@@ -11,7 +11,7 @@ import { FaDownload } from 'react-icons/fa';
 const Home = () => {
   const [input, setInput] = useState('');
   const [quality, setQuality] = useState('simple');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const { post } = useApi();
   const dispatch = useDispatch();
