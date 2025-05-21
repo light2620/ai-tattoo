@@ -9,6 +9,7 @@ import Spinner from './utils/Spinner/Spinner';
 import store from './Redux/store.js';
 import { Provider } from 'react-redux';
 import Loader from './utils/Loader/Loader.jsx';
+import ChunkErrorBoundary from './Components/ChunkErrorBoundary/ChunkErrorBoundary.jsx';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 window.addEventListener('error', (event) => {
   const isChunkLoadError = event.message && event.message.includes('Loading CSS chunk');
@@ -19,6 +20,7 @@ window.addEventListener('error', (event) => {
   }
 });
 root.render(
+   <ChunkErrorBoundary>
   <ApiProvider>
     <Provider store={store}>
       <Suspense fallback={<Loader />}>
@@ -26,6 +28,7 @@ root.render(
       </Suspense>
     </Provider>
   </ApiProvider>
+  </ChunkErrorBoundary>
 );
 
 

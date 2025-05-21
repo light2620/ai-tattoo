@@ -11,11 +11,9 @@ function App() {
   return (
     
     <UserProvider>
-   
         <div>
           <Outlet />
         </div>
-   
       <Toaster />
       </UserProvider>
     
