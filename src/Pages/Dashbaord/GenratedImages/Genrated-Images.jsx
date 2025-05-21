@@ -1,13 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { FiDownload } from 'react-icons/fi';
+import React, { useEffect } from 'react'; // Removed useState as it's not used
+import { FiDownload, FiEye } from 'react-icons/fi'; // Added FiEye
 import Spinner from '../../../utils/Spinner/Spinner';
 import './style.css';
 import { useSelector } from 'react-redux';
-const GenratedImages = () => {
 
-   const images = useSelector((state) => state.images.images);
-   const loading = useSelector((state) => state.images.imagesLoading);
-   useEffect(() => {},[images]);
+const GenratedImages = () => {
+  const images = useSelector((state) => state.images.images);
+  const loading = useSelector((state) => state.images.imagesLoading);
+  console.log(images);
+
+  useEffect(() => {
+
+  }, [images]);
+
+  const handleDownload = (imageUrl, imageName) => {
+
+    fetch(imageUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = imageName || 'generated-image.png'; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href); 
+      })
+      .catch(console.error);
+  };
+
   if (loading) {
     return (
       <div className="images-wrapper">
@@ -16,7 +37,6 @@ const GenratedImages = () => {
     );
   }
 
-  // If not loading and no images
   if (!images || images.length === 0) {
     return (
       <div className="images-wrapper">
@@ -28,11 +48,18 @@ const GenratedImages = () => {
   return (
     <div className="images-container">
       {images.map((img, index) => (
-        <div key={index} className="image-card">
-          <img src={img.url} alt={`Generated ${index}`} className="image" />
-          <button className="download-btn">
-            <FiDownload />
-          </button>
+        <div key={img.id || index} className="image-card">
+          <img src={img.url} alt={`Generated ${index + 1}`} className="image" />
+          <div className="image-actions">
+            <button
+              className="action-btn download-btn"
+              onClick={() => handleDownload(img.url, `tattoo-design-${index + 1}.png`)}
+              title="Download Image"
+            >
+              <FiDownload />
+            </button>
+
+          </div>
         </div>
       ))}
     </div>
