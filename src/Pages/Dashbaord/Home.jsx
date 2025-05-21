@@ -51,9 +51,9 @@ const Home = () => {
           onChange={(e) => setInput(e.target.value)}
         />
         <div className="mode">
-            <OptionSelector selected={quality} onChange={setQuality} />
+          <OptionSelector selected={quality} onChange={setQuality} />
         </div>
-        
+
         <button onClick={handleGenerate}>Generate</button>
       </div>
 
@@ -74,6 +74,11 @@ const Home = () => {
             rel="noopener noreferrer"
             className="download-btn"
             title="Download image"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleGenerate();
+              }
+            }}
           >
             <FaDownload />
           </a>
