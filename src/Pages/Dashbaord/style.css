@@ -3,20 +3,20 @@
   display: flex;
   justify-content: center;
   padding: 20px;
-
+  height: 100%;
 }
 
 /* HOME CONTENT: Limit height but allow image section to grow */
 .home-content {
   width: 100%;
   max-width: 700px;
+  height: 100%;
   background-color: #ffffff;
   padding: 0.5em 1em;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 80px); /* adjust 80px to navbar height */
   overflow: hidden;
 }
 
@@ -69,18 +69,14 @@
   background-color: #1f1f1f;
 }
 
-.option{
- 
-}
-
-
-
 
 /* IMAGE PREVIEW: Flexible space */
 .image-preview {
   flex: 1; /* Take remaining space */
   text-align: center;
   border: 2px dashed #e5e7eb;
+  width: 100%;
+  height: 100%;
   padding: 10px;
   border-radius: 10px;
   box-sizing: border-box;
@@ -88,6 +84,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+
 }
 
 /* IMAGE: Responsive inside box */
@@ -114,4 +111,23 @@
   color: #4b5563;
   font-size: 16px;
   height: 100%;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 44px;
+}
+
+.download-btn:hover {
+  background-color: #1f1f1f;
 }
