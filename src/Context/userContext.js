@@ -73,7 +73,7 @@ export const UserProvider = ({ children }) => {
 
       }
     } catch (error) {
-      console.error("Login failed:", error.message);
+      toast.error(error?.response?.data?.error || "Something went wrong try again...");
     } finally {
       setLoading(false);
     }
