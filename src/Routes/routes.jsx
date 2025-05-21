@@ -13,7 +13,7 @@ import User from "../Pages/Dashbaord/Users/User";
 import AuthLayout from "../Layout/AuthLayout/AuthLayout";
 import ProfilePage from "../Pages/Dashbaord/ProfilePage/Profile";
 import NotFound from "../Pages/NotFound/NotFound";
-
+import Plans from '../Pages/Dashbaord/Plans/Plans';
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -45,7 +45,8 @@ export const router = createBrowserRouter([
               { path: "", element: <Home /> },
               { path: "generated-images", element: <GenratedImages /> },
               { path: "users", element: <User /> },
-              { path: "profile", element: <ProfilePage /> }
+              { path: "profile", element: <ProfilePage /> },
+              { path : "Plans", element : <Plans />}
             ]
           }
         ]

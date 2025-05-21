@@ -1,0 +1,44 @@
+.plans-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem; /* 20px */
+  padding: 2.5rem 0; /* 40px 0 */
+  flex-wrap: wrap;
+}
+
+.plan-card {
+  width: 15.625rem;
+  background-color: #ffffff;
+  padding: 1.25rem; 
+  border-radius: 0.75rem; 
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); 
+  color: #333333;
+  border-top: 1em solid transparent; 
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Tablet */
+@media (max-width: 56.25rem) { 
+  .plans-container {
+    justify-content: center;
+  }
+
+  .plan-card {
+    width: 45%; /* remains % for responsiveness */
+    margin-bottom: 1.25rem; /* 20px */
+  }
+}
+
+/* Mobile */
+@media (max-width: 37.5rem) { /* 600px */
+  .plan-card {
+    width: 90%; /* remains % */
+    margin-bottom: 1.25rem; /* 20px */
+  }
+}
+
+.plan-card a {
+  color:rgb(250, 214, 70);
+  text-decoration: underline;
+}
