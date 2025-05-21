@@ -65,11 +65,13 @@ const Home = () => {
             className="reference-btn"
             onClick={() => setOpenRefrenceImages(true)}
           >
-            Select Some Reference Images
+           <span className="btn-text">Reference Images</span> 
           </button>
          
+          <div className="option-selector">
+            <OptionSelector selected={quality} onChange={setQuality} />
+          </div>
           
-          <OptionSelector selected={quality} onChange={setQuality} />
 
           <button className="btn-generate" onClick={handleGenerate}>
             Generate
