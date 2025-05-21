@@ -10,7 +10,7 @@ const GenratedImages = () => {
   useEffect(() => {
 
   }, [images]);
-
+console.log(images)
 const handleDownload = (imageUrl, imageName) => {
   const link = document.createElement('a');
   link.href = imageUrl;

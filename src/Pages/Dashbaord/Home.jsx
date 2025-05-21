@@ -7,9 +7,12 @@ import { setImages, setImageLoading } from '../../Redux/ImagesSlice';
 import OptionSelector from '../../utils/OptionSelector/OptionSelector';
 import Spinner from '../../utils/Spinner/Spinner';
 import { FaDownload } from 'react-icons/fa';
-
+import ReferenceImages from '../../Components/RefrenceImages/RefrenceImages';
+import toast from 'react-hot-toast';
 const Home = () => {
   const [input, setInput] = useState('');
+  const [openRefrenceImages, setOpenRefrenceImages] = useState(false);
+  const [selectedRefrenceImages, setSelectedRefrenceImages] = useState([]);
   const [quality, setQuality] = useState('simple');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
@@ -23,8 +26,13 @@ const Home = () => {
       setImageUrl('');
       const response = await post(
         'https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage',
-        { prompt: input, quality }
+        {
+          prompt: input,
+          referenceImages: selectedRefrenceImages,
+          mode: quality
+        }
       );
+      console.log(response)
       if (response.data.type === 'success') {
         setImageUrl(response.data.imageUrl);
         const userData = await getUserDetails(dispatch, post, setImageLoading);
@@ -33,7 +41,7 @@ const Home = () => {
         }
       }
     } catch (err) {
-      console.error(err);
+      toast.error(err.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -50,11 +58,23 @@ const Home = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <div className="mode">
-          <OptionSelector selected={quality} onChange={setQuality} />
-        </div>
 
-        <button onClick={handleGenerate}>Generate</button>
+        <div className="form-options">
+        
+           <button
+            className="reference-btn"
+            onClick={() => setOpenRefrenceImages(true)}
+          >
+            Select Some Reference Images
+          </button>
+         
+          
+          <OptionSelector selected={quality} onChange={setQuality} />
+
+          <button className="btn-generate" onClick={handleGenerate}>
+            Generate
+          </button>
+        </div>
       </div>
 
       {loading && (
@@ -86,8 +106,18 @@ const Home = () => {
       )}
 
       {!loading && !imageUrl && (
-        <p className="placeholder">No image generated yet.</p>
+        <div>
+          <p className="placeholder">No image generated yet.</p>
+          {selectedRefrenceImages.length > 0 && <p className="placeholder">{selectedRefrenceImages.length} Refrence Selected</p>}
+
+        </div>
+
+
+
       )}
+      {
+        openRefrenceImages && <ReferenceImages selectedImages={selectedRefrenceImages} setSelectedImages={setSelectedRefrenceImages} onClose={() => setOpenRefrenceImages(false)} />
+      }
     </div>
   );
 };

@@ -89,16 +89,6 @@ const Profile = () => {
             disabled={!isEditing}
           />
         </div>
-
-        <div className="profile-form-group">
-          <label>Role:</label>
-          <input
-            name="role"
-            value={profileData.role}
-            disabled
-          />
-        </div>
-
         <button className="edit-btn" onClick={handleEditToggle} disabled={loading}>
           {loading ? 'Saving...' : isEditing ? 'Save' : 'Edit'}
         </button>
