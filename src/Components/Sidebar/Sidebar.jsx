@@ -5,7 +5,7 @@ import sidebarItems from '../../utils/Sidebar';
 import { useUser } from '../../Context/userContext';
 import Logo from '../Logo';
 
-const Sidebar = () => {
+const Sidebar = ({onClose}) => {
   const location = useLocation();
   const { role } = useUser();
 
@@ -22,18 +22,20 @@ const Sidebar = () => {
         <Logo />
       </div>
 
-      {sidebarItems
-        .filter(item => !item.adminOnly || role === 'admin') 
-        .map(({ name, icon: Icon, path }) => (
-          <Link
-            to={`/dashboard/${path}`}
-            key={name}
-            className={`nav-link ${isActiveTab(path) ? 'active' : ''}`}
-          >
-            <Icon className="nav-icon" />
-            <span className="title">{name}</span>
-          </Link>
-        ))}
+     {sidebarItems
+  .filter(item => !item.adminOnly || role === 'admin') 
+  .map(({ name, icon: Icon, path }) => (
+    <Link
+      to={`/dashboard/${path}`}
+      key={name}
+      className={`nav-link ${isActiveTab(path) ? 'active' : ''}`
+      }
+    >
+      <Icon className="nav-icon" />
+      <span className="title">{name}</span>
+    </Link>
+  ))
+}
     </div>
   );
 };

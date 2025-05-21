@@ -8,7 +8,7 @@ import './style.css';
 
 const DashboardLayout = () => {
   const isMobile = useMobile(768);
-  const [mobileSidebar, setMobileSidebar] = useState(false); // default closed
+  const [mobileSidebar, setMobileSidebar] = useState(false); 
 
   const toggleMobileSidebar = () => {
     setMobileSidebar(prev => !prev);
