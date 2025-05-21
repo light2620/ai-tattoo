@@ -82,11 +82,11 @@
   .nav-link {
     padding: 8px 10px;
   }
-
-  .sidebar{
+.sidebar{
 
     width:30%;
   }
+
   
 }
 
@@ -102,6 +102,9 @@
   .nav-link {
     padding: 10px 12px;
   }
-  
+    .sidebar{
+
+    width:100%;
+  }
 
 }
