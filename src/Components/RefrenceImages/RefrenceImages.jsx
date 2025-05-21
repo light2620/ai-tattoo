@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { IoMdClose } from "react-icons/io";
 import "./style.css";
 
 const ReferenceImages = ({ selectedImages, setSelectedImages, onClose }) => {
@@ -103,6 +104,11 @@ const ReferenceImages = ({ selectedImages, setSelectedImages, onClose }) => {
   return (
     <div className="popup-container">
       <div className="popup" ref={popupRef}>
+        <div 
+        onClick={onClose}
+        className="close-popup">
+          <IoMdClose size={30} />
+        </div>
         <h3>Select Reference Images</h3>
 
         <input

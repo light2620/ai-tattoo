@@ -12,16 +12,25 @@
 }
 
 .popup {
-  background: #1a1a1a; /* Dark background for contrast */
+  background: #1a1a1a; 
+  position : relative;
   padding: 20px;
   width: 90%;
   max-width: 1000px;
   max-height: 90vh;
   overflow-y: auto;
   border-radius: 8px;
-  color: white; /* Set default text to white */
+  color: white; 
 }
-
+.close-popup{
+  position : absolute;
+  color : white;
+  right : 0;
+  top: 0;
+  margin-top: 2em;
+  margin-right: 1em;
+  cursor : pointer;
+}
 .heading {
   color: white;
   font-size: 24px;
