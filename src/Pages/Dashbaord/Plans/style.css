@@ -14,6 +14,7 @@
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); 
   color: #333333;
   border-top: 1em solid transparent; 
+  text-align : center;
   box-sizing: border-box;
   flex-shrink: 0;
 }

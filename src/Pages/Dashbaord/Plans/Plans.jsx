@@ -34,8 +34,11 @@ const Plans = () => {
           style={{ borderTop: `1em solid ${plan.borderColor}` }}
         >
           <h2>{plan.name}</h2>
+          <hr />
           <p><strong>URL:</strong> <a href={plan.url}>{plan.url}</a></p>
+          <hr />
           <p><strong>Credit Score:</strong> {plan.creditScore}</p>
+          <hr />
           <p><strong>Amount:</strong> {plan.amount}</p>
         </div>
       ))}
