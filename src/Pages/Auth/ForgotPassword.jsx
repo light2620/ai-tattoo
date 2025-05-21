@@ -22,7 +22,7 @@ const ForgotPassword = () => {
         <div className="auth-input">
           <label htmlFor="login-email">Email</label>
           <input
-            className="input"
+            className="auth-input"
             type="email"
             value={credentials.email}
             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}

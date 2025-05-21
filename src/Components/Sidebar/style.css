@@ -1,8 +1,7 @@
 .sidebar {
-  
-  width : full; 
+  width : 20%; 
   background-color: white;
-  padding: 20px;
+  padding :1em;
   height: 100vh;
   box-sizing: border-box;
   border-right: 2px solid #FFCC4A;
@@ -103,9 +102,6 @@
   .nav-link {
     padding: 10px 12px;
   }
-  .sidebar{
-    border: none;
-    width:100%;
-  }
+  
 
 }

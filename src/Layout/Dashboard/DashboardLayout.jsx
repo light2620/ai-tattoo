@@ -20,13 +20,13 @@ const DashboardLayout = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Show Sidebar only if NOT mobile */}
+  
       {!isMobile && <Sidebar />}
 
       <div className="right-side" style={{ flex: 1 }}>
         <Navbar onToggleSidebar={toggleMobileSidebar} />
 
-        {/* Mobile Sidebar overlay */}
+
         {isMobile && mobileSidebar && (
           <MobileSideBar onClose={closeMobileSidebar} />
         )}

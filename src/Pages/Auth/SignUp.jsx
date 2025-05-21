@@ -24,9 +24,10 @@ const SignUp = () => {
       <form onSubmit={handleLogin} className="auth-panel">
         <h1 className="auth-heading">Sign Up</h1>
       <div className="auth-input-container">
-       <div className="auth-input">
+       <div className="auth-inputs">
           <label htmlFor="name">Name</label>
           <input
+            className="auth-input"
             type="text"
             value={credentials.name}
             onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
@@ -35,10 +36,10 @@ const SignUp = () => {
             required
           />
         </div>
-        <div className="auth-input">
+        <div className="auth-inputs">
           <label htmlFor="email">Email</label>
           <input
-            className="input"
+            className="auth-input"
             type="email"
             value={credentials.email}
             onChange={(e) => setCredentials({ ...credentials, email: e.target.value }   )}
@@ -48,10 +49,10 @@ const SignUp = () => {
           />
         </div>
 
-        <div className="auth-input">
+        <div className="auth-inputs">
           <label htmlFor="password">Password</label>
           <input
-            className="input"
+            className="auth-input"
             type="password"
             value={credentials.password}
             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}

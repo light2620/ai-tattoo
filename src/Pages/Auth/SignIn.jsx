@@ -26,10 +26,10 @@ const SignIn = () => {
       <form onSubmit={handleLogin} className="auth-panel">
         <h1 className="auth-heading">Sign-In</h1>
         <div className="auth-input-container">
-        <div className="auth-input">
+        <div className="auth-inputs">
           <label htmlFor="login-email">Email</label>
           <input
-            className="input"
+            className="auth-input"
             type="email"
             value={credentials.email}
             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
@@ -39,10 +39,10 @@ const SignIn = () => {
           />
         </div>
 
-        <div className="auth-input">
+        <div className="auth-inputs">
           <label htmlFor="login-password">Password</label>
           <input
-            className="input"
+            className="auth-input"
             type="password"
             value={credentials.password}
             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}

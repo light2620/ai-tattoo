@@ -1,21 +1,21 @@
 .dashboard-container {
   display: flex;
   height: 100vh;
-  width: 100vw;
-  position: relative; /* important for stacking context */
+  position: relative;
 }
 
 .right-side {
   flex: 1;
+  width: 80%;
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+
 }
 
 .dashboard-content {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
-
 }

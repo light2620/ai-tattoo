@@ -2,7 +2,6 @@
 .navbar {
   position: relative;
   height: 10vh;
-    z-index: 999;
 }
 
 /* Mobile Styles (<= 768px) */
@@ -14,7 +13,6 @@
     transform: translateY(-50%);
     font-size: 1.5rem;
     cursor: pointer;
-    z-index: 10;
   }
 
   .navbar-logo {
