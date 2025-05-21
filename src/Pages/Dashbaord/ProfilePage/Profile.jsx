@@ -60,7 +60,7 @@ const Profile = () => {
     <div className="profile-page">
       <h2>My Profile</h2>
       <div className="profile-form">
-        <div className="form-group">
+        <div className="profile-form-group">
           <label>Name:</label>
           <input
             name="name"
@@ -70,7 +70,7 @@ const Profile = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="profile-form-group">
           <label>Email:</label>
           <input
             name="email"
@@ -80,7 +80,7 @@ const Profile = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="profile-form-group">
           <label>Phone:</label>
           <input
             name="phone"
@@ -90,7 +90,7 @@ const Profile = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="profile-form-group">
           <label>Role:</label>
           <input
             name="role"

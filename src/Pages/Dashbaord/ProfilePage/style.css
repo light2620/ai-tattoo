@@ -20,26 +20,26 @@
   gap: 1em;
 }
 
-.form-group {
+.profile-form-group {
   display: flex;
   flex-direction: column;
 }
 
-.form-group label {
+.profile-form-group label {
   font-weight: 600;
   margin-bottom: 0.5em;
   color: #374151;
   font-size: 1rem;
 }
 
-.form-group input {
+.profile-form-group input {
   padding: 0.5em 0.75em;
   border: 1px solid #d1d5db;
   border-radius: 0.375em;
   font-size: 1rem;
 }
 
-.form-group input:disabled {
+.profile-form-group input:disabled {
   background-color: #f9fafb;
   color: #6b7280;
   cursor: not-allowed;
