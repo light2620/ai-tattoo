@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
-import { FiDownload, FiEye } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import { FiDownload } from 'react-icons/fi';
 import Spinner from '../../../utils/Spinner/Spinner';
-import './style.css';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { useSelector } from 'react-redux';
+import './style.css';
 
 const GenratedImages = () => {
   const images = useSelector((state) => state.images.images);
   const loading = useSelector((state) => state.images.imagesLoading);
 
+  const [downloadingIndexes, setDownloadingIndexes] = useState([]); // <-- Array for multiple loaders
+
   useEffect(() => {}, [images]);
 
-  const handleDownload = async (imageUrl, imageName) => {
+  const handleDownload = async (imageUrl, imageName, index) => {
+    setDownloadingIndexes((prev) => [...prev, index]); // Add index to array
+
     const encodedUrl = encodeURIComponent(imageUrl);
     const apiUrl = `https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/downloadTattooImage?url=${encodedUrl}`;
 
@@ -32,6 +37,9 @@ const GenratedImages = () => {
     } catch (err) {
       console.error("Error downloading image:", err);
       alert("Download failed. Check console for details.");
+    } finally {
+      // Remove index from downloading array
+      setDownloadingIndexes((prev) => prev.filter((i) => i !== index));
     }
   };
 
@@ -57,13 +65,24 @@ const GenratedImages = () => {
         <div key={img.id || index} className="image-card">
           <img src={img.url} alt={`Generated ${index + 1}`} className="image" />
           <div className="image-actions">
-            <button
-              className="action-btn download-btn"
-              onClick={() => handleDownload(img.url, `tattoo-design-${index + 1}.png`)}
-              title="Download Image"
-            >
-              <FiDownload />
-            </button>
+            {downloadingIndexes.includes(index) ? (
+              <div className="loading-icon">
+                <ProgressSpinner
+                style={{ width: '25px', height: '25px' }}
+                strokeWidth="8"
+                animationDuration=".5s"
+              />
+              </div>
+              
+            ) : (
+              <button
+                className="action-btn download-btn"
+                onClick={() => handleDownload(img.url, `tattoo-design-${index + 1}.png`, index)}
+                title="Download Image"
+              >
+                <FiDownload />
+              </button>
+            )}
           </div>
         </div>
       ))}
