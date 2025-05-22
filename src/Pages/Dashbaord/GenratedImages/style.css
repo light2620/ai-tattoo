@@ -1,89 +1,129 @@
-.images-container {
-  display: grid;
-  grid-template-columns: 1fr; 
-  gap: 1rem;
-  padding: 1rem;
-  position: relative; 
+/* style.css */
 
+/* New wrapper for the entire GenratedImages component content */
+.genrated-images-component-wrapper {
+  padding: 24px; /* Overall padding for the component's content area */
+
+  min-height: 100vh; /* Optional: if this component takes the full view height */
+  box-sizing: border-box;
 }
 
+/* Styling for the "Generated Image" title */
+.page-title-generated {
+  font-size: 28px; /* Matches "Designs" title size in example */
+  font-weight: 600;
+  color: #111827; /* Dark text (like Tailwind gray-900) */
+  margin-bottom: 24px; /* Space below the title */
+}
+
+.images-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to 1 column */
+  gap: 1.5rem; /* Spacing between cards (24px) */
+  position: relative;
+}
+
+/* Responsive grid columns */
 @media (min-width: 600px) {
   .images-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-@media (min-width: 900px) { 
+@media (min-width: 900px) {
   .images-container {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) {
   .images-container {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
 .image-card {
-  position: relative; 
+  position: relative;
   overflow: hidden;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: #f0f0f0; 
+  border-radius: 12px;
+  background-color: #ffffff; /* White background for cards - this will be visible through transparent images */
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex; /* Added to help manage internal layout if needed, though img takes over */
+  flex-direction: column; /* Ensure image actions stay at bottom */
 }
 
 .image-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
-.image {
-  width: 100%;
-  height: auto; 
+.image { /* This class is on the <img> tag */
+  width: 100%; /* Image will take full width of its container (the card) */
+  /* NO fixed height - height will be determined by image aspect ratio and width */
+  max-height: 400px; /* Optional: prevent extremely tall images from breaking layout */
+  object-fit: contain; /* Ensures entire image is visible, maintains aspect ratio */
   display: block;
-  border-radius: 8px; 
+  padding: 16px; /* Padding INSIDE the image area, around the design content */
+  box-sizing: border-box;
+  /* The background of the image element itself is transparent.
+     Transparent parts of the source image will show the .image-card's white background. */
+}
 
+/* Container for the download button / spinner */
+.image-actions {
+  position: absolute; /* Positioned relative to .image-card */
+  bottom: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
 .action-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  background-color: black;
+  background-color: rgba(31, 41, 55, 0.75);
   color: white;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.39);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-
-.loading-icon{
-  position: absolute;
-  top:50%;
-  left:50%;
+.action-btn:hover {
+  background-color: rgba(17, 24, 39, 0.9);
 }
 
+.action-btn svg {
+  font-size: 16px;
+}
 
+.loading-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-
-
-
-/* Wrapper and No Images Text - unchanged */
+/* Fallback for main loading or no images */
 .images-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
-  padding: 1rem;
+  min-height: 50vh;
   width: 100%;
 }
 
 .no-images-text {
-  font-size: 1.2rem;
-  color: #555;
+  font-size: 1.1rem;
+  color: #6b7280;
   text-align: center;
 }
