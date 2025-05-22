@@ -1,29 +1,42 @@
 // src/router.js
+import React, { lazy, Suspense } from 'react'; // Import lazy and Suspense if needed for specific fallbacks here
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+
+// --- Layouts & Higher-Order Components (usually not lazy-loaded if they are core structure) ---
+import App from '../App';
 import UnProtectedRoute from './UnProtectedRoute';
 import ProtectedRoute from './ProtectedRoute';
-import AdminRoute from './AdminRoute'; // Import AdminRoute
+import AdminRoute from './AdminRoute';
 import RoleBasedRedirect from './RoleBasedRedirect';
-import App from '../App';
-
-import SignUp from '../Pages/Auth/SignUp';
-import SignIn from '../Pages/Auth/SignIn';
-import ForgotPassword from '../Pages/Auth/ForgotPassword';
-import DashboardLayout from '../Layout/Dashboard/DashboardLayout';
-import Home from '../Pages/Dashbaord/Home/Home';
-import GenratedImages from '../Pages/Dashbaord/GenratedImages/Genrated-Images';
-import User from "../Pages/Dashbaord/Users/User";
 import AuthLayout from "../Layout/AuthLayout/AuthLayout";
-import ProfilePage from "../Pages/Dashbaord/ProfilePage/Profile";
-import NotFound from "../Pages/NotFound/NotFound";
-import Plans from '../Pages/Dashbaord/Plans/Plans';
-import CreateNewUserPage from '../Components/AddNewUser/CreateNewUserPage';
-import Dashboard from '../Pages/Dashbaord/Dashboard';
+// DashboardLayout can be lazy-loaded if it's substantial
+const DashboardLayout = lazy(() => import('../Layout/Dashboard/DashboardLayout'));
+
+// --- Page Components (Ideal candidates for lazy loading) ---
+const SignIn = lazy(() => import('../Pages/Auth/SignIn'));
+const SignUp = lazy(() => import('../Pages/Auth/SignUp'));
+const ForgotPassword = lazy(() => import('../Pages/Auth/ForgotPassword'));
+
+const Dashboard = lazy(() => import('../Pages/Dashbaord/Dashboard'));
+const Home = lazy(() => import('../Pages/Dashbaord/Home/Home')); // Tattoo AI
+const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genrated-Images'));
+const User = lazy(() => import("../Pages/Dashbaord/Users/User"));
+const ProfilePage = lazy(() => import("../Pages/Dashbaord/ProfilePage/Profile"));
+const Plans = lazy(() => import('../Pages/Dashbaord/Plans/Plans'));
+const CreateNewUserPage = lazy(() => import('../Components/AddNewUser/CreateNewUserPage')); // Note: This is in Components folder
+
+const NotFound = lazy(() => import("../Pages/NotFound/NotFound"));
+
+
+// --- Your Suspense Fallback Loader (if you want a different one than main.jsx for specific routes) ---
+// import Loader from '../utils/Loader/Loader'; // Path to your loader component
+// const RouteSuspenseFallback = <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><Loader /></div>;
+
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <App />, // App is usually not lazy-loaded as it's the root shell
     children: [
       // --- Authentication Routes ---
       {
@@ -31,7 +44,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "auth",
-            element: <AuthLayout />,
+            element: <AuthLayout />, // AuthLayout might not need lazy loading if simple
             children: [
               { path: "signin", element: <SignIn /> },
               { path: "signup", element: <SignUp /> },
@@ -43,33 +56,29 @@ export const router = createBrowserRouter([
 
       // --- Protected Application Routes ---
       {
-        element: <ProtectedRoute />, // First, ensure user is logged in
+        element: <ProtectedRoute />,
         children: [
           {
-            // This is the entry point for authenticated users.
-            // RoleBasedRedirect will handle where they land based on their role.
-            index: true, // Matches the root path ("/") for authenticated users
-            element: <RoleBasedRedirect />
+            index: true,
+            element: <RoleBasedRedirect /> // Handles initial redirect logic
           },
           {
-            // Routes accessible to ALL authenticated users (admin and normal user)
-            // These will be wrapped by DashboardLayout if placed inside it
-            element: <DashboardLayout />,
+            // Routes accessible to ALL authenticated users
+            element: <DashboardLayout />, // Lazy-loaded layout
             children: [
               { path: "tattoo-ai", element: <Home /> },
               { path: "generated-images", element: <GenratedImages /> },
               { path: "profile", element: <ProfilePage /> },
-              // Add other routes accessible by all logged-in users here
             ]
           },
           {
-            // Admin-specific routes, also wrapped by DashboardLayout
-            element: <AdminRoute />, // Further protects these routes for admins only
+            // Admin-specific routes
+            element: <AdminRoute />,
             children: [
               {
-                element: <DashboardLayout />, // Ensure admin routes also get the layout
+                element: <DashboardLayout />, // Lazy-loaded layout again for admin section
                 children: [
-                  { path: "dashboard", element: <Dashboard /> }, // Admin's dashboard
+                  { path: "dashboard", element: <Dashboard /> },
                   { path: "users", element: <User /> },
                   { path: "users/new", element: <CreateNewUserPage /> },
                   { path: "plans", element: <Plans /> },
