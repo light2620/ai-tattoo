@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FiDownload } from 'react-icons/fi';
+import { FaDownload } from 'react-icons/fa';
 import Spinner from '../../../utils/Spinner/Spinner';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useSelector } from 'react-redux';
@@ -36,9 +36,8 @@ const GenratedImages = () => {
       window.URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error("Error downloading image:", err);
-      alert("Download failed. Check console for details.");
+      toast.error("Download failed. Try again.");
     } finally {
-      // Remove index from downloading array
       setDownloadingIndexes((prev) => prev.filter((i) => i !== index));
     }
   };
@@ -76,11 +75,11 @@ const GenratedImages = () => {
               
             ) : (
               <button
-                className="action-btn download-btn"
+                className="action-btn"
                 onClick={() => handleDownload(img.url, `tattoo-design-${index + 1}.png`, index)}
                 title="Download Image"
               >
-                <FiDownload />
+                <FaDownload />
               </button>
             )}
           </div>

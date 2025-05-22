@@ -46,9 +46,20 @@
 
 }
 
-.action-btn{
+.action-btn {
   position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgb(255, 204, 74);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.39);
 }
+
 
 .loading-icon{
   position: absolute;
