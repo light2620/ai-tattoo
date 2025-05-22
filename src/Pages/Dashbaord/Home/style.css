@@ -1,183 +1,305 @@
-/* Container */
-.home-container {
-  max-width: 800px;
-  margin: auto;
-  padding: 1rem;
+/* src/Pages/Dashbaord/Home/Home.css */
+.tattoo-ai-page-container {
+  padding: 24px;
+  background-color: #F9FAFB;
+  min-height: calc(100vh - 64px); /* Full height minus topbar */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  box-sizing: border-box;
+  display: flex; /* Added for centering content if it's not full width */
+  flex-direction: column; /* Added */
+  align-items: center; /* Center the content area horizontally */
+}
+
+.page-header-alt {
+  margin-bottom: 24px;
+  width: 100%; /* Ensure header takes full width of its container */
+  max-width: 1200px; /* Max width for the content area */
+}
+
+.page-header-alt h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.generator-content-area {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%; /* Take full width of the centered container */
+  max-width: 1200px; /* Max width for the content area */
+}
+
+.generator-form-card,
+.generator-output-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  padding: 24px;
+  display: flex; /* Added for internal flex control */
+  flex-direction: column; /* Added */
+}
+
+.generator-output-card {
+    min-height: 400px; /* Suggest a minimum height for the output card */
+}
+
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.form-prompt-input-group {
+  margin-bottom: 20px;
+}
+
+.prompt-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+.prompt-textarea:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.form-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  align-items: flex-end;
+  margin-top: auto; /* Push controls to the bottom of the form card */
+}
+
+.control-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-
 }
 
-/* Title */
-.home-heading {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  margin-top :-1rem;
-  text-align: center;
-}
 
-/* Input + Button Group */
-.form-group {
-  width: 100%;
-  display: flex;
-  flex-direction : column;
-  margin-bottom: 1.5rem;
-  gap: .6em;
-  
-}
-
-.form-group input {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  width: 100%;
-}
-.form-options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-generate,
-.reference-btn {
-
-  padding: 0.65rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
+.control-button {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
   border-radius: 6px;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
   box-sizing: border-box;
+  height: 42px; /* Consistent button height */
+}
+
+.control-button .button-icon {
+  font-size: 16px;
+}
+
+.reference-button {
+  background-color: #F3F4F6;
+  color: #374151;
+  border-color: #D1D5DB;
+}
+.reference-button:hover {
+  background-color: #E5E7EB;
+  border-color: #9CA3AF;
+}
+
+.generate-button {
+  background-color: #1F2937;
+  color: #FFFFFF;
+}
+.generate-button:hover:not(:disabled) {
+  background-color: #374151;
+}
+.generate-button:disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+.generate-button .spinner-container svg {
+    margin-right: 8px;
+}
+
+/* Output Card Styling */
+.generator-output-card .output-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid #E5E7EB;
+  padding-bottom: 12px;
+}
+
+.output-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.output-image-area {
+  position: relative;
+  width: 100%;
+  /* aspect-ratio: 1 / 1; Removed fixed aspect ratio to allow flexibility */
+  background-color: #F3F4F6;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.btn-generate {
-     width: 100px;
-     background-color: black;
-     color : white;
-}
-.reference-btn{
-  widht: 200px;
-  background-color: #FFCC4A;
-  color: white;
-}
-
-.reference-btn:hover{
-  background-color:rgb(250, 186, 23);
-}
-.btn-generate:hover {
-  background-color:rgb(41, 40, 40);
-
+  border: 1px dashed #D1D5DB;
+  flex-grow: 1; /* Allow this area to grow to fill the card */
+  min-height: 300px; /* Minimum height for the image area */
+  max-height: 500px; /* Max height to prevent excessive stretching on large screens */
 }
 
 
-
-
-/* Loading */
-.generating-img-loading {
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content : center;
-  color: #555;
-  font-size: 1rem;
-  margin-top: 5rem;
-
+  justify-content: center;
+  z-index: 10;
+  color: #374151;
+  border-radius: 8px; /* Match parent's border radius */
+}
+.loading-overlay p {
+    margin-top: 12px;
+    font-weight: 500;
 }
 
 
-/* Image Preview */
-.image-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 480px;      /* fixed max width for desktop */
-  max-height: 480px;     /* fixed max height for desktop */
-  margin: auto;
-  border-radius: 0.5rem;
-  overflow: hidden;      /* prevent scroll, clip overflow */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-
-.image-wrapper img {
+.generated-image-container {
   width: 100%;
   height: 100%;
-  display: block;
-  object-fit: fill;  /* keep aspect ratio, fit inside */
+  position: relative;
+  display: flex; /* Added to help center image if needed */
+  align-items: center; /* Added */
+  justify-content: center; /* Added */
 }
 
-.download-btn {
+.generated-image {
+  max-width: 100%;  /* Allow image to shrink */
+  max-height: 100%; /* Allow image to shrink */
+  object-fit: contain;
+  display: block;
+}
+
+.download-image-button {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgb(255, 204, 74);
+  bottom: 12px;
+  right: 12px;
+  background-color: #1F2937;
   color: white;
   border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.39);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease;
+  z-index: 5; /* Ensure it's above the image */
+}
+.download-image-button:hover:not(:disabled) {
+  background-color: #374151;
+}
+.download-image-button:disabled {
+    background-color: #6B7280;
+    cursor: not-allowed;
+}
+.download-image-button .p-progress-spinner-circle {
+    stroke: white !important;
 }
 
 
-.download-spinner{
-  position: absolute;
-  top: 50%;
-  left:50%;
-}
-
-/* Placeholder */
-.placeholder {
-  color: #777;
-  font-style: italic;
+.placeholder-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin-top: 1rem;
+  color: #6B7280;
+  padding: 20px;
+  width: 100%; /* Ensure it takes full width of its container */
+  height: 100%; /* Ensure it takes full height */
 }
 
+.placeholder-icon {
+  font-size: 48px;
+  color: #9CA3AF;
+  margin-bottom: 16px;
+}
+.placeholder-area p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+.sub-placeholder {
+    font-size: 13px;
+    color: #9CA3AF;
+    margin-top: 8px;
+}
 
+/* Responsive adjustments */
+@media (max-width: 768px) { /* Tablet and smaller */
+  .generator-content-area {
+    grid-template-columns: 1fr; /* Stack cards */
+  }
+  .page-header-alt h1 {
+    font-size: 20px;
+  }
+  .output-image-area {
+    min-height: 250px; /* Adjust for smaller screens */
+    max-height: 400px;
+  }
+}
 
-
-
-/* Responsive */
-@media (max-width: 480px) {
-  .home-heading {
-    font-size: 1.25rem;
-    margin-top : 0;
+@media (max-width: 520px) { /* Mobile specific button improvements */
+  .form-controls-grid {
+    grid-template-columns: 1fr; /* Stack all controls */
+    gap: 12px; /* Reduce gap slightly */
   }
-  .form-group input {
-    font-size: 0.9rem;
-    padding: 0.65rem 0.75rem;
+  .control-item {
+    width: 100%;
   }
- .form-options {
-    flex-direction: row;         /* Make buttons appear in a row */
-    align-items: center;
-    gap: 8px;
+  .control-button {
+    font-size: 13px; /* Slightly smaller font for buttons */
+    padding: 10px 12px; /* Adjust padding */
+    height: 40px;
   }
-   .btn-generate,
-  .reference-btn {
-    font-size: 0.8rem;
-    padding: 0.65rem .7rem;
+  .prompt-textarea {
+    font-size: 14px;
+    min-height: 70px;
   }
-  .reference-btn{
-    width: 120px
+  .output-image-area {
+    min-height: 200px; /* Further adjust for mobile */
+    max-height: 350px;
   }
-    .btn-generate{
-      width: 80px;
-    }
-
-  .download-btn {
-    padding: 0.4rem;
-    font-size: 1rem;
+  .placeholder-icon {
+    font-size: 36px;
+  }
+  .placeholder-area p {
+    font-size: 14px;
   }
 }
