@@ -33,12 +33,12 @@ export const UserProvider = ({ children }) => {
           return;
         }
 
-        const userData = await getUserDetails(dispatch, post, setImageLoading);
+        const userData = await getUserDetails(post);
         if (userData) {
           setUser(userData);
           setRole(userData.role);  
           setIsLoggedIn(true);
-          dispatch(setImages(userData.generateImages));
+      
         } else {
           console.error("Failed to fetch user details");
         }

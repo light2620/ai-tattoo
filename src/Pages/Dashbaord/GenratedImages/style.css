@@ -1,129 +1,116 @@
-/* style.css */
-
-/* New wrapper for the entire GenratedImages component content */
-.genrated-images-component-wrapper {
-  padding: 24px; /* Overall padding for the component's content area */
-
-  min-height: 100vh; /* Optional: if this component takes the full view height */
-  box-sizing: border-box;
+/* generatedImages.css */
+:root {
+  --bg-dark: #111827;
+  --text-light: #f3f4f6;
+  --muted: #6b7280;
+  --accent: #3b82f6;
 }
 
-/* Styling for the "Generated Image" title */
-.page-title-generated {
-  font-size: 28px; /* Matches "Designs" title size in example */
+.generated-wrapper {
+  padding: 2rem;
+  background-color: whtie;
+  min-height: 100vh;
+}
+
+.generated-title {
+  font-size: 2rem;
+  color: black;
+  margin-bottom: 2rem;
   font-weight: 600;
-  color: #111827; /* Dark text (like Tailwind gray-900) */
-  margin-bottom: 24px; /* Space below the title */
 }
 
-.images-container {
+.generated-grid {
   display: grid;
-  grid-template-columns: 1fr; /* Default to 1 column */
-  gap: 1.5rem; /* Spacing between cards (24px) */
-  position: relative;
-}
-
-/* Responsive grid columns */
-@media (min-width: 600px) {
-  .images-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (min-width: 900px) {
-  .images-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (min-width: 1200px) {
-  .images-container {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
 }
 
 .image-card {
   position: relative;
+  background: white;
+  border-radius: 1rem;
   overflow: hidden;
-  border-radius: 12px;
-  background-color: #ffffff; /* White background for cards - this will be visible through transparent images */
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  display: flex; /* Added to help manage internal layout if needed, though img takes over */
-  flex-direction: column; /* Ensure image actions stay at bottom */
+  transition: transform 0.2s ease;
 }
 
 .image-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  transform: translateY(-0.25rem);
 }
 
-.image { /* This class is on the <img> tag */
-  width: 100%; /* Image will take full width of its container (the card) */
-  /* NO fixed height - height will be determined by image aspect ratio and width */
-  max-height: 400px; /* Optional: prevent extremely tall images from breaking layout */
-  object-fit: contain; /* Ensures entire image is visible, maintains aspect ratio */
+.img-placeholder {
+  width: 100%;
+  height: 12rem;
+  background: white;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    background-color: rgb(202, 203, 204);
+  }
+  50% {
+    background-color: rgb(215, 218, 221);
+  }
+}
+
+.image-content {
+  width: 100%;
+  height: auto;
   display: block;
-  padding: 16px; /* Padding INSIDE the image area, around the design content */
-  box-sizing: border-box;
-  /* The background of the image element itself is transparent.
-     Transparent parts of the source image will show the .image-card's white background. */
+  object-fit: contain;
+  padding: 1rem;
+  background-color: white;
 }
 
-/* Container for the download button / spinner */
-.image-actions {
-  position: absolute; /* Positioned relative to .image-card */
-  bottom: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.action-btn {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-color: rgba(31, 41, 55, 0.75);
-  color: white;
+.download-btn {
+  position: absolute;
+  bottom:20px;
+  right: 20px;
+  background: black;
   border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 0.5em;
+  color: white;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+.download-btn:hover{
+  background-color :rgb(73, 72, 72);
 }
 
-.action-btn:hover {
-  background-color: rgba(17, 24, 39, 0.9);
+.download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.action-btn svg {
-  font-size: 16px;
+.loader {
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  animation: spin 0.6s linear infinite;
 }
 
-.loading-icon {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* Fallback for main loading or no images */
-.images-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 50vh;
-  width: 100%;
-}
-
-.no-images-text {
-  font-size: 1.1rem;
-  color: #6b7280;
+.no-images {
+  font-size: 1.125rem;
+  color:rgb(202, 203, 204);
   text-align: center;
+  margin-top: 2rem;
+}
+
+.skeleton {
+  background-color:rgb(202, 203, 204);
+  height: 12rem;
+  border-radius: 1rem;
+  animation: pulse 1.5s infinite;
 }
