@@ -3,6 +3,7 @@ import { FaDownload } from 'react-icons/fa';
 import Spinner from '../../../utils/Spinner/Spinner';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import './style.css';
 
 const GenratedImages = () => {
