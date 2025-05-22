@@ -35,7 +35,7 @@ const ForgotPassword = () => {
       </div>
 
       <div className="auth-links">
-        <Link className="auth-link" to="/signin">Back to Sign In</Link>
+        <Link className="auth-link" to="/auth/signin">Back to Sign In</Link>
       </div>
       <button type="submit" disabled={loading} className="auth-btn">
         {loading && <i className="pi pi-spin pi-spinner"></i>}

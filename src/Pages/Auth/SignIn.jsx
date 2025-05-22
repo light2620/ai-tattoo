@@ -55,9 +55,9 @@ const SignIn = () => {
 
 
         <div className="auth-links">
-          <Link to="/signup" className="auth-link">Sign Up</Link>
+          <Link to="/auth/signup" className="auth-link">Sign Up</Link>
           <span className="divider">|</span>
-          <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
+          <Link to="/auth/forgot-password" className="auth-link">Forgot Password?</Link>
         </div>
 
         <button type="submit" disabled={loading} className="auth-btn">

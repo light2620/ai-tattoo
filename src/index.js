@@ -15,7 +15,6 @@ window.addEventListener('error', (event) => {
   const isChunkLoadError = event.message && event.message.includes('Loading CSS chunk');
 
   if (isChunkLoadError) {
-    
     window.location.reload();
   }
 });

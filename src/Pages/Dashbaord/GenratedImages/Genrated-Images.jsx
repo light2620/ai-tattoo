@@ -10,12 +10,12 @@ const GenratedImages = () => {
   const images = useSelector((state) => state.images.images);
   const loading = useSelector((state) => state.images.imagesLoading);
 
-  const [downloadingIndexes, setDownloadingIndexes] = useState([]); // <-- Array for multiple loaders
+  const [downloadingIndexes, setDownloadingIndexes] = useState([]); 
 
   useEffect(() => {}, [images]);
 
   const handleDownload = async (imageUrl, imageName, index) => {
-    setDownloadingIndexes((prev) => [...prev, index]); // Add index to array
+    setDownloadingIndexes((prev) => [...prev, index]); 
 
     const encodedUrl = encodeURIComponent(imageUrl);
     const apiUrl = `https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/downloadTattooImage?url=${encodedUrl}`;

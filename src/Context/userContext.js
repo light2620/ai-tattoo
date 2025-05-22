@@ -29,7 +29,6 @@ export const UserProvider = ({ children }) => {
         const decoded = jwtDecode(token);
         const currentTime = Date.now() / 1000;
         if (decoded.exp < currentTime) {
-
           logout();
           return;
         }
@@ -81,7 +80,7 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('Authorization');
-    navigate("/");
+    navigate("/auth/signin");
   
   };
   const resetPassword = async(credentials,setCredentials)=>{
@@ -95,7 +94,7 @@ export const UserProvider = ({ children }) => {
                     email: ""
                 });
                 setLoading(false);
-                navigate("/signin");
+                navigate("/auth/signin");
             }
         }catch(err){
           console.log(err);
@@ -116,7 +115,7 @@ export const UserProvider = ({ children }) => {
           });
           toast.success(response.data?.message);
           setLoading(false);
-          navigate("/signin");
+          navigate("/auth/signin");
         }
     }catch(err){
       toast.error(err.response.data.error);

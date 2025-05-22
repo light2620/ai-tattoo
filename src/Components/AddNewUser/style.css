@@ -1,0 +1,169 @@
+/* CreateNewUserPage.css */
+.create-user-page-container {
+  padding: 24px;
+  background-color: #f8f9fa; 
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.breadcrumb-separator {
+  margin: 0 8px;
+  color: #9ca3af;
+}
+
+.form-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  padding: 32px; 
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 24px; 
+  margin-bottom: 32px;
+}
+
+.add-user-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-user-form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+  display: block; 
+}
+
+.add-user-form-group input[type="text"],
+.add-user-form-group input[type="email"],
+.add-user-form-group select,
+.phone-input-custom .PhoneInputInput { 
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #374151;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-user-form-group input[type="text"]:focus,
+.add-user-form-group input[type="email"]:focus,
+.add-user-form-group select:focus,
+.phone-input-custom .PhoneInputInput:focus {
+  border-color: #3b82f6; 
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+}
+
+/* Styling for react-phone-number-input */
+.phone-input-custom { 
+  display: flex; 
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding-left: 8px; 
+}
+.phone-input-custom:focus-within { 
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.phone-input-custom .PhoneInputCountry {
+  margin-right: 8px; 
+}
+
+.phone-input-custom .PhoneInputInput {
+  border: none !important; 
+  box-shadow: none !important; 
+  flex-grow: 1;
+  padding: 10px 0px 10px 8px; 
+}
+.phone-input-custom .PhoneInputCountryIcon--border {
+  box-shadow: none; 
+}
+
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+
+.password-note {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #1f2937; 
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+.submit-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr; 
+  }
+  .form-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .submit-button {
+    width: 100%; 
+  }
+}
+
+/* Spinner inside button */
+.submit-button .spinner-container { 
+  width: 20px;
+  height: 20px;
+}

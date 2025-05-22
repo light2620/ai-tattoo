@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import './style.css';
-import { useApi } from '../../Api/apiProvider';
-import { getUserDetails } from '../../Api/getUserDataApi';
+import { useApi } from '../../../Api/apiProvider';
+import { getUserDetails } from '../../../Api/getUserDataApi';
 import { useDispatch } from 'react-redux';
-import { setImages, setImageLoading } from '../../Redux/ImagesSlice';
-import OptionSelector from '../../utils/OptionSelector/OptionSelector';
-import Spinner from '../../utils/Spinner/Spinner';
+import { setImages, setImageLoading } from '../../../Redux/ImagesSlice';
+import OptionSelector from '../../../utils/OptionSelector/OptionSelector';
+import Spinner from '../../../utils/Spinner/Spinner';
 import { FaDownload } from 'react-icons/fa';
-import ReferenceImages from '../../Components/RefrenceImages/RefrenceImages';
+import ReferenceImages from '../../../Components/RefrenceImages/RefrenceImages';
 import toast from 'react-hot-toast';
 import { ProgressSpinner } from 'primereact/progressspinner';
 

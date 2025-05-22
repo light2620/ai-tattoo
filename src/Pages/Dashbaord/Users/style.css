@@ -1,64 +1,337 @@
-.user-page {
-  padding: 20px;
-
+/* General Page Styles */
+.users-page-container {
+  padding: 24px;
+  background-color: #f8f9fa; /* Light gray background for the whole page */
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-.create-user-btn {
+
+/* Header Section */
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.users-header-left h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827; /* Dark gray for title */
+  margin: 0 0 4px 0;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  color: #6b7280; /* Medium gray for breadcrumbs */
+}
+
+.new-user-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 16px;
-  margin-bottom: 15px;
-  background-color: black; /* Blue */
+  background-color: #1f2937; /* Dark gray / almost black */
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
-.create-user-btn:hover {
-  background-color:rgb(39, 41, 44); /* Darker blue */
+.new-user-button:hover {
+  background-color: #374151; /* Slightly lighter dark gray on hover */
 }
 
-.user-table {
+/* Content Card (Tabs, Filters, Table) */
+.users-content-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+}
+
+/* Controls: Tabs and Filters */
+.users-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 16px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px; /* Gap between tab buttons */
+}
+
+.tab-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280; /* Default tab text color */
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab-button:hover {
+  color: #374151; /* Darker text on hover */
+}
+
+.tab-button.active {
+  color: #1f2937; /* Active tab text color */
+  border-bottom-color: #1f2937; /* Active tab underline */
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.role-filter select,
+.search-filter input {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db; /* Light gray border */
+  border-radius: 6px;
+  background-color: #fff;
+  color: #374151;
+}
+
+.role-filter select {
+  min-width: 120px; /* Adjust as needed */
+}
+
+.search-filter {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-filter .search-icon {
+  position: absolute;
+  left: 10px;
+  color: #9ca3af; /* Icon color */
+  font-size: 16px; /* Match image more closely */
+}
+
+.search-filter input {
+  padding-left: 36px; /* Space for the icon */
+  width: 200px; /* Adjust as needed */
+}
+
+/* Table Styles */
+.users-table-wrapper {
+  overflow-x: auto; /* Allow horizontal scrolling if table is too wide */
+}
+
+.users-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 }
 
-.user-table th,
-.user-table td {
-  border: 1px solid #ddd;
+.users-table th,
+.users-table td {
   padding: 12px 15px;
   text-align: left;
+  border-bottom: 1px solid #e5e7eb; /* Light gray horizontal lines */
+  font-size: 14px;
 }
 
-.user-table thead {
-  background-color: #f3f4f6; /* Light gray */
+.users-table th {
+  background-color: #f9fafb; /* Very light gray for header */
+  color: #374151; /* Darker text for header */
+  font-weight: 500;
+  text-transform: uppercase; /* As per common table styles, though image doesn't strictly show this */
+  font-size: 12px; /* Smaller font for headers */
+  letter-spacing: 0.05em;
 }
 
-.user-table tbody tr:nth-child(even) {
-  background-color: #f9fafb; /* Slightly lighter */
+
+.users-table tbody tr:hover {
+  background-color: #f9fafb; /* Slight hover effect for rows */
 }
 
-.user-table tbody tr:hover {
-  background-color: #e0e7ff; /* Light blue hover */
+.user-name {
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 2px;
 }
 
-.delete-user{ 
-    color: red;
-    cursor : pointer;
-}
-.delete-user:hover{
-    text-decoration : underline;
-
-}
-.action{
-    display : flex;
-    gap : 10px;
+.user-email {
+  font-size: 13px;
+  color: #6b7280;
 }
 
-.edit-user{
-    color :rgb(59, 126, 64);
-    cursor: pointer;
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px; /* Fine-tuned padding */
+  border-radius: 12px; /* Rounded badge */
+  font-size: 12px; /* Smaller font for badge */
+  font-weight: 500;
+  text-transform: capitalize;
+  line-height: 1.5;
 }
 
-.edit-user:hover{
-    color : rgb(77, 151, 82);
+.status-badge.status-active {
+  background-color: #E0E7FF; /* Light blueish-gray background */
+  color: #3730A3; /* Dark blue text */
+}
+/* Based on image, active is more like a light gray */
+.status-badge.status-active {
+  background-color: #E5E7EB; /* Light gray background */
+  color: #374151; /* Dark gray text */
+}
+
+
+.status-badge.status-pending {
+  background-color: #FEF3C7; /* Light yellow background for pending */
+  color: #92400E; /* Dark amber text */
+}
+
+.status-badge.status- { /* Fallback for empty status */
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+
+.actions-cell {
+  text-align: right; /* Align icons to the right */
+  white-space: nowrap;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: #6b7280; /* Icon color */
+  cursor: pointer;
+  padding: 6px;
+  margin-left: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #f3f4f6; /* Light gray background on hover */
+  color: #374151; /* Darker icon color on hover */
+}
+
+.table-message {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end; /* Align to the right, as common */
+  align-items: center;
+  padding-top: 20px; /* Space above pagination */
+  gap: 8px;
+  margin-top: 16px;
+  border-top: 1px solid #e5e7eb; /* Separator line */
+}
+
+.pagination-controls button {
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #f9fafb;
+}
+
+.pagination-controls button:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+.pagination-controls span {
+  font-size: 14px;
+  color: #374151;
+  margin: 0 8px;
+}
+
+.spinner-cell {
+  text-align: center; /* Center the spinner horizontally */
+
+}
+
+.spinner-cell > div {
+  margin: 5em auto;
+
+}
+
+/* Ensure popups are styled if needed, or their existing styles are compatible */
+/* Example of a basic popup style if you need to adjust them: */
+/*
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+*/
+
+/* Responsive adjustments (Optional, for better small screen viewing) */
+@media (max-width: 768px) {
+  .users-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .users-controls {
+    flex-direction: column;
+    align-items: stretch; /* Make filters take full width */
+  }
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .role-filter select, .search-filter input {
+    width: 100%;
+  }
+  .search-filter input {
+    box-sizing: border-box; /* ensure padding doesn't overflow */
+  }
+  .tabs {
+    width: 100%;
+    justify-content: space-around; /* Distribute tabs */
+  }
+  .pagination-controls {
+    justify-content: center;
+  }
 }

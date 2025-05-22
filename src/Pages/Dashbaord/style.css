@@ -1,183 +1,108 @@
-/* Container */
-.home-container {
-  max-width: 800px;
-  margin: auto;
-  padding: 1rem;
+.dashboard-page-content {
+  padding: 24px; /* Main padding for the dashboard content area */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.dashboard-stats-grid {
+  display: grid;
+  /* Create 3 columns for the top stats, and allow the 4th (Total Users) to wrap or fit */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.dashboard-stat-card {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 12px; /* Rounded corners as per image */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02); /* Subtle shadow */
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start; /* Align text to top, illustration might be taller */
+}
+
+.stat-card-info {
+  flex-grow: 1;
+}
+
+.stat-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280; /* Gray-500 */
+  margin: 0 0 4px 0;
+}
+
+.stat-card-value {
+  font-size: 32px; /* Large number */
+  font-weight: 700;
+  color: #1F2937; /* Gray-800 */
+  margin: 0;
+  line-height: 1.1;
+}
+
+.stat-card-illustration {
+  width: 60px; /* Adjust based on your illustration size */
+  height: 60px;
+  display: flex;
   align-items: center;
-
-}
-
-/* Title */
-.home-heading {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  margin-top :-1rem;
-  text-align: center;
-}
-
-/* Input + Button Group */
-.form-group {
-  width: 100%;
-  display: flex;
-  flex-direction : column;
-  margin-bottom: 1.5rem;
-  gap: .6em;
-  
-}
-
-.form-group input {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  width: 100%;
-}
-.form-options {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
+  /* background-color: #F3F4F6; Light gray bg for placeholder */
+  /* border-radius: 8px; */
+  margin-left: 16px; /* Space from text */
+}
+/* Placeholder for illustrations if you use simple emoji/text */
+.illustration-placeholder {
+    font-size: 30px;
 }
 
-.btn-generate,
-.reference-btn {
 
-  padding: 0.65rem 1rem;
-  font-size: 1rem;
+.dashboard-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Two charts side-by-side */
+  gap: 24px;
+}
+
+.dashboard-chart-card {
+  background-color: #FFFFFF;
+  padding: 20px 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.chart-card-title {
+  font-size: 16px;
   font-weight: 600;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #1F2937; /* Gray-800 */
+  margin: 0;
 }
 
-.btn-generate {
-     width: 100px;
-     background-color: black;
-     color : white;
-}
-.reference-btn{
-  widht: 200px;
-  background-color: #FFCC4A;
-  color: white;
+.chart-card-timespan {
+  font-size: 13px;
+  font-weight: 500;
+  color: #EA580C; /* Orange-600 */
+  background-color: #FFF7ED; /* Orange-50 */
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
-.reference-btn:hover{
-  background-color:rgb(250, 186, 23);
+.chart-card-body {
+  min-height: 200px; /* Placeholder height for chart area */
 }
-.btn-generate:hover {
-  background-color:rgb(41, 40, 40);
-
-}
-
-
-
-
-/* Loading */
-.generating-img-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content : center;
-  color: #555;
-  font-size: 1rem;
-  margin-top: 5rem;
-
-}
-
-
-/* Image Preview */
-.image-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 480px;      /* fixed max width for desktop */
-  max-height: 480px;     /* fixed max height for desktop */
-  margin: auto;
-  border-radius: 0.5rem;
-  overflow: hidden;      /* prevent scroll, clip overflow */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-
-.image-wrapper img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: fill;  /* keep aspect ratio, fit inside */
-}
-
-.download-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgb(255, 204, 74);
-  color: white;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.39);
-}
-
-
-.download-spinner{
-  position: absolute;
-  top: 50%;
-  left:50%;
-}
-
-/* Placeholder */
-.placeholder {
-  color: #777;
-  font-style: italic;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-
-
-
-
-/* Responsive */
-@media (max-width: 480px) {
-  .home-heading {
-    font-size: 1.25rem;
-    margin-top : 0;
-  }
-  .form-group input {
-    font-size: 0.9rem;
-    padding: 0.65rem 0.75rem;
-  }
- .form-options {
-    flex-direction: row;         /* Make buttons appear in a row */
+.chart-placeholder-content {
+    display: flex;
     align-items: center;
-    gap: 8px;
-  }
-   .btn-generate,
-  .reference-btn {
-    font-size: 0.8rem;
-    padding: 0.65rem .7rem;
-  }
-  .reference-btn{
-    width: 120px
-  }
-    .btn-generate{
-      width: 80px;
-    }
-
-  .download-btn {
-    padding: 0.4rem;
-    font-size: 1rem;
-  }
+    justify-content: center;
+    height: 100%;
+    min-height: 200px;
+    border: 1px dashed #D1D5DB; /* Gray-300 */
+    border-radius: 8px;
+    color: #6B7280; /* Gray-500 */
+    font-size: 14px;
 }

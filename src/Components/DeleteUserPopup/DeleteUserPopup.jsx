@@ -1,5 +1,4 @@
 
-import "primeicons/primeicons.css"; 
 import "./style.css";
 
 const DeleteUserPopup = ({ onClose, onDelete, userName, loading }) => {

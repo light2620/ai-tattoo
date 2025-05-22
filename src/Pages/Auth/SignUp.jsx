@@ -65,7 +65,7 @@ const SignUp = () => {
         
 
         <div className="auth-links">
-          <p >Already have a account?<Link to="/signin"  className="auth-link"> Sign In</Link></p>
+          <p >Already have a account?<Link to="/auth/signin"  className="auth-link"> Sign In</Link></p>
         </div>
 
         <button type="submit" disabled={loading} className="auth-btn">
