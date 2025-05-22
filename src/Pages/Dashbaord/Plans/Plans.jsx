@@ -131,7 +131,7 @@ const Plans = () => {
       <div className="plans-header">
         <div className="plans-header-left">
           <h1>Plans</h1>
-          <div className="breadcrumbs">Dashboard / Plans</div> {/* Adjust breadcrumbs as needed */}
+    
         </div>
         <button
           className="new-plan-button"
