@@ -1,305 +1,253 @@
-/* src/Pages/Dashbaord/Home/Home.css */
-.tattoo-ai-page-container {
-  padding: 24px;
-  background-color: #F9FAFB;
-  min-height: calc(100vh - 64px); /* Full height minus topbar */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  box-sizing: border-box;
-  display: flex; /* Added for centering content if it's not full width */
-  flex-direction: column; /* Added */
-  align-items: center; /* Center the content area horizontally */
-}
-
-.page-header-alt {
-  margin-bottom: 24px;
-  width: 100%; /* Ensure header takes full width of its container */
-  max-width: 1200px; /* Max width for the content area */
-}
-
-.page-header-alt h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.generator-content-area {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 24px;
-  align-items: flex-start;
-  width: 100%; /* Take full width of the centered container */
-  max-width: 1200px; /* Max width for the content area */
-}
-
-.generator-form-card,
-.generator-output-card {
-  background-color: #FFFFFF;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-  padding: 24px;
-  display: flex; /* Added for internal flex control */
-  flex-direction: column; /* Added */
-}
-
-.generator-output-card {
-    min-height: 400px; /* Suggest a minimum height for the output card */
-}
-
-
-.form-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 8px;
-}
-
-.form-prompt-input-group {
-  margin-bottom: 20px;
-}
-
-.prompt-textarea {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 15px;
-  border: 1px solid #D1D5DB;
-  border-radius: 8px;
-  box-sizing: border-box;
-  resize: vertical;
-  min-height: 80px;
-  line-height: 1.5;
-}
-.prompt-textarea:focus {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-  outline: none;
-}
-
-.form-controls-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  align-items: flex-end;
-  margin-top: auto; /* Push controls to the bottom of the form card */
-}
-
-.control-item {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.control-button {
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  height: 42px; /* Consistent button height */
-}
-
-.control-button .button-icon {
-  font-size: 16px;
-}
-
-.reference-button {
-  background-color: #F3F4F6;
-  color: #374151;
-  border-color: #D1D5DB;
-}
-.reference-button:hover {
-  background-color: #E5E7EB;
-  border-color: #9CA3AF;
-}
-
-.generate-button {
-  background-color: #1F2937;
-  color: #FFFFFF;
-}
-.generate-button:hover:not(:disabled) {
-  background-color: #374151;
-}
-.generate-button:disabled {
-  background-color: #9CA3AF;
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-.generate-button .spinner-container svg {
-    margin-right: 8px;
-}
-
-/* Output Card Styling */
-.generator-output-card .output-header {
-  margin-bottom: 16px;
-  border-bottom: 1px solid #E5E7EB;
-  padding-bottom: 12px;
-}
-
-.output-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
-
-.output-image-area {
-  position: relative;
-  width: 100%;
-  /* aspect-ratio: 1 / 1; Removed fixed aspect ratio to allow flexibility */
-  background-color: #F3F4F6;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px dashed #D1D5DB;
-  flex-grow: 1; /* Allow this area to grow to fill the card */
-  min-height: 300px; /* Minimum height for the image area */
-  max-height: 500px; /* Max height to prevent excessive stretching on large screens */
-}
-
-
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
+/* Container */
+.home-container {
+  max-width: 700px; /* Slightly reduced max-width for a more contained feel */
+  margin: 2rem auto; /* Added more top/bottom margin for breathing room on the page */
+  padding: 1.5rem; /* Slightly increased padding */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  z-index: 10;
-  color: #374151;
-  border-radius: 8px; /* Match parent's border radius */
-}
-.loading-overlay p {
-    margin-top: 12px;
-    font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Consistent font */
+  background-color: #f9fafb; /* Light background for the container itself */
+  border-radius: 12px; /* Rounded corners for the whole section */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow */
 }
 
+/* Title */
+.home-heading {
+  font-size: 1.75rem; /* Slightly adjusted font size */
+  font-weight: 700; /* Bolder */
+  margin-bottom: 1.5rem; /* Increased bottom margin */
+  margin-top: 0; /* Removed negative top margin, handled by container padding */
+  text-align: center;
+  color: #111827; /* Darker, more modern text color */
+}
 
-.generated-image-container {
+/* Input + Button Group */
+.form-group {
   width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex; /* Added to help center image if needed */
-  align-items: center; /* Added */
-  justify-content: center; /* Added */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  gap: 0.75rem; /* Increased gap */
 }
 
-.generated-image {
-  max-width: 100%;  /* Allow image to shrink */
-  max-height: 100%; /* Allow image to shrink */
-  object-fit: contain;
-  display: block;
+.form-group input[type="text"] { /* More specific selector */
+  padding: 0.85rem 1.1rem; /* Increased padding for a more substantial feel */
+  border: 1px solid #D1D5DB; /* Softer border color (Tailwind Gray-300) */
+  border-radius: 8px; /* Slightly more rounded */
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding doesn't add to width */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Smooth focus transition */
+}
+.form-group input[type="text"]:focus {
+  border-color: #FDBF2D;
+  border: 2px solid #FDBF2D; /* Blue focus ring (Tailwind Blue-500) */
+
+  outline: none; /* Remove default outline */
 }
 
-.download-image-button {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background-color: #1F2937;
-  color: white;
+.form-options {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: center; - Let's try space-between or allow natural flow */
+  align-items: center; /* Vertically align items if they wrap */
+  gap: 12px; /* Increased gap */
+}
+
+/* Style for the div wrapping OptionSelector if it exists and needs alignment */
+.option-selector {
+  flex-grow: 1; /* Allow it to take available space if needed */
+  min-width: 150px; /* Ensure it has some minimum width */
+}
+
+.btn-generate,
+.reference-btn {
+  padding: 0.75rem 1.25rem; /* Consistent and slightly larger padding */
+  font-size: 0.95rem; /* Slightly adjusted font size */
+  font-weight: 600;
+  border-radius: 8px; /* Consistent rounded corners */
   border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: inline-flex; /* Changed to inline-flex for better alignment with text/icons */
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  transition: background-color 0.2s ease;
-  z-index: 5; /* Ensure it's above the image */
+  text-decoration: none; /* Ensure no underline if wrapped in <a> sometimes */
+  transition: background-color 0.2s ease, transform 0.1s ease; /* Added transform for subtle click feedback */
+  /* white-space: nowrap; - Already there, good */
 }
-.download-image-button:hover:not(:disabled) {
-  background-color: #374151;
+.btn-generate:active,
+.reference-btn:active {
+    transform: scale(0.98); /* Subtle press effect */
 }
-.download-image-button:disabled {
-    background-color: #6B7280;
+
+
+.btn-generate {
+  min-width: 120px; /* Min width instead of fixed */
+  background-color: #1F2937; /* Dark Gray/Black (Tailwind Gray-800) */
+  color: white;
+}
+.reference-btn {
+  min-width: 180px; /* Min width */
+  background-color: #FDBF2D; /* A slightly richer yellow/amber */
+  color: white; /* Dark brown text for better contrast on yellow */
+  font-weight: 600;
+}
+
+.reference-btn:hover {
+  background-color: #FACA50; /* Lighter amber on hover */
+}
+.btn-generate:hover:not(:disabled) { /* Added :not(:disabled) */
+  background-color: #374151; /* Slightly Lighter Dark Gray (Tailwind Gray-700) */
+}
+.btn-generate:disabled { /* Style for disabled state */
+    background-color: #9CA3AF; /* Tailwind Gray-400 */
     cursor: not-allowed;
 }
-.download-image-button .p-progress-spinner-circle {
-    stroke: white !important;
-}
 
 
-.placeholder-area {
+/* Loading */
+.generating-img-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #4B5563; /* Slightly darker text (Tailwind Gray-600) */
+  font-size: 1rem;
+  margin-top: 3rem; /* Reduced top margin */
+  padding: 2rem 0;
+}
+.generating-img-loading p {
+    margin-top: 0.75rem; /* Space between spinner and text */
+}
+
+
+/* Image Preview */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 450px; /* Slightly reduced for better fit */
+  /* max-height: 450px; Let content define height based on image aspect ratio */
+  aspect-ratio: 1 / 1; /* Maintain a square preview box if no image */
+  margin: 1.5rem auto; /* Increased top/bottom margin */
+  border-radius: 10px; /* More rounded */
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+  background-color: #E5E7EB; /* Placeholder background (Tailwind Gray-200) */
+  display: flex; /* For centering placeholder */
+  align-items: center;
+  justify-content: center;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain; /* Changed to contain for better aspect ratio preservation */
+}
+
+.download-btn {
+  position: absolute;
+  bottom: 12px; /* Slightly more padding */
+  right: 12px; /* Slightly more padding */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(31, 41, 55, 0.8); /* Dark semi-transparent background */
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Adjusted shadow */
+  display: flex; /* To center icon */
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+.download-btn:hover {
+    background-color: rgba(55, 65, 81, 0.9); /* Darker on hover */
+}
+.download-btn svg { /* Target the icon inside */
+    font-size: 16px; /* Adjust icon size if needed */
+}
+
+
+.download-spinner { /* Ensure spinner is centered */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Proper centering */
+}
+
+/* Placeholder */
+.placeholder {
+  color: #6B7280; /* Tailwind Gray-500 */
+  font-size: 0.95rem; /* Slightly adjusted */
   text-align: center;
-  color: #6B7280;
-  padding: 20px;
-  width: 100%; /* Ensure it takes full width of its container */
-  height: 100%; /* Ensure it takes full height */
+  margin-top: 0.5rem; /* Reduced margin if multiple placeholders */
+  padding: 0 1rem; /* Add some horizontal padding */
+}
+/* If .image-wrapper is used as placeholder container */
+.image-wrapper .placeholder-content { /* New class for content inside placeholder */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6B7280;
+}
+.image-wrapper .placeholder-content svg { /* If you add an icon to placeholder */
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    color: #9CA3AF; /* Tailwind Gray-400 */
 }
 
-.placeholder-icon {
-  font-size: 48px;
-  color: #9CA3AF;
-  margin-bottom: 16px;
-}
-.placeholder-area p {
-    font-size: 15px;
-    line-height: 1.6;
-}
-.sub-placeholder {
-    font-size: 13px;
-    color: #9CA3AF;
-    margin-top: 8px;
-}
 
-/* Responsive adjustments */
-@media (max-width: 768px) { /* Tablet and smaller */
-  .generator-content-area {
-    grid-template-columns: 1fr; /* Stack cards */
+/* Responsive */
+@media (max-width: 480px) {
+  .home-container {
+    margin: 1rem auto;
+    padding: 1rem;
+    border-radius: 8px;
   }
-  .page-header-alt h1 {
-    font-size: 20px;
+  .home-heading {
+    font-size: 1.5rem; /* Adjusted for mobile */
+    margin-bottom: 1rem;
   }
-  .output-image-area {
-    min-height: 250px; /* Adjust for smaller screens */
-    max-height: 400px;
+  .form-group input[type="text"] {
+    font-size: 0.95rem;
+    padding: 0.75rem 0.9rem;
   }
-}
+  .form-options {
+    flex-direction: column; /* Stack options for better mobile layout */
+    gap: 10px;
+    width: 100%; /* Make options take full width */
+  }
+  .option-selector {
+    width: 100%; /* Make selector take full width */
+  }
+  .btn-generate,
+  .reference-btn {
+    font-size: 0.9rem; /* Adjusted for mobile */
+    padding: 0.75rem 1rem; /* Adjusted padding */
+    width: 100%; /* Make buttons full width when stacked */
+    min-width: unset; /* Remove min-width */
+  }
 
-@media (max-width: 520px) { /* Mobile specific button improvements */
-  .form-controls-grid {
-    grid-template-columns: 1fr; /* Stack all controls */
-    gap: 12px; /* Reduce gap slightly */
+  .image-wrapper {
+    max-width: 100%; /* Allow image wrapper to be full width */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    aspect-ratio: unset; /* Allow height to be determined by content on mobile */
+    min-height: 250px; /* Ensure a minimum visible area */
   }
-  .control-item {
-    width: 100%;
+
+  .download-btn {
+    width: 36px;
+    height: 36px;
+    bottom: 8px;
+    right: 8px;
   }
-  .control-button {
-    font-size: 13px; /* Slightly smaller font for buttons */
-    padding: 10px 12px; /* Adjust padding */
-    height: 40px;
-  }
-  .prompt-textarea {
-    font-size: 14px;
-    min-height: 70px;
-  }
-  .output-image-area {
-    min-height: 200px; /* Further adjust for mobile */
-    max-height: 350px;
-  }
-  .placeholder-icon {
-    font-size: 36px;
-  }
-  .placeholder-area p {
-    font-size: 14px;
+  .download-btn svg {
+      font-size: 14px;
   }
 }

@@ -155,7 +155,6 @@ const User = () => {
       <div className="users-header">
         <div className="users-header-left">
           <h1>Users</h1>
-          <div className="breadcrumbs">Dashboard / Users</div>
         </div>
         <button
           className="new-user-button"
@@ -169,7 +168,7 @@ const User = () => {
         {/* Filters and Tabs remain the same */}
         <div className="users-controls">
           <div className="tabs">
-            {["All", "Active", "Pending"].map((tab) => (
+            {["All", "Active"].map((tab) => (
               <button
                 key={tab}
                 className={`tab-button ${activeTab === tab ? "active" : ""}`}

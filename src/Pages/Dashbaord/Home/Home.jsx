@@ -1,187 +1,161 @@
-// src/Pages/Dashbaord/Home/Home.js (or your path)
-import React, { useState } from 'react';
-import './style.css'; // We'll create this new CSS file
+import { useState } from 'react';
+import './style.css';
 import { useApi } from '../../../Api/apiProvider';
-import { getUserDetails } from '../../../Api/getUserDataApi'; // Assuming this is correct
+import { getUserDetails } from '../../../Api/getUserDataApi';
 import { useDispatch } from 'react-redux';
-import { setImages, setImageLoading } from '../../../Redux/ImagesSlice'; // Assuming this is correct
-import OptionSelector from '../../../utils/OptionSelector/OptionSelector'; // Assuming this is a custom component
-import Spinner from '../../../utils/Spinner/Spinner'; // Your existing spinner
-import { FaDownload, FaImage } from 'react-icons/fa'; // FaImage for reference button
-import ReferenceImages from '../../../Components/RefrenceImages/RefrenceImages'; // Assuming path
+import { setImages, setImageLoading } from '../../../Redux/ImagesSlice';
+import OptionSelector from '../../../utils/OptionSelector/OptionSelector';
+import Spinner from '../../../utils/Spinner/Spinner';
+import { FaDownload } from 'react-icons/fa';
+import ReferenceImages from '../../../Components/RefrenceImages/RefrenceImages';
 import toast from 'react-hot-toast';
-import { ProgressSpinner } from 'primereact/progressspinner'; // PrimeReact spinner
+import { ProgressSpinner } from 'primereact/progressspinner';
+import "primeicons/primeicons.css";
 
 const Home = () => {
   const [input, setInput] = useState('');
   const [openRefrenceImages, setOpenRefrenceImages] = useState(false);
   const [selectedRefrenceImages, setSelectedRefrenceImages] = useState([]);
-  const [quality, setQuality] = useState('simple'); // 'simple' or 'detailed' from OptionSelector
+  const [quality, setQuality] = useState('simple');
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
-
+  const [imageUrl, setImageUrl] = useState(
+    ''
+  );
   const { post } = useApi();
   const dispatch = useDispatch();
 
   const handleGenerate = async () => {
-    if (!input.trim()) {
-      toast.error("Please describe your tattoo idea.");
-      return;
-    }
-    setLoading(true);
-    setImageUrl('');
+    if (!input.trim()) return;
     try {
+      setLoading(true);
+      setImageUrl('');
       const response = await post(
         'https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage',
         {
           prompt: input,
           referenceImages: selectedRefrenceImages,
-          mode: quality,
+          mode: quality
         }
       );
+      console.log(response);
       if (response.data.type === 'success') {
         setImageUrl(response.data.imageUrl);
-        // Optionally, fetch user details and update Redux store if credit/image count changes
         const userData = await getUserDetails(dispatch, post, setImageLoading);
-        if (userData && userData.generateImages) {
+        if (userData) {
           dispatch(setImages(userData.generateImages));
         }
-      } else {
-        toast.error(response.data.message || 'Image generation failed.');
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Something went wrong during generation.');
+      toast.error(err.response?.data?.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDownload = async (url, imageName) => {
-    if (!url) return;
+  const handleDownload = async (imageUrl, imageName) => {
     setDownloading(true);
-    const encodedUrl = encodeURIComponent(url);
+    const encodedUrl = encodeURIComponent(imageUrl);
     const apiUrl = `https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/downloadTattooImage?url=${encodedUrl}`;
 
     try {
       const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
+
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
+
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = imageName || 'tattoo-design.png';
+      link.download = imageName || 'tattoo.png';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
       window.URL.revokeObjectURL(blobUrl);
-      toast.success("Image download started!");
     } catch (err) {
       console.error('Error downloading image:', err);
-      toast.error('Download failed. Please try again.');
+      alert('Download failed. Check console for details.');
     } finally {
       setDownloading(false);
     }
   };
 
   return (
-    <div className="tattoo-ai-page-container">
-      <div className="page-header-alt"> {/* Similar to other page headers */}
-        <h1>Tattoo AI Generator</h1>
-        {/* Optional breadcrumbs or subtitle here */}
-      </div>
+    <div className="home-container">
+      <h2 className="home-heading">Tattoo Generator</h2>
 
-      <div className="generator-content-area">
-        <div className="generator-form-card">
-          <div className="form-prompt-input-group">
-            <label htmlFor="tattooPrompt" className="form-label">Describe your tattoo idea</label>
-            <textarea
-              id="tattooPrompt"
-              className="prompt-textarea"
-              placeholder="e.g., A majestic lion with a crown, geometric style, vibrant colors..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              rows="3"
-            />
+      <div className="form-group">
+        <input
+          type="text"
+          placeholder="Describe your tattoo idea..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+
+        <div className="form-options">
+          <button
+            className="reference-btn"
+            onClick={() => setOpenRefrenceImages(true)}
+          >
+            <span className="btn-text">Reference Images</span>
+          </button>
+
+          <div className="option-selector">
+            <OptionSelector selected={quality} onChange={setQuality} />
           </div>
 
-          <div className="form-controls-grid">
-            <div className="control-item">
-              <label className="form-label">Quality</label>
-              <OptionSelector selected={quality} onChange={setQuality} />
-            </div>
-            <div className="control-item">
-              <label className="form-label">Reference</label>
-              <button
-                className="control-button reference-button"
-                onClick={() => setOpenRefrenceImages(true)}
-              >
-                <FaImage className="button-icon" />
-                {selectedRefrenceImages.length > 0
-                  ? `${selectedRefrenceImages.length} Selected`
-                  : 'Add Images'}
-              </button>
-            </div>
-            <div className="control-item generate-button-wrapper">
-              {/* Empty label for alignment or specific styling */}
-              <label className="form-label"> </label>
-              <button
-                className="control-button generate-button"
-                onClick={handleGenerate}
-                disabled={loading || downloading || !input.trim()}
-              >
-                {loading ? (
-                  <>
-                    <Spinner size="small" color="#fff" /> Generating...
-                  </>
-                ) : (
-                  'Generate Image'
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="generator-output-card">
-          <div className="output-header">
-            <h3 className="output-title">Generated Tattoo</h3>
-          </div>
-          <div className="output-image-area">
-            {loading && (
-              <div className="loading-overlay">
-                <Spinner size="large" />
-                <p>Creating your masterpiece...</p>
-              </div>
-            )}
-            {!loading && imageUrl && (
-              <div className="generated-image-container">
-                <img src={imageUrl} alt="Generated tattoo design" className="generated-image" />
-                <button
-                  onClick={() => handleDownload(imageUrl, `tattoo-${input.substring(0,20).replace(/\s+/g, '-')}.png`)}
-                  className="download-image-button"
-                  disabled={downloading}
-                  aria-label="Download image"
-                >
-                  {downloading ? (
-                    <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="6" animationDuration=".5s" />
-                  ) : (
-                    <FaDownload />
-                  )}
-                </button>
-              </div>
-            )}
-            {!loading && !imageUrl && (
-              <div className="placeholder-area">
-                <FaImage className="placeholder-icon" />
-                <p>Your generated image will appear here.</p>
-                {selectedRefrenceImages.length > 0 && !input.trim() && (
-                    <p className="sub-placeholder">Describe your idea to use the {selectedRefrenceImages.length} reference image(s).</p>
-                )}
-              </div>
-            )}
-          </div>
+          <button className="btn-generate" onClick={handleGenerate} disabled={loading || downloading}>
+            {loading ? <span>Generating <i className="pi pi-spin pi-spinner spinner-icon"> </i> </span> : "Generate" }
+          </button>
         </div>
       </div>
+
+      {loading && (
+        <div className="generating-img-loading">
+          <Spinner />
+          <p>Generating Tattoo...</p>
+        </div>
+      )}
+
+      {!loading && imageUrl && (
+        <div className="image-wrapper">
+          <img src={imageUrl} alt="Generated tattoo" />
+          {downloading ? (
+            <div
+              className="download-spinner"  >
+              <ProgressSpinner style={{ width: '25px', height: '25px' }}
+                strokeWidth="8"
+                animationDuration=".5s" />
+            </div>
+          ) : (
+            <button
+              onClick={() => handleDownload(imageUrl, `tattoo-design.png`)}
+              rel="noopener noreferrer"
+              className="download-btn"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleGenerate();
+                }
+              }}
+              style={{ marginLeft: '10px' }}
+            >
+              <FaDownload />
+            </button>
+          )}
+        </div>
+      )}
+
+      {!loading && !imageUrl && (
+        <div>
+          <p className="placeholder">No image generated yet.</p>
+          {selectedRefrenceImages.length > 0 && (
+            <p className="placeholder">
+              {selectedRefrenceImages.length} Reference Selected
+            </p>
+          )}
+        </div>
+      )}
 
       {openRefrenceImages && (
         <ReferenceImages

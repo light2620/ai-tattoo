@@ -1,5 +1,4 @@
-
-import Spinner from '../../../utils/Spinner/Spinner';
+import "primeicons/primeicons.css";
 import './style.css'; // We'll create this shared CSS
 
 const DeleteUserModal = ({ isOpen, onClose, onConfirm, userName, loading }) => {

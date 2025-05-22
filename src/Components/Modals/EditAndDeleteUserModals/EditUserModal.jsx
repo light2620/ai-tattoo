@@ -7,7 +7,8 @@ import { useApi } from '../../../Api/apiProvider';
 import 'react-phone-number-input/style.css'; 
 import { FiInfo } from 'react-icons/fi'; 
 import 'react-phone-number-input/style.css'; 
-import './style.css'; // Shared CSS
+import './style.css';
+import "primeicons/primeicons.css";
 
 
 const EditUserModal = ({ isOpen, onClose, userData, fetchUserList }) => {

@@ -70,9 +70,7 @@ const CreateNewUserPage = () => {
     <div className="create-user-page-container">
       <div className="page-header">
         <h1>Create a new user</h1>
-        <div className="breadcrumbs">
-          Dashboard <span className="breadcrumb-separator">•</span> Users <span className="breadcrumb-separator">•</span> New user
-        </div>
+        
       </div>
 
       <div className="form-card">

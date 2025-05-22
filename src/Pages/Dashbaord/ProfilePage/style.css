@@ -1,62 +1,167 @@
-.profile-page {
-  max-width: 31.25rem; /* 500px */
-  margin: 2em auto;
-  padding: 1.5em;
-  background: #fff;
-  border-radius: 0.5em;
-  box-shadow: 0 0 0.625em rgba(0, 0, 0, 0.1); /* 10px */
+/* src/Pages/Dashbaord/ProfilePage/ProfilePage.css */
+.profile-page-container {
+  padding: 24px;
+  background-color: #F9FAFB; /* Match dashboard background */
+  min-height: calc(100vh - 64px); /* Full height minus topbar */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content card */
 }
 
-.profile-page h2 {
-  text-align: center;
-  margin-bottom: 1.5em;
-  font-size: 1.5rem;
+.page-header-alt {
+  width: 100%;
+  max-width: 700px; /* Consistent max width */
+  margin-bottom: 24px;
+}
+
+.page-header-alt h1 {
+  font-size: 24px;
+  font-weight: 600;
   color: #111827;
 }
 
-.profile-form {
+.profile-content-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  padding: 32px; /* More padding for a spacious form */
+  width: 100%;
+  max-width: 700px; /* Max width for the form card */
+}
+
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to single column */
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 640px) { /* Two columns on larger screens */
+  .profile-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+.form-field-item {
   display: flex;
   flex-direction: column;
-  gap: 1em;
 }
 
-.profile-form-group {
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151; /* Gray-700 */
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #D1D5DB; /* Gray-300 */
+  border-radius: 6px;
+  background-color: #fff;
+  color: #1F2937; /* Gray-800 */
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus,
+.phone-input-profile.PhoneInput--focus { /* Target PhoneInput focus state */
+  border-color: #3B82F6; /* Blue-500 */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.form-input:disabled {
+  background-color: #F3F4F6; /* Gray-100 */
+  color: #6B7280; /* Gray-500 */
+  cursor: not-allowed;
+  border-color: #E5E7EB; /* Gray-200 */
+}
+
+/* Styling for react-phone-number-input wrapper */
+.phone-input-profile {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  border: 1px solid #D1D5DB; /* Gray-300 */
+  border-radius: 6px;
+  background-color: #fff; /* Ensure background color */
+  padding-left: 8px; /* Space for the flag */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.phone-input-profile.PhoneInput--disabled {
+    background-color: #F3F4F6;
+    cursor: not-allowed;
+}
+.phone-input-profile.PhoneInput--disabled .PhoneInputInput {
+    cursor: not-allowed;
+    color: #6B7280;
 }
 
-.profile-form-group label {
-  font-weight: 600;
-  margin-bottom: 0.5em;
-  color: #374151;
-  font-size: 1rem;
+
+.phone-input-profile .PhoneInputInput { /* Target the input within react-phone-number-input */
+  border: none !important; /* Override default border of the inner input */
+  box-shadow: none !important; /* Override default shadow */
+  flex-grow: 1;
+   
+  font-size: 14px;
+  background-color: transparent !important; /* Ensure transparent bg */
+  color: #1F2937;
+}
+.phone-input-profile .PhoneInputCountryIcon--border {
+  box-shadow: none;
 }
 
-.profile-form-group input {
-  padding: 0.5em 0.75em;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375em;
-  font-size: 1rem;
+.profile-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #E5E7EB; /* Separator line */
 }
 
-.profile-form-group input:disabled {
-  background-color: #f9fafb;
-  color: #6b7280;
+.profile-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* Space for spinner */
+}
+
+.profile-button.primary-button {
+  background-color: #1F2937; /* Dark Gray/Black */
+  color: white;
+}
+.profile-button.primary-button:hover:not(:disabled) {
+  background-color: #374151;
+}
+.profile-button.primary-button:disabled {
+  background-color: #9CA3AF; /* Gray-400 */
   cursor: not-allowed;
 }
 
-.edit-btn {
-  padding: 0.6em 1.2em;
-  background-color: black;
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: 0.375em;
-  cursor: pointer;
-  transition: background 0.2s;
-  font-size: 1rem;
+.profile-button.secondary-button {
+  background-color: #FFFFFF;
+  color: #374151; /* Gray-700 */
+  border-color: #D1D5DB; /* Gray-300 */
 }
-
-.edit-btn:hover {
-  background-color:rgb(43, 43, 44);
+.profile-button.secondary-button:hover:not(:disabled) {
+  background-color: #F9FAFB; /* Gray-50 */
+  border-color: #9CA3AF; /* Gray-400 */
+}
+.profile-button.secondary-button:disabled {
+    background-color: #F3F4F6;
+    color: #9CA3AF;
+    border-color: #E5E7EB;
+    cursor: not-allowed;
 }

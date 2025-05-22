@@ -5,11 +5,11 @@ import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom'
 import { router } from './Routes/routes.jsx';
 import { ApiProvider } from './Api/apiProvider.js';
-import Spinner from './utils/Spinner/Spinner';
 import store from './Redux/store.js';
 import { Provider } from 'react-redux';
 import Loader from './utils/Loader/Loader.jsx';
 import ChunkErrorBoundary from './Components/ChunkErrorBoundary/ChunkErrorBoundary.jsx';
+import { UserProvider } from './Context/userContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 window.addEventListener('error', (event) => {
   const isChunkLoadError = event.message && event.message.includes('Loading CSS chunk');
