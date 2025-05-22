@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdClose } from "react-icons/io";
 import "./style.css";
+import toast from "react-hot-toast";
 
 const ReferenceImages = ({ selectedImages, setSelectedImages, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -83,10 +84,15 @@ const ReferenceImages = ({ selectedImages, setSelectedImages, onClose }) => {
   );
 
   const handleSelect = (url) => {
+    
     if (selectedImages.includes(url)) {
       setSelectedImages(selectedImages.filter(img => img !== url));
     } else {
-      setSelectedImages([...selectedImages, url]);
+      if(selectedImages.length < 2){
+           setSelectedImages([...selectedImages, url]);
+      }else{
+        toast.error("Cannot select more than 2 images")
+      }
     }
   };
 
@@ -109,7 +115,7 @@ const ReferenceImages = ({ selectedImages, setSelectedImages, onClose }) => {
         className="close-popup">
           <IoMdClose size={30} />
         </div>
-        <h3>Select Reference Images</h3>
+        <h3>Select Reference Images (Max 2 image)</h3>
 
         <input
           type="text"

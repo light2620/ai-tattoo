@@ -19,7 +19,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [imageUrl, setImageUrl] = useState(
-    'https://firebasestorage.googleapis.com/v0/b/tattoo-shop-printing-dev.firebasestorage.app/o/tattoos%2F0d2d1436-8020-4a2d-8e14-27a5078f43c1.png?alt=media&token=73bda86e-4ef8-431e-8953-5a1dc1588338'
+    ''
   );
   const { post } = useApi();
   const dispatch = useDispatch();
