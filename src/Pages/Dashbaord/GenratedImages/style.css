@@ -1,19 +1,17 @@
-/* style.css */
-
 /* New wrapper for the entire GenratedImages component content */
 .genrated-images-component-wrapper {
-  padding: 24px; /* Overall padding for the component's content area */
-
-  min-height: 100vh; /* Optional: if this component takes the full view height */
+  padding: 24px;
+  background-color: #f9fafb; /* Tailwind gray-50: Soft background for the page */
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
 /* Styling for the "Generated Image" title */
 .page-title-generated {
-  font-size: 28px; /* Matches "Designs" title size in example */
+  font-size: 28px;
   font-weight: 600;
-  color: #111827; /* Dark text (like Tailwind gray-900) */
-  margin-bottom: 24px; /* Space below the title */
+  color: #111827; /* Dark text (Tailwind gray-900) */
+  margin-bottom: 24px;
 }
 
 .images-container {
@@ -41,15 +39,20 @@
 }
 
 .image-card {
-  position: relative;
+  position: relative; /* For absolute positioning of overlays/actions */
   overflow: hidden;
   border-radius: 12px;
-  background-color: #ffffff; /* White background for cards - this will be visible through transparent images */
-  border: 1px solid #e5e7eb;
+  background-color: #ffffff; /* White background for cards */
+  border: 1px solid #e5e7eb; /* Tailwind gray-200 */
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  display: flex; /* Added to help manage internal layout if needed, though img takes over */
-  flex-direction: column; /* Ensure image actions stay at bottom */
+  
+  display: flex; /* To help center content */
+  flex-direction: column;
+  justify-content: center; /* Center content (image or placeholder) vertically */
+  align-items: center; /* Center content horizontally */
+  min-height: 250px; /* Give card a minimum height, adjust as needed */
+  /* aspect-ratio: 1 / 1; /* Alternative: force a square aspect ratio */
 }
 
 .image-card:hover {
@@ -58,20 +61,53 @@
 }
 
 .image { /* This class is on the <img> tag */
-  width: 100%; /* Image will take full width of its container (the card) */
-  /* NO fixed height - height will be determined by image aspect ratio and width */
-  max-height: 400px; /* Optional: prevent extremely tall images from breaking layout */
+  width: 100%;
+  max-height: 400px; /* Max height for image content */
   object-fit: contain; /* Ensures entire image is visible, maintains aspect ratio */
-  display: block;
+  display: block; /* Default display for img */
   padding: 16px; /* Padding INSIDE the image area, around the design content */
   box-sizing: border-box;
-  /* The background of the image element itself is transparent.
-     Transparent parts of the source image will show the .image-card's white background. */
+  /* visibility is controlled by inline style based on load state */
+  position: relative; /* Ensures it's in the normal flow and can have z-index if needed */
+  z-index: 1; /* Above card background, below overlays if any conflict */
 }
+
+/* Overlays for loading/error states */
+.image-status-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px; /* Match image padding for content alignment */
+  box-sizing: border-box;
+  z-index: 5; /* Above image (if it were visible), below actions */
+}
+
+.image-loading-placeholder {
+  /* background-color: rgba(230, 230, 230, 0.3); Subtle background for loading state (optional) */
+  /* Spinner itself provides visual cue */
+}
+
+.image-error-placeholder {
+  background-color: rgba(245, 245, 245, 0.9); /* Light background for error state */
+  color: #757575; /* Muted text color for error */
+  font-size: 0.9rem;
+  text-align: center;
+}
+.image-error-placeholder span {
+  padding: 8px 12px;
+  background-color: rgba(0,0,0,0.05);
+  border-radius: 4px;
+}
+
 
 /* Container for the download button / spinner */
 .image-actions {
-  position: absolute; /* Positioned relative to .image-card */
+  position: absolute;
   bottom: 12px;
   right: 12px;
   width: 36px;
@@ -79,14 +115,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 10; /* Ensure actions are on top */
 }
 
 .action-btn {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: rgba(31, 41, 55, 0.75);
+  background-color: rgba(31, 41, 55, 0.75); /* Dark semi-transparent */
   color: white;
   border: none;
   cursor: pointer;
@@ -98,32 +134,38 @@
 }
 
 .action-btn:hover {
-  background-color: rgba(17, 24, 39, 0.9);
+  background-color: rgba(17, 24, 39, 0.9); /* Darker on hover */
+}
+.action-btn:disabled { /* Style for disabled button if you use it */
+  background-color: rgba(107, 114, 128, 0.5); /* Grayed out */
+  cursor: not-allowed;
 }
 
 .action-btn svg {
   font-size: 16px;
 }
 
+/* For the download progress spinner (inside .image-actions) */
 .loading-icon {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* The ProgressSpinner will be styled by PrimeReact theme or inline styles */
 }
 
-/* Fallback for main loading or no images */
+/* Fallback for main loading spinner or no images text */
 .images-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
+  min-height: 50vh; /* Give some space for the spinner/text */
   width: 100%;
 }
 
 .no-images-text {
   font-size: 1.1rem;
-  color: #6b7280;
+  color: #6b7280; /* Tailwind gray-500 */
   text-align: center;
 }

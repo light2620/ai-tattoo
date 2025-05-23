@@ -42,13 +42,13 @@ window.addEventListener('load', () => {
 });
 root.render(
   <ChunkErrorBoundary>
-  <ApiProvider>
-    <Provider store={store}>
-      <Suspense fallback={<Loader />}>
-        <RouterProvider router={router} />
-      </Suspense>
-    </Provider>
-  </ApiProvider>
+    <Suspense fallback={<Loader />}>
+      <ApiProvider>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+      </ApiProvider>
+    </Suspense>
   </ChunkErrorBoundary>
 );
 
