@@ -54,7 +54,7 @@ const CreateNewUserPage = () => {
 
       if (response.status === 200 || response.status === 201) { 
         toast.success(response.data.message || 'User created successfully!');
-        navigate('/dashboard/users'); 
+        navigate('/users'); 
       } else {
         toast.error(response.data.message || 'Failed to create user.');
       }
