@@ -23,7 +23,8 @@ const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genr
 const User = lazy(() => import("../Pages/Dashbaord/Users/User"));
 const ProfilePage = lazy(() => import("../Pages/Dashbaord/ProfilePage/Profile"));
 const Plans = lazy(() => import('../Pages/Dashbaord/Plans/Plans'));
-const CreateNewUserPage = lazy(() => import('../Components/AddNewUser/CreateNewUserPage')); // Note: This is in Components folder
+const CreateNewUserPage = lazy(() => import('../Components/AddNewUser/CreateNewUserPage')); 
+const ManagePlansPage = lazy(() => import('../Pages/Dashbaord/ManagePlans/ManagePlansPage'))
 
 const NotFound = lazy(() => import("../Pages/NotFound/NotFound"));
 
@@ -82,6 +83,7 @@ export const router = createBrowserRouter([
                   { path: "users", element: <User /> },
                   { path: "users/new", element: <CreateNewUserPage /> },
                   { path: "plans", element: <Plans /> },
+                  { path: "manage-plans", element: <ManagePlansPage /> }
                 ]
               }
             ]

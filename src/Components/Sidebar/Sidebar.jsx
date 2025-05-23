@@ -20,7 +20,7 @@ const Sidebar = ({ onClose }) => {
     if (itemPath !== '/' && location.pathname.startsWith(itemPath + '/')) {
         return true;
     }
-    // Special case: If itemPath is '/dashboard' and current path is exactly '/', treat as active.
+   
     if (itemPath === '/dashboard' && location.pathname === '/') {
         return true;
     }

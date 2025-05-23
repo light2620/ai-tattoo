@@ -1,7 +1,6 @@
 /* New wrapper for the entire GenratedImages component content */
 .genrated-images-component-wrapper {
   padding: 24px;
-  background-color: #f9fafb; /* Tailwind gray-50: Soft background for the page */
   min-height: 100vh;
   box-sizing: border-box;
 }

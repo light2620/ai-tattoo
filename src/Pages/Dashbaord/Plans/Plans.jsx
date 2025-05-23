@@ -32,6 +32,7 @@ const Plans = () => {
       );
       if (response.status === 200 && response.data) {
         setPlans(response.data.plans || []); 
+     
         
       } else {
         toast.error("Failed to fetch plans.");

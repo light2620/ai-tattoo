@@ -30,9 +30,13 @@ const ProfileSection = () => {
             <FaLink className="icon" />
             <Link to={"profile"}>Shivam Negi</Link>
           </div>
+          <div>
+            
+          </div>
           <div 
           onClick={logout}
-          className="profile-item logout">Logout</div>
+          className="profile-item logout">Logout
+          </div>
         </div>
       )}
     </div>
