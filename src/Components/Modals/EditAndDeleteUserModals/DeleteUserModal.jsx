@@ -1,5 +1,5 @@
 import "primeicons/primeicons.css";
-import './style.css'; // We'll create this shared CSS
+import '../style.css'; // We'll create this shared CSS
 
 const DeleteUserModal = ({ isOpen, onClose, onConfirm, userName, loading }) => {
   if (!isOpen) return null;

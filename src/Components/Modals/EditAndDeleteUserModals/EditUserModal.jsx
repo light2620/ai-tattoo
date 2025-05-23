@@ -7,7 +7,7 @@ import { useApi } from '../../../Api/apiProvider';
 import 'react-phone-number-input/style.css'; 
 import { FiInfo } from 'react-icons/fi'; 
 import 'react-phone-number-input/style.css'; 
-import './style.css';
+import '../style.css';
 import "primeicons/primeicons.css";
 
 
