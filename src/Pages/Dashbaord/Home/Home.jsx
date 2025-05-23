@@ -38,7 +38,6 @@ const Home = () => {
           mode: quality
         }
       );
-      console.log(response);
       if (response.data.type === 'success') {
         setImageUrl(response.data.imageUrl);
         const userData = await getUserDetails(dispatch, post, setImageLoading);

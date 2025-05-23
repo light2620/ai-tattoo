@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useApi } from '../../../Api/apiProvider';
 import SlimPlanCard from '../../../Components/PlanCard/PlanCard'; // Renamed for clarity
-import Loader from '../../../utils/Loader/Loader';
+import Spinner from '../../../utils/Spinner/Spinner';
 import './style.css';
 import toast from 'react-hot-toast';
 import { useUser } from '../../../Context/userContext';
@@ -66,8 +66,7 @@ const ManagePlansPage = () => {
   if (loading) {
     return (
       <div className="manage-plans-page-container is-loading">
-        <Loader />
-        <p>Loading Subscription Details...</p>
+        <Spinner />
       </div>
     );
   }
