@@ -1,7 +1,8 @@
 // src/Components/Modals/AddEditPlanModal.js
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import "primeicons/primeicons.css";
+import "primeicons/primeicons.css"
+import "./style.css";
 
 import "./style.css"
 

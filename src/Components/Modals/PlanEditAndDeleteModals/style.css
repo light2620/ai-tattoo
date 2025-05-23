@@ -14,6 +14,7 @@
   font-weight: 500;
   color: #374151;
   margin-bottom: 6px;
+  text-align: left;
 }
 
 .plan-modal-form input[type="text"],

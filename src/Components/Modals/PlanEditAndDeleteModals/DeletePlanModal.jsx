@@ -1,5 +1,5 @@
 import "primeicons/primeicons.css"; 
- 
+import './style.css'
 
 const DeletePlanModal = ({ isOpen, onClose, onConfirm, planName, loading }) => {
   if (!isOpen) return null;
