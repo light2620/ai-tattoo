@@ -90,7 +90,7 @@
 }
 .detail-value.plan-name-highlight {
     font-weight: 600;
-    color: #007bff; /* Primary color */
+    color: black; /* Primary color */
     display: flex;
     align-items: center;
 }
