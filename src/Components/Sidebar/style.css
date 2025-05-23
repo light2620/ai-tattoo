@@ -100,10 +100,10 @@
 }
 
 @media (max-width: 768px) {
-  /* For mobile, sidebar might be toggled off-canvas.
-     These styles assume it's still part of the flow or width is managed by a parent. */
+
   .sidebar {
-    /* Example: width: 200px; or handled by DashboardLayout toggle */
+     border-right: none;
+     width : 100%;
   }
   .brand-sub-text {
     display: none; /* Hide sub-text on smaller screens for space */
