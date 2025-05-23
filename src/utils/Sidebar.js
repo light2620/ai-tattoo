@@ -38,7 +38,6 @@ const sidebarItems = [
     name: "Manage Plans",
     icon: MdOutlineManageHistory, // Or any other icon you prefer
     path: "/manage-plans",
-    adminOnly: true
   }
 ];
 
