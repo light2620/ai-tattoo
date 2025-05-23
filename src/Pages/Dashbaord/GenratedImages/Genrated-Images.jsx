@@ -1,23 +1,19 @@
-// components/GeneratedImages.jsx
 import { useEffect, useState } from 'react';
 import { FaDownload } from 'react-icons/fa';
-import { useUser } from '../../../Context/userContext';
+import Spinner from '../../../utils/Spinner/Spinner'; // Main page loading spinner
+import { ProgressSpinner } from 'primereact/progressspinner'; // For individual download
+import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import './style.css';
+import './style.css'; // Your updated CSS
 
-const GeneratedImages = () => {
-  const { user } = useUser();
-  const [loading, setLoading] = useState(true);
-  const [images, setImages] = useState([]);
+const GenratedImages = () => {
+  const images = useSelector((state) => state.images.images);
+  const loading = useSelector((state) => state.images.imagesLoading);
   const [downloadingIndexes, setDownloadingIndexes] = useState([]);
-  const [imgLoadStatus, setImgLoadStatus] = useState({}); // Tracks image load
 
   useEffect(() => {
-    setTimeout(() => {
-      setImages(user?.generateImages || []);
-      setLoading(false);
-    }, 1000); // Simulate network loading
-  }, [user]);
+    // Side effects on image changes if any
+  }, [images]);
 
   const handleDownload = async (imageUrl, imageName, index) => {
     setDownloadingIndexes((prev) => [...prev, index]);
@@ -27,80 +23,94 @@ const GeneratedImages = () => {
 
     try {
       const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error('Download failed');
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "Server error details unavailable.");
+        throw new Error(`Download request failed: ${response.status} ${response.statusText}. ${errorText}`);
+      }
 
       const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
+      const blobUrl = window.URL.createObjectURL(blob);
 
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = imageName || `design-${index + 1}.png`;
+      link.download = imageName || 'design.png';
       document.body.appendChild(link);
       link.click();
-      link.remove();
-      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(blobUrl);
     } catch (err) {
-      toast.error(err.message || 'Download failed');
+      console.error("Error downloading image:", err);
+      toast.error(err.message || "Download failed. Please try again.");
     } finally {
       setDownloadingIndexes((prev) => prev.filter((i) => i !== index));
     }
   };
 
+  // Main component loading state
   if (loading) {
     return (
-      <div className="generated-wrapper">
-        <h1 className="generated-title">Generated Designs</h1>
-        <div className="generated-grid">
-          {[...Array(6)].map((_, i) => (
-            <div className="image-card skeleton" key={i}></div>
-          ))}
+      <div className="genrated-images-component-wrapper"> {/* Use new wrapper */}
+        <h1 className="page-title-generated">Generated Image</h1>
+        <div className="images-wrapper"> {/* Centering for spinner */}
+          <Spinner />
         </div>
       </div>
     );
   }
 
+  // No images state
   if (!images || images.length === 0) {
     return (
-      <div className="generated-wrapper">
-        <h1 className="generated-title">Generated Designs</h1>
-        <p className="no-images">No images found.</p>
+      <div className="genrated-images-component-wrapper"> {/* Use new wrapper */}
+        <h1 className="page-title-generated">Generated Image</h1>
+        <div className="images-wrapper"> {/* Centering for text */}
+          <p className="no-images-text">No designs available at the moment.</p>
+        </div>
       </div>
     );
   }
 
+  // Display images
   return (
-    <div className="generated-wrapper">
-      <h1 className="generated-title">Generated Designs</h1>
-      <div className="generated-grid">
+    <div className="genrated-images-component-wrapper"> {/* New top-level wrapper */}
+      <h1 className="page-title-generated">Generated Image</h1>
+      <div className="images-container">
         {images.map((img, index) => (
-          <div className="image-card" key={img.id || index}>
-            {!imgLoadStatus[index] && <div className="img-placeholder"></div>}
+          <div key={img.id || `gen-img-${index}`} className="image-card">
             <img
               src={img.url}
-              alt={`Generated ${index + 1}`}
-              className="image-content"
-              onLoad={() =>
-                setImgLoadStatus((prev) => ({ ...prev, [index]: true }))
-              }
+              alt={img.altText || `Generated Design ${index + 1}`}
+              className="image" // Ensure this class is on the <img> tag
               onError={(e) => {
-                e.target.style.display = 'none';
+                e.target.onerror = null;
+                // Optionally set a placeholder: e.target.src="path/to/placeholder.png";
+                console.warn(`Failed to load image: ${img.url}`);
               }}
-              style={{ display: imgLoadStatus[index] ? 'block' : 'none' }}
             />
-            <button
-              className="download-btn"
-              onClick={() =>
-                handleDownload(img.url, `design-${index + 1}.png`, index)
-              }
-              disabled={downloadingIndexes.includes(index)}
-              title="Download"
-            >
+            <div className="image-actions">
               {downloadingIndexes.includes(index) ? (
-                <span className="loader"></span>
+                <div className="loading-icon">
+                  <ProgressSpinner
+                    style={{ width: '24px', height: '24px' }}
+                    strokeWidth="7" // A bit thicker for visibility
+                    fill="transparent" // Spinner's own background
+                    animationDuration=".7s"
+                    // Color of the spinner path is typically controlled by PrimeReact theme
+                    // or can be overridden with more specific CSS targeting p-progress-spinner-circle
+                  />
+                </div>
               ) : (
-                <FaDownload />
+                <button
+                  className="action-btn"
+                  onClick={() => handleDownload(img.url, `design-${index + 1}.png`, index)}
+                  title="Download Design"
+                  aria-label="Download Design"
+                >
+                  <FaDownload />
+                </button>
               )}
-            </button>
+            </div>
           </div>
         ))}
       </div>
@@ -108,4 +118,4 @@ const GeneratedImages = () => {
   );
 };
 
-export default GeneratedImages;
+export default GenratedImages;
