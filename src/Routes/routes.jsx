@@ -70,6 +70,7 @@ export const router = createBrowserRouter([
               { path: "tattoo-ai", element: <Home /> },
               { path: "generated-images", element: <GenratedImages /> },
               { path: "profile", element: <ProfilePage /> },
+              {path: "manage-plans", element: <ManagePlansPage/>}
             ]
           },
           {
@@ -82,8 +83,7 @@ export const router = createBrowserRouter([
                   { path: "dashboard", element: <Dashboard /> },
                   { path: "users", element: <User /> },
                   { path: "users/new", element: <CreateNewUserPage /> },
-                  { path: "plans", element: <Plans /> },
-                  { path: "manage-plans", element: <ManagePlansPage /> }
+                  { path: "plans", element: <Plans /> }, 
                 ]
               }
             ]
