@@ -50,12 +50,13 @@ const ManagePlansPage = () => {
   }, [get]);
 
   const handlePurchasePlan = (plan) => {
-    toast.success(`Proceeding to ${plan.planName}...`);
-    if (plan.purchaseUrl) {
-      window.open(plan.purchaseUrl, '_blank');
-    } else {
-      toast.error("Purchase URL not available.");
-    }
+    
+     window.open("https://app.cercus.app/v2/preview/2GKjR6WbRpwQ8SmMzvLe", '_blank');
+    // if (plan.purchaseUrl) {
+    //   window.open(plan.purchaseUrl, '_blank');
+    // } else {
+    //   toast.error("Purchase URL not available.");
+    // }
   };
 
   const formatDate = (timestamp) => {
