@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { getUserDetails } from "../Api/getUserDataApi"; // Ensure this path is correct
 import { useDispatch } from "react-redux";
 import { setImages, setImageLoading } from "../Redux/ImagesSlice"; // Ensure these paths are correct
-
+import { setCredits } from "../Redux/creditSlice";  
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -59,11 +59,13 @@ export const UserProvider = ({ children }) => {
 
 
         const userData = await getUserDetails(dispatch, post, setImageLoading); 
+  
         if (userData) {
           setUser(userData);
           setRole(userData.role); // This is the authoritative role
           setIsLoggedIn(true);
           dispatch(setImages(userData.generateImages || []));
+          dispatch(setCredits(userData.creditScore || 0));
         } else {
           console.error("Failed to fetch user details despite valid token.");
           toast.error("Could not verify user. Logging out.");

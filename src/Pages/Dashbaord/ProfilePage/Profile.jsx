@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import './style.css'; // We'll create this new CSS
 import { useUser } from '../../../Context/userContext';
@@ -6,16 +5,21 @@ import { useApi } from '../../../Api/apiProvider';
 import toast from 'react-hot-toast';
 import "primeicons/primeicons.css";
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css'; // Base styling for PhoneInput
+import 'react-phone-number-input/style.css';
+// import { useDispatch } from 'react-redux'; // useDispatch is imported but not used, can be removed if not needed elsewhere
+import { useSelector } from 'react-redux';
 
 const ProfilePage = () => {
-  const { user, fetchUserDetails } = useUser(); // Assuming fetchUserDetails can refresh user context
+  const { user, fetchUserDetails } = useUser();
   const { post } = useApi();
+  // const dispatch = useDispatch(); // Not used in this component currently
+  const credits = useSelector((state) => state.credits.credits);
+  // console.log('Credits from Redux:', credits); // For debugging
 
   const [profileData, setProfileData] = useState({
     displayName: '',
     email: '',
-    phoneNumber: '', // Changed from 'phone' to match API and PhoneInput
+    phoneNumber: '',
     role: ''
   });
 
@@ -56,18 +60,17 @@ const ProfilePage = () => {
       const response = await post(
         'https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/updateAIUserProfile',
         {
-          updates: { // API expects 'updates' object
+          updates: {
             displayName: profileData.displayName,
             phoneNumber: profileData.phoneNumber
-            // Email and role are typically not user-updatable through this kind of profile edit
           }
         }
       );
-      if (response.status === 200 || response.data?.type === 'success') { // Check for success
+      if (response.status === 200 || response.data?.type === 'success') {
         toast.success(response.data.message || 'Profile updated successfully!');
         setIsEditing(false);
-        if (fetchUserDetails) { // If context has a refresh function
-            fetchUserDetails(); // Refresh user data in context
+        if (fetchUserDetails) {
+            fetchUserDetails();
         }
       } else {
         toast.error(response.data.message || 'Failed to update profile.');
@@ -86,7 +89,6 @@ const ProfilePage = () => {
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    // Reset form to original user data from context
     if (user) {
       setProfileData({
         displayName: user.displayName || '',
@@ -112,7 +114,7 @@ const ProfilePage = () => {
               <input
                 type="text"
                 id="displayName"
-                name="displayName" // Changed from 'name'
+                name="displayName"
                 className="form-input"
                 value={profileData.displayName}
                 onChange={handleChange}
@@ -128,7 +130,7 @@ const ProfilePage = () => {
                 name="email"
                 className="form-input"
                 value={profileData.email}
-                disabled // Email is generally not editable by user directly
+                disabled
               />
             </div>
 
@@ -137,7 +139,7 @@ const ProfilePage = () => {
               <PhoneInput
                 id="phoneNumber"
                 name="phoneNumber"
-                className="form-input phone-input-profile" // Custom class for PhoneInput wrapper
+                className="form-input phone-input-profile"
                 placeholder="Enter phone number"
                 value={profileData.phoneNumber}
                 onChange={handlePhoneChange}
@@ -148,6 +150,33 @@ const ProfilePage = () => {
               />
             </div>
 
+            {/* Added Section for Credits Display */}
+            <div className="form-field-item">
+              <label htmlFor="creditsLeft" className="form-label">Total Credits Left</label>
+              <input
+                type="text" // Display as text
+                id="creditsLeft"
+                name="creditsLeft"
+                className="form-input"
+                // Use ?? for nullish coalescing to show '0' if credits are 0
+                value={credits ?? 'N/A'}
+                disabled // This field is not editable by the user here
+              />
+            </div>
+             {/* You could also display the role if desired, similar to credits */}
+             {/*
+             <div className="form-field-item">
+              <label htmlFor="role" className="form-label">Account Role</label>
+              <input
+                type="text"
+                id="role"
+                name="role"
+                className="form-input"
+                value={profileData.role || 'N/A'}
+                disabled
+              />
+            </div>
+            */}
 
           </div>
 
@@ -163,7 +192,7 @@ const ProfilePage = () => {
                   Cancel
                 </button>
                 <button
-                  type="submit" // Changed to submit
+                  type="submit"
                   className="profile-button primary-button"
                   disabled={loading || !profileData.displayName.trim()}
                 >

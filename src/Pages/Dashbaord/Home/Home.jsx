@@ -11,6 +11,7 @@ import ReferenceImages from '../../../Components/RefrenceImages/RefrenceImages';
 import toast from 'react-hot-toast';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import "primeicons/primeicons.css";
+import { setCredits } from '../../../Redux/creditSlice';
 
 const Home = () => {
   const [input, setInput] = useState('');
@@ -43,6 +44,7 @@ const Home = () => {
         const userData = await getUserDetails(dispatch, post, setImageLoading);
         if (userData) {
           dispatch(setImages(userData.generateImages));
+          dispatch(setCredits(userData.creditScore || 0)); 
         }
       }
     } catch (err) {
