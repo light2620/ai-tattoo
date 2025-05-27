@@ -41,6 +41,7 @@ const Home = () => {
       );
       if (response.data.type === 'success') {
         setImageUrl(response.data.imageUrl);
+        setSelectedRefrenceImages([]);
         const userData = await getUserDetails(dispatch, post, setImageLoading);
         if (userData) {
           dispatch(setImages(userData.generateImages));
