@@ -6,7 +6,7 @@
   height: 100vh;
   box-sizing: border-box;
   transition: width 0.3s ease;
-  overflow-y: auto;
+  /* overflow-y: auto;  Let's manage overflow on navigation specifically if needed */
   display: flex;
   flex-direction: column;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -18,6 +18,7 @@
   padding: 10px 8px;
   margin-bottom: 24px;
   text-align: center; /* Center the image if it's the only thing */
+  flex-shrink: 0; /* Prevent logo section from shrinking if content grows */
 }
 
 .sidebar-logo-section img { /* Add this class to your img tag in Logo.js */
@@ -31,7 +32,10 @@
 .sidebar-navigation {
   display: flex;
   flex-direction: column;
-  margin-top: 16px; /* Add some space if there were section titles before it */
+  margin-top: 16px;
+  flex-grow: 1; /* Allow navigation to take up available space, pushing credits down */
+  overflow-y: auto; /* Add scroll if nav items are too many */
+  overflow-x: hidden; /* Prevent horizontal scrollbars */
 }
 
 /* Navigation Links */
@@ -51,17 +55,17 @@
 }
 
 .nav-link:hover {
-  background-color: #F3F4F6; 
-  color: #1F2937; 
+  background-color: #F3F4F6;
+  color: #1F2937;
 }
-.nav-link:hover .nav-icon { 
+.nav-link:hover .nav-icon {
     color: #1F2937;
 }
 
 .nav-link.active {
-  background-color: #FEF3C7; 
-  color: #92400E; 
-  font-weight: 600; 
+  background-color: #FEF3C7;
+  color: #92400E;
+  font-weight: 600;
 }
 .nav-link.active .nav-icon {
   color: #D97706; /* Orange/Amber icon color (Amber-600) */
@@ -85,12 +89,41 @@
   white-space: nowrap;
 }
 
+/* Credits Section Styling - NEW */
+.sidebar-credits-section {
+  padding: 15px 12px; /* Match horizontal padding of .sidebar */
+  margin-top: 16px; /* Space above the credits section */
+  border-top: 1px solid #E5E7EB; /* A subtle top border (Gray-200) */
+  text-align: left;
+  color: #4B5563; /* Default text color, similar to nav items */
+  font-size: 13px; /* Slightly smaller font size */
+  flex-shrink: 0; /* Prevent this section from shrinking */
+  display: flex; /* For potential icon alignment */
+  align-items: center; /* Vertically align icon and text if an icon is used */
+  gap: 8px; /* Space if an icon is used */
+}
+
+.credits-icon { /* If you add an icon */
+  font-size: 16px; /* Adjust as needed */
+  color: #6B7280; /* Match nav icon color or choose another */
+}
+
+.credits-label {
+  /* font-weight: 500; */ /* Optional: if you want the label slightly bolder */
+}
+
+.credits-value {
+  font-weight: 600; /* Make the value stand out a bit */
+  color: #1F2937; /* Darker color for the value */
+}
+
+
 /* Responsive adjustments (can be adapted from your existing CSS if preferred) */
 @media (max-width: 900px) {
   .sidebar {
     width: 220px; /* Example: Shrink sidebar width */
   }
- .sidebar-logo-section img { 
+ .sidebar-logo-section img {
   height: 35px;
   width: auto;
   object-fit: contain;
@@ -100,12 +133,13 @@
 }
 
 @media (max-width: 768px) {
-
   .sidebar {
      border-right: none;
      width : 100%;
+     /* When sidebar is full width (e.g., mobile overlay), ensure credits section is still visible */
+     /* No specific change needed here if flex layout is correct */
   }
   .brand-sub-text {
-    display: none; 
+    display: none;
   }
 }

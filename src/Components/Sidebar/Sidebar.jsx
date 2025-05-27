@@ -5,22 +5,23 @@ import './style.css';
 import sidebarItemsData from '../../utils/Sidebar';
 import { useUser } from '../../Context/userContext';
 import Logo from '../Logo'; // Assuming path is correct
+import { useSelector } from 'react-redux';
+// Optional: Import an icon for credits if you have one
+// import { FaCoins } from 'react-icons/fa';
 
 const Sidebar = ({ onClose }) => {
   const location = useLocation();
-  const { role } = useUser();
+  const { user } = useUser(); // Get the full user object
+  const role = user?.role; // Safely access role
+  const totalCredits = useSelector((state) => state.credits.credits);
 
   const isActiveTab = (itemPath) => {
-    // For exact matches (like /dashboard or /tattoo-ai)
     if (location.pathname === itemPath) {
       return true;
     }
-    // For paths that might have sub-routes (like /users and /users/new)
-    // ensure itemPath is not just '/' to avoid matching everything.
     if (itemPath !== '/' && location.pathname.startsWith(itemPath + '/')) {
         return true;
     }
-   
     if (itemPath === '/dashboard' && location.pathname === '/') {
         return true;
     }
@@ -38,7 +39,7 @@ const Sidebar = ({ onClose }) => {
           .filter(item => !item.adminOnly || role === 'admin')
           .map(({ name, icon: Icon, path }) => (
             <Link
-              to={path} // Use the direct path from sidebarItemsData
+              to={path}
               key={name}
               className={`nav-link ${isActiveTab(path) ? 'active' : ''}`}
               onClick={onClose}
@@ -48,6 +49,14 @@ const Sidebar = ({ onClose }) => {
             </Link>
           ))}
       </nav>
+
+      {/* Credits Section Added */}
+      <div className="sidebar-credits-section">
+        {/* <FaCoins className="credits-icon" />  */}
+        {/* Uncomment if you have an icon */}
+        <span className="credits-label">Credits Left:</span>
+        <span className="credits-value">{totalCredits ?? 'N/A'}</span>
+      </div>
     </div>
   );
 };
