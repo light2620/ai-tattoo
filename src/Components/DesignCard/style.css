@@ -1,14 +1,14 @@
 /* DesignCard.css */
 
-/* --- Base Image Item Styles (for gallery cards) --- */
+/* --- Base Image Item Styles (common for gallery and pinned if .image-item is used on both) --- */
 .image-item {
     position: relative;
     border: 1px solid #eee;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: hidden; /* Important for containing overlays and rounded corners */
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: flex;
+    display: flex; /* Helps with centering the img if it's smaller than aspect-ratio */
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1; /* Default for gallery items */
@@ -18,130 +18,181 @@
     max-width: 100%;
     max-height: 100%;
     display: block;
-    object-fit: contain; /* Use contain for gallery to see full image */
+    object-fit: contain; /* Default: contain for gallery to see full image */
     transition: transform 0.3s ease;
 }
 
 .image-item.reference-selected { /* When selected in gallery */
     outline: 3px solid #000000;
-    outline-offset: 1px;
+    outline-offset: 1px; /* Pushes outline outside the item slightly */
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
-/* --- Image Overlay (for gallery card hover/selection) --- */
-.image-item .image-overlay { /* Targeting direct child for gallery card */
+/* --- Styles specific to Gallery Card Overlay (hover/selection) --- */
+.image-item:not(.pinned-reference-item) .image-overlay { /* Target gallery cards */
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(170, 170, 170, 0.92);
+    background-color: rgba(170, 170, 170, 0.92); /* Gallery overlay color */
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes keywords up, footer down */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     padding: 12px;
     box-sizing: border-box;
-    border-radius: inherit; /* Inherit from .image-item */
+    border-radius: inherit; /* Match parent's border-radius */
 }
 
-.image-item:hover .image-overlay,
-.image-item.reference-selected .image-overlay {
+.image-item:not(.pinned-reference-item):hover .image-overlay,
+.image-item:not(.pinned-reference-item).reference-selected .image-overlay {
     opacity: 1;
     visibility: visible;
 }
 
-/* --- Pinned Reference Item Styles (cardType="pinned") --- */
-.pinned-reference-item { /* This class is added to image-item for pinned cards */
-    aspect-ratio: 4 / 3; /* Different aspect ratio for pinned */
+/* --- Styles specific to Pinned Reference Item --- */
+.pinned-reference-item { /* This class is on the same element as .image-item */
+    aspect-ratio: 4 / 3; /* Different aspect ratio for pinned items */
 }
 
 .pinned-reference-item img {
-    object-fit: cover; /* Cover for pinned items to fill space */
+    object-fit: cover; /* Cover for pinned items to fill space better */
 }
 
-.pinned-reference-item .image-overlay.always-visible {
+.pinned-reference-item .image-overlay.always-visible { /* Pinned cards have a different overlay */
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     opacity: 1; visibility: visible;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0,0,0,0.6); /* Pinned overlay color (darker) */
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes keywords up, footer down */
     padding: 8px;
     box-sizing: border-box;
     border-radius: inherit;
 }
 
-/* --- Overlay Content (Keywords, Footer, Description, Actions) --- */
-/* General for both gallery and pinned (can be overridden) */
+/* --- Card Download Spinner (common for both card types) --- */
+.card-download-spinner-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(255, 255, 255, 0.85); /* Light overlay for spinner */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15; /* Above other overlay content */
+    border-radius: inherit;
+}
+
+/* --- Card Download Button (common styling, specific positioning below) --- */
+.card-download-btn {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    padding: 5px 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    z-index: 12; /* Ensure it's above general overlay text but below spinner */
+}
+.card-download-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Positioning for Gallery card download button (bottom-left of overlay) */
+.image-item:not(.pinned-reference-item) .image-overlay .gallery-download-btn {
+    bottom: 12px; /* From edge of overlay padding */
+    left: 12px;   /* From edge of overlay padding */
+}
+
+/* Positioning for Pinned card download button (bottom-left of overlay) */
+.pinned-reference-item .image-overlay.always-visible .pinned-download-btn {
+    bottom: 8px;  /* From edge of overlay padding */
+    left: 8px;    /* From edge of overlay padding */
+}
+.pinned-reference-item .pinned-download-btn svg { /* Specific icon size for pinned card download */
+    width: 16px;
+    height: 16px;
+}
+
+/* --- Overlay Content: Keywords, Footer, Description, Actions (shared structure) --- */
 .overlay-keywords-container {
     display: flex; flex-wrap: wrap; justify-content: flex-start;
-    gap: 6px; max-height: 70%; overflow-y: auto;
+    gap: 6px;
+    max-height: calc(100% - 60px); /* Prevents keywords from overlapping footer, adjust 60px if footer height changes */
+    overflow-y: auto;
+    /* align-self: flex-start; Implicit with justify-content:space-between on parent */
 }
-.keyword-tag {
+.keyword-tag { /* General keyword tag style */
     background-color: #6E6E6E; color: white; padding: 4px 8px;
     border-radius: 4px; font-size: 0.75em; white-space: nowrap;
 }
 
 .overlay-footer {
     display: flex; justify-content: space-between; align-items: center; width: 100%;
-    margin-top: auto; /* Pushes footer to the bottom */
+    margin-top: auto; /* Pushes footer to the bottom of the flex column (overlay) */
+    /* align-self: flex-end; Implicit */
+    gap: 8px; /* Gap between description and actions/button */
 }
 .overlay-description {
     font-size: 0.8em; color: white; text-align: left;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    padding-right: 10px;
-    flex-grow: 1;
-    min-width: 0;
+    /* padding-right: 10px; Replaced by gap on .overlay-footer */
+    flex-grow: 1; /* Allow description to take available space */
+    min-width: 0; /* Important for text-overflow in flex children */
 }
 
-/* Specific to Gallery Card Overlay */
-.image-item .overlay-actions { /* For gallery cards */
+/* Styles for actions in Gallery Card overlay footer */
+.image-item:not(.pinned-reference-item) .overlay-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
+    gap: 8px; /* Space between view and select buttons */
+    flex-shrink: 0; /* Prevent buttons from shrinking */
 }
-.image-item .overlay-view-btn { /* For gallery cards */
+.image-item:not(.pinned-reference-item) .overlay-view-btn {
     background-color: #6E6E6E; color: white; border: none; border-radius: 4px;
     padding: 6px 8px; cursor: pointer; display: flex; align-items: center;
-    justify-content: center; font-size: 1.1em; transition: background-color 0.2s ease;
+    justify-content: center; font-size: 1.1em; /* Icon size */
+    transition: background-color 0.2s ease;
 }
-.image-item .overlay-view-btn:hover { background-color: #505050; }
+.image-item:not(.pinned-reference-item) .overlay-view-btn:hover { background-color: #505050; }
 
 
-/* Specific to Pinned Card Overlay */
+/* Styles for Pinned Card Overlay (smaller text, different keyword tags) */
 .pinned-reference-item .overlay-keywords-container.short {
-    gap: 3px;
-    /* margin-bottom: 5px; */ /* Let flexbox handle spacing */
+    gap: 3px; /* Tighter gap for pinned card keywords */
+    max-height: calc(100% - 40px); /* Adjust if pinned footer height is different */
 }
-.pinned-reference-item .keyword-tag.small-tag {
+.pinned-reference-item .keyword-tag.small-tag { /* Pinned card specific keyword style */
     font-size: 0.65em; padding: 2px 5px; background-color: rgba(255,255,255,0.2);
     border-radius: 3px;
 }
-.pinned-reference-item .overlay-footer.short {
+.pinned-reference-item .overlay-footer.short { /* Pinned card footer might have slightly different gaps */
     gap: 5px;
 }
-.pinned-reference-item .overlay-description.small-desc {
+.pinned-reference-item .overlay-description.small-desc { /* Pinned card description */
     font-size: 0.7em;
 }
 
 
-/* --- Reference Selection Button (shared by both card types, styled once) --- */
+/* --- Reference Selection Button (common styles for select/deselect) --- */
 .select-reference-btn {
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 4px;
-    width: auto;
-    height: auto;
+    width: auto; height: auto; /* Fit content */
     padding: 5px 7px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    font-size: 1em; /* Base size for icon container */
+    /* font-size is effectively controlled by the SVG size inside */
 }
 .select-reference-btn:hover:not(:disabled) {
     background-color: rgba(255, 255, 255, 0.4);
@@ -159,46 +210,46 @@
     border-color: rgba(100,100,100,0.3);
     color: rgba(255,255,255,0.5);
     cursor: not-allowed;
-    transform: scale(1);
+    transform: none; /* No hover effect when disabled */
 }
 
-/* Icon size control for select button in gallery cards */
-.image-item .overlay-actions .select-reference-btn svg {
+/* Icon size control for select button in Gallery cards */
+.image-item:not(.pinned-reference-item) .overlay-actions .select-reference-btn svg {
     width: 20px;
     height: 20px;
 }
-/* Icon size control for select button in pinned cards */
+/* Icon size control for select button in Pinned cards */
 .pinned-reference-item .overlay-footer.short .select-reference-btn {
-    padding: 4px 6px; /* Slightly smaller padding for pinned cards */
+    padding: 4px 6px; /* Slightly smaller padding for button on pinned cards */
 }
 .pinned-reference-item .overlay-footer.short .select-reference-btn svg {
-    width: 16px; /* Smaller icon for pinned cards */
+    width: 16px;
     height: 16px;
 }
 
-/* Media queries for DesignCard elements (e.g., overlay footer layout) */
+/* Media queries for DesignCard elements */
 @media (max-width: 768px) {
-    /* For gallery cards overlay footer */
-    .image-item .overlay-footer {
+    /* Gallery card overlay footer becomes column */
+    .image-item:not(.pinned-reference-item) .overlay-footer {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: flex-start; /* Align items to start of column */
         gap: 5px;
     }
-    .image-item .overlay-actions {
-        width: 100%;
-        justify-content: flex-end;
+    .image-item:not(.pinned-reference-item) .overlay-actions {
+        width: 100%; /* Actions take full width */
+        justify-content: flex-end; /* Buttons to the right */
     }
-    .image-item .overlay-description {
-        padding-right: 0;
-        max-width: 100%;
+    .image-item:not(.pinned-reference-item) .overlay-description {
+        padding-right: 0; /* No padding needed if stacked */
+        max-width: 100%; /* Description takes full width */
     }
 
-    /* For pinned cards overlay footer */
+    /* Pinned card overlay footer also becomes column */
     .pinned-reference-item .overlay-footer.short {
         flex-direction: column;
         align-items: flex-start;
     }
     .pinned-reference-item .overlay-footer.short .select-reference-btn {
-        margin-top: 4px;
+        margin-top: 4px; /* Space above button when stacked */
     }
 }

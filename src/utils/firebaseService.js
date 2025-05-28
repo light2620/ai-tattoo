@@ -1,5 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"
-import { initializeFirestore, persistentLocalCache, getDoc, doc,CACHE_SIZE_UNLIMITED } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { initializeApp } from "firebase/app";
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  getDoc,
+  doc,
+  CACHE_SIZE_UNLIMITED
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
