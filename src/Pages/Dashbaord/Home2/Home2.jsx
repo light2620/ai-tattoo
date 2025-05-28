@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getDesignsFromFirebase } from '../../../utils/firebaseService';
-import { ProgressSpinner } from 'primereact/progressspinner';
+// ProgressSpinner is not used, consider removing if not needed elsewhere.
+// import { ProgressSpinner } from 'primereact/progressspinner'; 
 import './style.css';
 import { useApi } from '../../../Api/apiProvider';
 import Spinner from '../../../utils/Spinner/Spinner';
@@ -27,22 +28,22 @@ const Home = () => {
     const [activeSuggestions, setActiveSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [isDownloadingGlobal, setIsDownloadingGlobal] = useState(false);
-     const [globalDownloadError, setGlobalDownloadError] = useState('');
+    const [globalDownloadError, setGlobalDownloadError] = useState('');
 
     const { post } = useApi();
-      const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const [selectedReferenceImageUrls, setSelectedReferenceImageUrls] = useState([]);
     const [pinnedReferenceDesigns, setPinnedReferenceDesigns] = useState([]);
     const [generatedImageUrl, setGeneratedImageUrl] = useState('');
-    const [isAICreating, setIsAICreating] = useState(false); // For AI image generation process
+    const [isAICreating, setIsAICreating] = useState(false);
     const [aiError, setAiError] = useState('');
 
     const searchInputRef = useRef(null);
     const searchAreaContainerRef = useRef(null);
 
     // ... (all existing useEffect hooks and handler functions remain the same)
-   
+
     // --- Effect 1: Fetch initial data ---
     useEffect(() => {
         const fetchDesignsAndKeywords = async () => {
@@ -88,7 +89,7 @@ const Home = () => {
 
     // --- Effect 3: Update pinnedReferenceDesigns ---
     useEffect(() => {
-        if (allDesigns.length > 0) { 
+        if (allDesigns.length > 0) {
             const pinned = selectedReferenceImageUrls
                 .map(url => allDesigns.find(design => design.image_link === url))
                 .filter(Boolean);
@@ -148,6 +149,7 @@ const Home = () => {
         if (trimTag && !selectedTags.map(t => t.toLowerCase()).includes(trimTag.toLowerCase())) {
             setSelectedTags(prev => [...prev, trimTag]);
         }
+        setCurrentInput(''); // <--- MODIFICATION: Clear input after adding a tag
         setActiveSuggestions([]);
         setShowSuggestions(false);
         searchInputRef.current?.focus();
@@ -164,6 +166,7 @@ const Home = () => {
             if (currentInput.trim()) {
                 const exactMatchInSuggestions = activeSuggestions.find(s => s.toLowerCase() === currentInput.trim().toLowerCase());
                 addTag(exactMatchInSuggestions || currentInput.trim());
+                // currentInput will be cleared by addTag
             }
         } else if (e.key === 'Backspace' && !currentInput && selectedTags.length > 0) {
             e.preventDefault();
@@ -171,24 +174,25 @@ const Home = () => {
         }
     };
 
-    const handleSuggestionClick = (suggestion) => addTag(suggestion);
+    const handleSuggestionClick = (suggestion) => {
+        addTag(suggestion);
+        // currentInput will be cleared by addTag
+    };
 
     const handleInputFocus = () => {
         if (currentInput.trim() && activeSuggestions.length > 0) {
             setShowSuggestions(true);
         } else if (currentInput.trim()) {
-            // Trigger suggestion generation even if list is empty but input has text
             handleInputChange({ target: { value: currentInput } });
         }
     };
-    
+
     // --- Reference Image Selection ---
     const handleToggleReferenceImage = (imageUrl) => {
         setSelectedReferenceImageUrls(prev => {
             if (prev.includes(imageUrl)) {
                 return prev.filter(url => url !== imageUrl);
             }
-            // Allow selecting up to 2 images
             return prev.length < 2 ? [...prev, imageUrl] : prev;
         });
     };
@@ -196,23 +200,25 @@ const Home = () => {
     // --- AI Image Creation ---
     const handleAICreateImage = async () => {
         let combinedPrompt = selectedTags.join(' ');
+        // If currentInput was typed but not yet converted to a tag, include it.
+        // Since addTag clears currentInput, this will mostly be relevant if the user types
+        // and immediately clicks "Create" without pressing Enter or selecting a suggestion.
         if (currentInput.trim()) {
             combinedPrompt = combinedPrompt ? `${combinedPrompt} ${currentInput.trim()}` : currentInput.trim();
         }
+
         if (!combinedPrompt.trim()) {
-            setAiError("Please describe your tattoo or add tags to the prompt.");
+            setAiError("Please describe your tattoo by adding tags or typing in the search bar.");
             return;
         }
         setAiError('');
         setIsAICreating(true);
-        setGeneratedImageUrl(''); // Clear previous image
+        setGeneratedImageUrl('');
 
         let referencesForAPI = [...selectedReferenceImageUrls];
-        // If no references are selected, pick up to 2 random ones from filtered or all designs
         if (referencesForAPI.length === 0 && allDesigns.length > 0) {
             const sourceForRandom = filteredDesigns.length > 0 ? filteredDesigns : allDesigns;
             if (sourceForRandom.length > 0) {
-                // Shuffle and pick
                 referencesForAPI = [...sourceForRandom].sort(() => 0.5 - Math.random()).slice(0, Math.min(2, sourceForRandom.length)).map(img => img.image_link);
             }
         }
@@ -226,17 +232,20 @@ const Home = () => {
 
             if (response.data.type === 'success' && response.data.imageUrl) {
                 setGeneratedImageUrl(response.data.imageUrl);
-                setSelectedReferenceImageUrls([]);
-                        const userData = await getUserDetails(dispatch, post, setImageLoading);
-                        if (userData) {
-                          dispatch(setImages(userData.generateImages));
-                          dispatch(setCredits(userData.creditScore || 0)); 
-                        }
+                setSelectedReferenceImageUrls([]); // Clear selected references after generation
+                // Clear input and tags if they were used in the prompt
+                setCurrentInput(''); 
+                setSelectedTags([]); 
+
+                const userData = await getUserDetails(dispatch, post, setImageLoading);
+                if (userData) {
+                    dispatch(setImages(userData.generateImages));
+                    dispatch(setCredits(userData.creditScore || 0));
+                }
             } else {
                 setAiError(response.data.message || 'AI generation failed or returned an unexpected response.');
             }
         } catch (err) {
-            // More robust error handling
             const errorMessage = err.response?.data?.message || err.message || 'Error calling AI generation service.';
             console.error("AI Generation Error:", err);
             setAiError(errorMessage);
@@ -248,55 +257,43 @@ const Home = () => {
     const designsForGrid = filteredDesigns.filter(
         design => !pinnedReferenceDesigns.find(pinned => pinned.id === design.id)
     );
-    
+
     const canSelectMoreReferences = selectedReferenceImageUrls.length < 2;
 
     const handleImageDownload = async (imageUrl, imageName) => {
-        // If this function is only for a single image at a time, 
-        // setIsDownloadingGlobal could be used. If multiple can download,
-        // then individual cards need their own state (which we added in DesignCard)
-        // For now, this global state can be for the AI generated image download.
-        // The card-specific downloads will use their own state within DesignCard.
-
         const encodedUrl = encodeURIComponent(imageUrl);
-        // Ensure your Cloud Function URL is correct
         const apiUrl = `https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/downloadTattooImage?url=${encodedUrl}`;
-
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`Failed to fetch image for download: ${response.status} ${response.statusText}`);
-
             const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
-
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = imageName || 'tattoo.png'; // Default filename
+            link.download = imageName || 'tattoo.png';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-
             window.URL.revokeObjectURL(blobUrl);
-            return true; // Indicate success
+            return true;
         } catch (err) {
             console.error('Error downloading image:', err);
             alert(`Download failed for ${imageName || 'image'}. Error: ${err.message}. Check console for details.`);
-            return false; // Indicate failure
+            return false;
         }
     };
 
-
     return (
         <div className="home-container">
-            <h1>Tattoo Generator</h1>
-            
+            <h1>TATTOO GENERATOR</h1>
+
             <SearchBar
                 currentInput={currentInput}
                 selectedTags={selectedTags}
                 activeSuggestions={activeSuggestions}
                 showSuggestions={showSuggestions}
                 isAICreating={isAICreating}
-                loading={loading} // Pass main loading state
+                loading={loading}
                 searchInputRef={searchInputRef}
                 searchAreaContainerRef={searchAreaContainerRef}
                 onInputChange={handleInputChange}
@@ -308,68 +305,56 @@ const Home = () => {
             />
 
             {isAICreating && (
-                <div className="ai-generating-spinner-container"> {/* New container for styling */}
-                    <Spinner /> {/* Your custom spinner */}
+                <div className="ai-generating-spinner-container">
+                    <Spinner />
                     <p>Generating Tattoo...</p>
                 </div>
             )}
             {aiError && <p className="error-message ai-error-message">{aiError}</p>}
-            
+
             <GeneratedImageView
                 generatedImageUrl={generatedImageUrl}
-                isAICreating={isAICreating} // Pass this to ensure it doesn't show while creating
+                isAICreating={isAICreating}
                 onImageDownload={handleImageDownload}
                 isDownloading={isDownloadingGlobal}
                 setIsDownloading={setIsDownloadingGlobal}
                 downloadError={globalDownloadError}
                 setDownloadError={setGlobalDownloadError}
             />
-            
-            {!loading && pinnedReferenceDesigns.length > 0 && ( // Show pinned only if not initial loading and there are pinned items
+
+            {!loading && pinnedReferenceDesigns.length > 0 && (
                 <PinnedReferencesDisplay
                     pinnedReferenceDesigns={pinnedReferenceDesigns}
                     onToggleReferenceImage={handleToggleReferenceImage}
-
                 />
-                
             )}
 
-        
-
-            {/* Show gallery loading message only if initial data loading OR auto-filtering
-                AND not AI creating AND no generated image is currently shown */}
             {(loading || (isAutoFiltering && !isAICreating && !generatedImageUrl)) && !isAICreating &&
-
-              <div className="loading-reference-image">
-                  <Spinner />
-                  <p className="loading-message">Loading designs...</p>
-              </div>
+                <div className="loading-reference-image">
+                    <Spinner />
+                    <p className="loading-message">Loading designs...</p>
+                </div>
             }
 
-            {/* Main gallery section */}
             {!(loading || isAutoFiltering || isAICreating) && (
                 <>
-                    {/* Informational messages */}
-                    {allDesigns.length > 0 && selectedReferenceImageUrls.length === 0 && pinnedReferenceDesigns.length === 0 && (
+                    {allDesigns.length > 0 && selectedReferenceImageUrls.length === 0 && pinnedReferenceDesigns.length === 0 && !generatedImageUrl && (
                         <p className="reference-info">Click on an image to select it as a reference for AI creation (max 2).</p>
                     )}
-                    {designsForGrid.length === 0 && (selectedTags.length > 0 || currentInput.trim() !== '') && (
+                    {designsForGrid.length === 0 && (selectedTags.length > 0 || currentInput.trim() !== '') && !generatedImageUrl && (
                         <p className="no-results-message">No further designs match your current filter.</p>
                     )}
-                    {/* Message if grid is empty but designs exist (e.g., all are pinned) */}
-                    {designsForGrid.length === 0 && selectedTags.length === 0 && currentInput.trim() === '' && allDesigns.length > 0 && pinnedReferenceDesigns.length === allDesigns.length && (
-                         <p className="no-results-message">All available designs are selected as references. Deselect or search to see more.</p>
+                    {designsForGrid.length === 0 && selectedTags.length === 0 && currentInput.trim() === '' && allDesigns.length > 0 && pinnedReferenceDesigns.length === allDesigns.length && !generatedImageUrl && (
+                        <p className="no-results-message">All available designs are selected as references. Deselect or search to see more.</p>
                     )}
-                    {/* Message if grid is empty, no filters, and not all designs are pinned */}
-                    {designsForGrid.length === 0 && selectedTags.length === 0 && currentInput.trim() === '' && allDesigns.length > 0 && pinnedReferenceDesigns.length < allDesigns.length && pinnedReferenceDesigns.length > 0 && (
+                    {designsForGrid.length === 0 && selectedTags.length === 0 && currentInput.trim() === '' && allDesigns.length > 0 && pinnedReferenceDesigns.length < allDesigns.length && pinnedReferenceDesigns.length > 0 && !generatedImageUrl &&(
                         <p className="no-results-message">All matching designs are shown above as pinned. Deselect or search to see more here.</p>
                     )}
-                    {allDesigns.length === 0 && !loading && ( // No designs loaded at all
+                    {allDesigns.length === 0 && !loading && !generatedImageUrl &&(
                         <p className="no-results-message">No designs available.</p>
                     )}
 
-                    {/* Render the gallery if there are designs for the grid */}
-                    {designsForGrid.length > 0 && (
+                    {designsForGrid.length > 0 && !generatedImageUrl && (
                         <DesignsGallery
                             designs={designsForGrid}
                             selectedReferenceImageUrls={selectedReferenceImageUrls}

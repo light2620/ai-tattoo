@@ -1,8 +1,8 @@
+import React from 'react'; // Added React import for JSX
 import { FiX, FiZap } from 'react-icons/fi';
-// Assuming SearchSuggestions.js is in ../../../utils/SearchSuggestion/ relative to Home.jsx
-// If SearchBar.jsx is in the same dir as Home.jsx, this path remains valid.
 import SearchSuggestions from '../../utils/SearchSuggestion/SearchSuggestions';
-import "./style.css"
+import "./style.css";
+
 const SearchBar = ({
     currentInput,
     selectedTags,
@@ -19,6 +19,9 @@ const SearchBar = ({
     onSuggestionClick,
     onAICreateImage
 }) => {
+    // Determine if the prompt is empty (no tags and no text in input)
+    const isPromptEmpty = selectedTags.length === 0 && currentInput.trim() === '';
+
     return (
         <div className="search-area-inline" ref={searchAreaContainerRef}>
             <div className="prompt-style-input-container" onClick={() => searchInputRef.current?.focus()}>
@@ -32,7 +35,7 @@ const SearchBar = ({
                     <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder="Search for tattoo designs..."
+                        placeholder={selectedTags.length > 0 ? "Add more..." : "Generate Tattoo"} // Dynamic placeholder
                         value={currentInput}
                         onChange={onInputChange}
                         onKeyDown={onInputKeyDown}
@@ -46,7 +49,11 @@ const SearchBar = ({
                     />
                 </div>
             </div>
-            <button onClick={onAICreateImage} className="ai-create-button-inline" disabled={isAICreating || loading}>
+            <button
+                onClick={onAICreateImage}
+                className="ai-create-button-inline"
+                disabled={isAICreating || loading || isPromptEmpty} // <--- MODIFIED THIS LINE
+            >
                 {isAICreating ? 'Creating...' : <><FiZap size={16} /> Create with AI</>}
             </button>
         </div>
