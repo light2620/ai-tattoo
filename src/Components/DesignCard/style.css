@@ -86,48 +86,46 @@
     border-radius: inherit;
 }
 
-/* --- Card Download Button (common styling, specific positioning below) --- */
+/* --- Card Download Button (Centering Style) --- */
 .card-download-btn {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute; /* Absolutely positioned within the .image-overlay */
+    background-color: rgba(0, 0, 0, 0.65); /* Slightly darker for better visibility */
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 4px;
-    padding: 5px 7px;
+    border: none; /* Cleaner look for a centered button */
+    border-radius: 50%; /* Circular button */
+    width: 50px;       /* Explicit width */
+    height: 50px;      /* Explicit height */
+    padding: 0;        /* Remove padding if width/height are fixed */
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease;
-    z-index: 12; /* Ensure it's above general overlay text but below spinner */
+    top: 50px;
+    left:50px;
+    
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    z-index: 12; /* Above keywords/footer, below spinner */
 }
 .card-download-btn:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.85);
+
+}
+.card-download-btn svg { /* Common icon size for centered download button */
+    width: 24px;
+    height: 24px;
 }
 
-/* Positioning for Gallery card download button (bottom-left of overlay) */
-.image-item:not(.pinned-reference-item) .image-overlay .gallery-download-btn {
-    bottom: 12px; /* From edge of overlay padding */
-    left: 12px;   /* From edge of overlay padding */
-}
-
-/* Positioning for Pinned card download button (bottom-left of overlay) */
-.pinned-reference-item .image-overlay.always-visible .pinned-download-btn {
-    bottom: 8px;  /* From edge of overlay padding */
-    left: 8px;    /* From edge of overlay padding */
-}
-.pinned-reference-item .pinned-download-btn svg { /* Specific icon size for pinned card download */
-    width: 16px;
-    height: 16px;
-}
 
 /* --- Overlay Content: Keywords, Footer, Description, Actions (shared structure) --- */
+/* These elements will be under the centered download button if they occupy the center */
 .overlay-keywords-container {
     display: flex; flex-wrap: wrap; justify-content: flex-start;
     gap: 6px;
-    max-height: calc(100% - 60px); /* Prevents keywords from overlapping footer, adjust 60px if footer height changes */
+    /* Adjust max-height carefully if download button can overlap.
+       The button is centered, so keywords at the very top should be fine. */
+    max-height: calc(100% - 60px); /* Or less, to avoid visual clutter with center button */
     overflow-y: auto;
-    /* align-self: flex-start; Implicit with justify-content:space-between on parent */
+    /* `justify-content: space-between` on parent .image-overlay positions this at the top */
 }
 .keyword-tag { /* General keyword tag style */
     background-color: #6E6E6E; color: white; padding: 4px 8px;
@@ -136,14 +134,13 @@
 
 .overlay-footer {
     display: flex; justify-content: space-between; align-items: center; width: 100%;
-    margin-top: auto; /* Pushes footer to the bottom of the flex column (overlay) */
-    /* align-self: flex-end; Implicit */
+    margin-top: auto; /* Pushes footer to the bottom of the flex column (.image-overlay) */
     gap: 8px; /* Gap between description and actions/button */
+    /* The centered download button will be on top of the footer if footer is too tall or button too big */
 }
 .overlay-description {
     font-size: 0.8em; color: white; text-align: left;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    /* padding-right: 10px; Replaced by gap on .overlay-footer */
     flex-grow: 1; /* Allow description to take available space */
     min-width: 0; /* Important for text-overflow in flex children */
 }
@@ -192,7 +189,6 @@
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    /* font-size is effectively controlled by the SVG size inside */
 }
 .select-reference-btn:hover:not(:disabled) {
     background-color: rgba(255, 255, 255, 0.4);
@@ -251,5 +247,25 @@
     }
     .pinned-reference-item .overlay-footer.short .select-reference-btn {
         margin-top: 4px; /* Space above button when stacked */
+    }
+
+    /* Adjust centered download button for smaller screens */
+    .card-download-btn {
+        width: 44px;
+        height: 44px;
+    }
+    .card-download-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+@media (max-width: 480px) {
+    .card-download-btn {
+        width: 40px;
+        height: 40px;
+    }
+    .card-download-btn svg {
+        width: 18px;
+        height: 18px;
     }
 }
