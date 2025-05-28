@@ -1,0 +1,91 @@
+/* GeneratedImageView.css */
+.generated-image-view-container { /* Renamed from .generated-image-container */
+    margin: 30px auto;
+    padding: 20px;
+    /* border: 1px solid #ddd; */ /* Optional: keep if you liked the border */
+    /* border-radius: 8px; */
+    text-align: center;
+    max-width: 600px;
+    /* background-color: #f9f9f9; */ /* Optional: keep if you liked background */
+    position: relative; /* For absolute positioning of overlays if needed */
+}
+
+/* Removed .generated-image-container h2 as text is removed */
+
+.ai-image-wrapper {
+    position: relative; /* For positioning the download icon */
+    display: inline-block; /* To wrap content tightly */
+    border-radius: 4px; /* Optional: if you want rounded corners for the image container */
+    overflow: hidden; /* Optional: if you want to clip corners of the image */
+    border: 1px solid #eee; /* Add a subtle border around the image itself */
+}
+
+.ai-generated-image-display { /* Renamed from .ai-generated-image */
+    max-width: 100%;
+    height: auto;
+    display: block; /* Prevents extra space below image */
+    /* margin-bottom: 20px; */ /* Removed as actions are now an overlay */
+}
+
+.download-icon-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    opacity: 0.8;
+}
+
+.download-icon-overlay:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1;
+}
+
+.download-icon-overlay:disabled {
+    background-color: rgba(100, 100, 100, 0.5);
+    cursor: not-allowed;
+}
+
+.download-spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7); /* Light overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.download-error-message {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+
+/* Removed .generated-image-actions and .download-ai-button as they are replaced */
+
+/* Media queries for GeneratedImageView */
+@media (max-width: 480px) {
+    .download-icon-overlay {
+        width: 36px;
+        height: 36px;
+        bottom: 8px;
+        right: 8px;
+    }
+    .download-icon-overlay svg {
+        font-size: 20px; /* Adjust icon size if needed */
+    }
+}

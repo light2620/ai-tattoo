@@ -1,0 +1,59 @@
+/* Home.css */
+.home-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.home-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+.ai-generating-spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-bottom: 20px; /* Space below the spinner area */
+}
+
+.ai-generating-spinner-container p {
+    margin-top: 10px;
+    font-size: 1.1em;
+    color: #333;
+}
+/* --- Loading and Message Styles --- */
+.loading-message {
+    text-align: center; font-size: 1.1em; color: #555;
+}
+.ai-loading-message { color: #007bff; font-weight: bold; }
+
+.error-message, .ai-error-message {
+    color: #dc3545; background-color: #f8d7da; border: 1px solid #f5c6cb;
+    padding: 12px 15px; border-radius: 5px; margin: 15px auto; max-width: 700px;
+    text-align: center; font-size: 0.95em;
+}
+
+.no-results-message {
+    text-align: center; font-size: 1em; color: #666; padding: 20px; margin-top: 20px;
+}
+.reference-info {
+    text-align: center; margin: 15px 0 20px; font-style: italic; color: #555; font-size: 0.9em;
+}
+
+.loading-reference-image{
+   display:flex;
+   flex-direction:column;
+   align-items: center;
+   justify-content: center;
+}
+
+/* Optional: Media queries for general layout */
+@media (max-width: 768px) {
+    .home-container h1 { font-size: 1.5em; }
+}

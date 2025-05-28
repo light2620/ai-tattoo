@@ -6,6 +6,7 @@
   border: 4px solid #e5e7eb; /* Light grey */
   border-top: 4px solid #FFCC4A; /* Primary color */
   border-radius: 50%;
+  margin: auto;
   animation: spin 1s linear infinite;
   
 }

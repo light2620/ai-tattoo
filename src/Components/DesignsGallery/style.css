@@ -1,0 +1,20 @@
+/* DesignsGallery.css */
+.image-grid.main-grid { /* Grid for the main browsable designs */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 10px; /* Add some padding if not already by parent */
+}
+
+/* Media queries for DesignsGallery */
+@media (max-width: 768px) {
+    .image-grid.main-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .image-grid.main-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}

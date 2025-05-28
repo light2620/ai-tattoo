@@ -5,6 +5,7 @@ const UnProtectedRoute = () => {
   const token = localStorage.getItem("Authorization");
 
   return token ? <Navigate to="/" /> : <Outlet />;
+  
 };
 
 export default UnProtectedRoute;

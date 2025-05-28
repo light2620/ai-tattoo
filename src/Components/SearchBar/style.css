@@ -1,0 +1,174 @@
+/* SearchBar.css */
+.search-area-inline {
+    display: flex;
+    align-items: stretch; /* Keeps items same height on the line */
+    gap: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.prompt-style-input-container {
+    display: flex;
+    align-items: center; /* Vertically align items like tags and input wrapper */
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    /* min-height: 42px; */ /* Removed for align-items:stretch to work better with button */
+    box-sizing: border-box;
+    flex-grow: 1;
+    cursor: text;
+}
+
+.prompt-style-input-container:focus-within {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+/* == TAG STYLES - Reverting to original logic slightly adjusted == */
+.selected-tag-in-prompt {
+    display: flex;          /* This is key */
+    align-items: center;    /* This will vertically center the text and the button inside the tag */
+    background-color: #2C3A47;
+    color: white;
+    padding: 5px 10px;      /* Original padding */
+    border-radius: 16px;    /* Original radius */
+    font-size: 0.85em;      /* Original font size */
+    gap: 6px;               /* Original gap */
+    flex-shrink: 0;
+    /* Removed explicit height: 24px; */
+    /* The height will be determined by content (font-size, padding, icon size) */
+}
+
+.remove-tag-btn-in-prompt {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    padding: 0;             /* Original padding (none is good) */
+    display: flex;          /* This is key for the icon inside */
+    align-items: center;    /* This will vertically center the FiX icon */
+    justify-content: center;
+    line-height: 1;         /* Ensures the icon itself doesn't add extra line space */
+    /* Optional: to ensure button doesn't make tag taller than necessary */
+    /* font-size: 1em; /* ensure icon size is relative to parent tag font-size */
+}
+.remove-tag-btn-in-prompt svg { /* Target the SVG icon directly */
+    display: block; /* Helps with potential baseline issues */
+}
+
+
+.remove-tag-btn-in-prompt:hover {
+    color: white;
+}
+/* == END TAG STYLES == */
+
+.actual-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    min-width: 150px;
+    display: flex;
+    align-items: center; /* This is good for the input field itself */
+}
+
+.prompt-style-input-container input[type="text"] {
+    border: none;
+    outline: none;
+    padding: 6px 2px;   /* Restored original padding, can be adjusted slightly if needed */
+    font-size: 15px;    /* Slightly smaller for responsiveness balance */
+    line-height: 1.4;   /* Give input text some height */
+    width: 100%;
+    background-color: transparent;
+    color: #333;
+    /* height: 100%; Let align-items in parent handle this */
+}
+
+.prompt-style-input-container input[type="text"]::placeholder {
+    color: #777;
+    font-size: 14px;
+}
+
+.ai-create-button-inline {
+    padding: 0 15px;
+    font-size: 15px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding-top: 10px;    /* Vertical padding to achieve height */
+    padding-bottom: 10px; /* Vertical padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+    min-width: 130px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.ai-create-button-inline svg {
+    margin-top: -1px; 
+}
+
+.ai-create-button-inline:hover:not(:disabled) {
+    background-color: #333333;
+}
+
+.ai-create-button-inline:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* --- Search Suggestions --- */
+/* ... existing suggestion styles ... */
+
+
+/* Media queries for SearchBar */
+@media (max-width: 768px) {
+    .search-area-inline {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    .prompt-style-input-container {
+        width: 100%;
+         /* min-height: 42px; Consider adding back if tags wrap and make it too short */
+    }
+    .ai-create-button-inline {
+        width: 100%;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 12px; 
+        padding-bottom: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .prompt-style-input-container input[type="text"] {
+        font-size: 14px; /* Smaller input text */
+    }
+    .prompt-style-input-container input[type="text"]::placeholder {
+        font-size: 13px; /* Smaller placeholder */
+    }
+    .selected-tag-in-prompt { /* Revert to original smaller size for mobile from your old CSS */
+        font-size: 0.8em;
+        padding: 4px 8px;
+    }
+     .actual-input-wrapper {
+        min-width: 120px;
+    }
+    .ai-create-button-inline {
+        font-size: 14px;
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: auto;
+    }
+}

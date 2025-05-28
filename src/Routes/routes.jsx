@@ -19,6 +19,7 @@ const ForgotPassword = lazy(() => import('../Pages/Auth/ForgotPassword'));
 
 const Dashboard = lazy(() => import('../Pages/Dashbaord/Dashboard'));
 const Home = lazy(() => import('../Pages/Dashbaord/Home/Home')); // Tattoo AI
+const Home2 = lazy(() => import('../Pages/Dashbaord/Home2/Home2'));
 const GenratedImages = lazy(() => import('../Pages/Dashbaord/GenratedImages/Genrated-Images'));
 const User = lazy(() => import("../Pages/Dashbaord/Users/User"));
 const ProfilePage = lazy(() => import("../Pages/Dashbaord/ProfilePage/Profile"));
@@ -67,7 +68,7 @@ export const router = createBrowserRouter([
             // Routes accessible to ALL authenticated users
             element: <DashboardLayout />, // Lazy-loaded layout
             children: [
-              { path: "tattoo-ai", element: <Home /> },
+              { path: "tattoo-ai", element: <Home2 /> },
               { path: "generated-images", element: <GenratedImages /> },
               { path: "profile", element: <ProfilePage /> },
               {path: "manage-plans", element: <ManagePlansPage/>}
