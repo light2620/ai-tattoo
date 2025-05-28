@@ -288,7 +288,7 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <h1>Tattoo Generatotr</h1>
+            <h1>Tattoo Generator</h1>
             
             <SearchBar
                 currentInput={currentInput}
