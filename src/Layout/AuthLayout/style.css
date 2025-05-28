@@ -19,7 +19,7 @@
 }
 
 .auth-logo img {
-  max-width: 400px;
+  max-width: 250px;
   height: auto;
   object-fit: contain;
 }
@@ -46,6 +46,6 @@
 @media(max-width:420px){
 
   .auth-logo img {
-    max-width: 250px;
+    max-width: 150px;
   }
 }
