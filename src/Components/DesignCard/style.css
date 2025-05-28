@@ -89,6 +89,8 @@
 /* --- Card Download Button (Centering Style) --- */
 .card-download-btn {
     position: absolute; /* Absolutely positioned within the .image-overlay */
+    
+    transform: translate(200%, 200%); /* Center the button */
     background-color: rgba(0, 0, 0, 0.65); /* Slightly darker for better visibility */
     color: white;
     border: none; /* Cleaner look for a centered button */
@@ -100,15 +102,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 50px;
-    left:50px;
-
     transition: background-color 0.2s ease, transform 0.2s ease;
     z-index: 12; /* Above keywords/footer, below spinner */
 }
 .card-download-btn:hover {
     background-color: rgba(0, 0, 0, 0.85);
-
+    
 }
 .card-download-btn svg { /* Common icon size for centered download button */
     width: 24px;
