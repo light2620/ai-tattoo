@@ -1,9 +1,8 @@
-// Components/DesignCard/DesignCard.js (Modified)
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { FiEye, FiDownload } from 'react-icons/fi';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import './style.css';
-import useIntersectionObserver from '../../utils/useIntersectionObserver';
+import { useInView } from 'react-intersection-observer';
 
 const DesignCard = ({
     design,
@@ -14,23 +13,11 @@ const DesignCard = ({
     onImageDownload
 }) => {
     const [isCardDownloading, setIsCardDownloading] = useState(false);
-    const [isLoading, setIsLoading] = useState(true); // Add loading state
     const cardRef = useRef(null);
-    const isVisible = useIntersectionObserver(cardRef, {
-        root: null,
-        rootMargin: '200px 0px',
-        threshold: 0.1,
+    const { ref, inView } = useInView({
+        triggerOnce: true, // Only load once when it comes into view
+        threshold: 0.2,    // Load when 20% of the image is visible
     });
-
-    useEffect(() => {
-        if (isVisible) {
-            // Start loading the image only when the card is visible
-            const img = new Image();
-            img.onload = () => setIsLoading(false);  // Set loading to false when the image loads
-            img.onerror = () => setIsLoading(false); // Handle error if image fails to load
-            img.src = design.image_link;
-        }
-    }, [isVisible, design.image_link]); // Added design.image_link to the dependency array
 
     if (!design) return null;
 
@@ -49,19 +36,22 @@ const DesignCard = ({
         }
     };
 
-    const imageUrl = isVisible ? design.image_link : '/placeholder.png';
+    const imageUrl = design.image_link;
 
     return (
         <div
             className={`image-item`}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            ref={cardRef}
+            ref={(node) => {
+                ref(node);  // Attach intersection observer ref
+                cardRef.current = node; // Keep your cardRef
+            }}
         >
-            {isLoading ? (
-                <Skeleton />  // Render skeleton while loading
-            ) : (
+            {inView ? (
                 <img src={imageUrl} alt={design.image_description || 'Tattoo design'} loading="lazy" />
+            ) : (
+                <div className="image-placeholder">Loading...</div> // Or a placeholder image
             )}
 
             {isCardDownloading && (
@@ -94,15 +84,6 @@ const DesignCard = ({
                     </div>
                 </div>
             )}
-        </div>
-    );
-};
-
-// Skeleton Component (Create a separate file if needed - e.g., Skeleton.js)
-const Skeleton = () => {
-    return (
-        <div className="skeleton-wrapper">
-            <div className="skeleton-image"></div>
         </div>
     );
 };

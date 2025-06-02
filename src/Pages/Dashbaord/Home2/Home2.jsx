@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getDesignsFromFirebase } from '../../../utils/firebaseService';
 import './style.css';
 import { useApi } from '../../../Api/apiProvider';
@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setCredits } from '../../../Redux/creditSlice';
 import { setImages, setImageLoading } from '../../../Redux/ImagesSlice';
 import { getUserDetails } from '../../../Api/getUserDataApi';
-
+import { useInView } from 'react-intersection-observer';  // Import
 import SearchBar from '../../../Components/SearchBar/SearchBar';
 import DesignsGallery from '../../../Components/DesignsGallery/DesignsGallery';
 
@@ -24,14 +24,12 @@ const Home = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [isDownloadingGlobal, setIsDownloadingGlobal] = useState('');
     const [globalDownloadError, setGlobalDownloadError] = useState('');
-    const [aiImageUrl, setAiImageUrl] = useState(null); // State for the generated AI image URL
-    const [isAiLoading, setIsAiLoading] = useState(false); // State for loading the AI image
-    const [aiError, setAiError] = useState(''); // State for AI image generation errors
+    const [aiImageUrl, setAiImageUrl] = useState(null);
+    const [isAiLoading, setIsAiLoading] = useState(false);
+    const [aiError, setAiError] = useState('');
 
     const { post } = useApi();
     const dispatch = useDispatch();
-
-    // REMOVED: Reference image states and refs
     const searchInputRef = useRef(null);
     const searchAreaContainerRef = useRef(null);
     const isFiltered = selectedTags.length > 0;
@@ -43,6 +41,9 @@ const Home = () => {
             try {
                 const designs = await getDesignsFromFirebase();
                 setAllDesigns(designs);
+                console.log(designs)
+
+                //Pre-process keywords once
                 const keywordsMasterSet = new Set();
                 designs.forEach(design => {
                     design.keywords?.forEach(kw => {
@@ -50,6 +51,7 @@ const Home = () => {
                     });
                 });
                 setAllAvailableKeywords(keywordsMasterSet);
+
             } catch (error) {
                 console.error("Failed to fetch designs:", error);
                 setAiError("Error loading designs. Please refresh.");
@@ -60,23 +62,31 @@ const Home = () => {
         fetchDesignsAndKeywords();
     }, []);
 
-    // --- Effect 2: Automatic OR filtering ---
+    // --- Effect 2: Automatic OR filtering (debounced) ---
     useEffect(() => {
-        if (loading) return; // Don't filter if initial data isn't loaded
-        setIsAutoFiltering(true);
-        if (selectedTags.length === 0) {
-            setFilteredDesigns(allDesigns);
-        } else {
-            const lowerCaseTags = selectedTags.map(tag => tag.toLowerCase());
-            const results = allDesigns.filter(design =>
-                lowerCaseTags.some(tag =>
-                    (design.image_description?.toLowerCase().includes(tag)) ||
-                    (design.keywords?.some(kw => String(kw).toLowerCase().includes(tag)))
-                )
-            );
-            setFilteredDesigns(results);
-        }
-        setIsAutoFiltering(false);
+        if (loading) return;
+
+        const filterDesigns = () => {
+            setIsAutoFiltering(true);
+            if (selectedTags.length === 0) {
+                setFilteredDesigns(allDesigns);
+            } else {
+                const lowerCaseTags = selectedTags.map(tag => tag.toLowerCase());
+                const results = allDesigns.filter(design =>
+                    lowerCaseTags.some(tag =>
+                        (design.image_description?.toLowerCase().includes(tag)) ||
+                        (design.keywords?.some(kw => String(kw).toLowerCase().includes(tag)))
+                    )
+                );
+                setFilteredDesigns(results);
+            }
+            setIsAutoFiltering(false);
+        };
+
+        const timeoutId = setTimeout(filterDesigns, 150); // Debounce delay (adjust as needed)
+
+        return () => clearTimeout(timeoutId); // Clear timeout on unmount or tag change
+
     }, [selectedTags, allDesigns, loading]);
 
     // --- Effect 3: Click outside suggestions ---
@@ -91,46 +101,58 @@ const Home = () => {
     }, []);
 
     // --- Input and Tag Management ---
-
-const handleInputChange = (e) => {
+    const handleInputChange = (e) => {
         const query = e.target.value;
         setCurrentInput(query);
+
         if (!query.trim()) {
             setActiveSuggestions([]);
             setShowSuggestions(false);
             return;
         }
+
+        // Debounce the suggestion generation to avoid excessive calculations
+        const timeoutId = setTimeout(() => {
+            generateSuggestions(query);
+        }, 100); // Adjust the debounce delay as needed
+
+        return () => clearTimeout(timeoutId);
+
+    };
+
+    const generateSuggestions = (query) => {
         const lowerQuery = query.toLowerCase();
-        const queryWords = query.split(/\s+/).filter(w => w);  // Fixed whitespace split
+        const queryWords = query.split(/\s+/).filter(w => w);
         let potential = new Set();
+
         queryWords.forEach(qw => {
             const found = Array.from(allAvailableKeywords).find(ak => ak.toLowerCase() === qw);
             if (found && !selectedTags.map(t => t.toLowerCase()).includes(found.toLowerCase())) {
                 potential.add(found);
             }
         });
+
         if (query.slice(-1) !== ' ') {
             const lastSeg = queryWords.length > 0 ? queryWords[queryWords.length - 1] : "";
             if (lastSeg) {
                 Array.from(allAvailableKeywords).forEach(ak => {
-                      const found = Array.from(allAvailableKeywords).find(ak => ak.toLowerCase() === lastSeg);
                     if (ak.toLowerCase().startsWith(lastSeg) && !selectedTags.map(t => t.toLowerCase()).includes(ak.toLowerCase())) {
                         potential.add(ak);
                     }
                 });
             }
         }
+
         const sorted = Array.from(potential).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         setActiveSuggestions(sorted.slice(0, 7));
         setShowSuggestions(sorted.length > 0);
     };
-
     const addTag = (tag) => {
         const trimTag = tag.trim();
         if (trimTag && !selectedTags.map(t => t.toLowerCase()).includes(trimTag.toLowerCase())) {
             setSelectedTags(prev => [...prev, trimTag]);
         }
-        setCurrentInput(''); // <--- MODIFICATION: Clear input after adding a tag
+        setCurrentInput('');
         setActiveSuggestions([]);
         setShowSuggestions(false);
         searchInputRef.current?.focus();
@@ -147,7 +169,6 @@ const handleInputChange = (e) => {
             if (currentInput.trim()) {
                 const exactMatchInSuggestions = activeSuggestions.find(s => s.toLowerCase() === currentInput.trim().toLowerCase());
                 addTag(exactMatchInSuggestions || currentInput.trim());
-                // currentInput will be cleared by addTag
             }
         } else if (e.key === 'Backspace' && !currentInput && selectedTags.length > 0) {
             e.preventDefault();
@@ -157,7 +178,6 @@ const handleInputChange = (e) => {
 
     const handleSuggestionClick = (suggestion) => {
         addTag(suggestion);
-        // currentInput will be cleared by addTag
     };
 
     const handleInputFocus = () => {
@@ -170,20 +190,16 @@ const handleInputChange = (e) => {
 
     // --- AI Image Creation ---
     const handleAICreateImage = async () => {
-        // Check if there are filtered images
         if (filteredDesigns.length === 0) {
             setAiError("No filtered images available to use as reference.");
             return;
         }
 
-        // Get a random image from the filtered designs
         const randomIndex = Math.floor(Math.random() * filteredDesigns.length);
         const randomReferenceImage = filteredDesigns[randomIndex];
         console.log("Selected random reference image:", randomReferenceImage);
         let combinedPrompt = selectedTags.join(' ');
-        // If currentInput was typed but not yet converted to a tag, include it.
-        // Since addTag clears currentInput, this will mostly be relevant if the user types
-        // and immediately clicks "Create" without pressing Enter or selecting a suggestion.
+
         if (currentInput.trim()) {
             combinedPrompt = combinedPrompt ? `${combinedPrompt} ${currentInput.trim()}` : currentInput.trim();
         }
@@ -193,26 +209,21 @@ const handleInputChange = (e) => {
             return;
         }
         setAiError('');
-        setIsAiLoading(true); // Set AI loading state to true
-        setAiImageUrl(null); // Clear any previous image URL
+        setIsAiLoading(true);
+        setAiImageUrl(null);
 
         console.log("AI Create - Prompt:", combinedPrompt, "Reference Image:", randomReferenceImage.image_link);
 
         try {
             const response = await post('https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage', {
                 prompt: combinedPrompt,
-                referenceImages: [randomReferenceImage.image_link] // Ensure this exists!
+                referenceImages: [randomReferenceImage.image_link]
             });
 
             if (response.data.type === 'success' && response.data.imageUrl) {
-                // DO NOT CLEAR INPUT AND TAGS!
-                // Clear input and tags if they were used in the prompt
-               // setCurrentInput('');
-                //setSelectedTags([]);
-
                 console.log("AI Generation Success:", response.data.imageUrl);
-                setAiImageUrl(response.data.imageUrl); // Set the AI image URL
-                setAiError(''); // Clear any previous errors
+                setAiImageUrl(response.data.imageUrl);
+                setAiError('');
 
                 const userData = await getUserDetails(dispatch, post, setImageLoading);
                 if (userData) {
@@ -229,7 +240,7 @@ const handleInputChange = (e) => {
             setAiError(errorMessage);
             setAiImageUrl(null);
         } finally {
-            setIsAiLoading(false); // Set AI loading state to false
+            setIsAiLoading(false);
         }
     };
 
@@ -260,10 +271,10 @@ const handleInputChange = (e) => {
         <div className="home-container">
             <h1>TATTOO GENERATOR</h1>
 
-             {loading ? (
+            {loading ? (
                 <div className="loading-reference-image">
                     <Spinner />
-        
+
                 </div>
             ) : (
                 <>
@@ -296,14 +307,14 @@ const handleInputChange = (e) => {
                             aiError={aiError}
                         />
                     )}
-                      {filteredDesigns.length === 0 && isFiltered && (
+                    {filteredDesigns.length === 0 && isFiltered && (
                         <p className="no-results-message">No designs match your current filter.</p>
                     )}
                 </>
             )}
-             {allDesigns.length === 0 && !loading && (
-                        <p className="no-results-message">No designs available.</p>
-                    )}
+            {allDesigns.length === 0 && !loading && (
+                <p className="no-results-message">No designs available.</p>
+            )}
         </div>
     );
 };

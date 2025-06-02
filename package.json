@@ -17,6 +17,7 @@
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
+    "react-intersection-observer": "^9.16.0",
     "react-loader-spinner": "^6.1.6",
     "react-phone-number-input": "^3.4.12",
     "react-redux": "^9.2.0",

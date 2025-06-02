@@ -42,13 +42,13 @@ const SearchBar = ({
                         onFocus={onInputFocus}
                         autoComplete="off"
                     />
-                    
+
                 </div>
                 <SearchSuggestions
-                        suggestions={activeSuggestions}
-                        onSelectSuggestion={onSuggestionClick}
-                        isVisible={showSuggestions}
-                    />
+                    suggestions={activeSuggestions}
+                    onSelectSuggestion={onSuggestionClick}
+                    isVisible={showSuggestions}
+                />
             </div>
         </div>
     );

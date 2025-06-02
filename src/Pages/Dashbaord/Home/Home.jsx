@@ -1,171 +1,111 @@
-import { useState } from 'react';
-import './style.css';
-import { useApi } from '../../../Api/apiProvider';
-import { getUserDetails } from '../../../Api/getUserDataApi';
-import { useDispatch } from 'react-redux';
-import { setImages, setImageLoading } from '../../../Redux/ImagesSlice';
-import OptionSelector from '../../../utils/OptionSelector/OptionSelector';
-import Spinner from '../../../utils/Spinner/Spinner';
-import { FaDownload } from 'react-icons/fa';
-import ReferenceImages from '../../../Components/RefrenceImages/RefrenceImages';
-import toast from 'react-hot-toast';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import "primeicons/primeicons.css";
-import { setCredits } from '../../../Redux/creditSlice';
+import React, { useEffect, useState } from "react";
+import { getDesignsFromFirebase } from "../../../utils/firebaseService";
+import { FaSearch, FaTimes, FaDownload, FaEye } from "react-icons/fa";
+import { useInView } from "react-intersection-observer";
+import DesignCard from "../../../Components/DesignCard/DesignCard";
+import "./style.css";
 
 const Home = () => {
-  const [input, setInput] = useState('');
-  const [openRefrenceImages, setOpenRefrenceImages] = useState(false);
-  const [selectedRefrenceImages, setSelectedRefrenceImages] = useState([]);
-  const [quality, setQuality] = useState('simple');
-  const [loading, setLoading] = useState(false);
-  const [downloading, setDownloading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(
-    ''
-  );
-  const { post } = useApi();
-  const dispatch = useDispatch();
+  const [allDesigns, setAllDesigns] = useState([]);
+  const [filteredDesigns, setFilteredDesigns] = useState([]);
+  const [keywordInput, setKeywordInput] = useState("");
+  const [allKeywords, setAllKeywords] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
-  const handleGenerate = async () => {
-    if (!input.trim()) return;
-    try {
-      setLoading(true);
-      setImageUrl('');
-      const response = await post(
-        'https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage',
-        {
-          prompt: input,
-          referenceImages: selectedRefrenceImages,
-          mode: quality
-        }
+  useEffect(() => {
+    const fetchData = async () => {
+      const designs = await getDesignsFromFirebase();
+      setAllDesigns(designs);
+      setFilteredDesigns(designs);
+
+      const keywordSet = new Set();
+      designs.forEach((d) => d.keywords.forEach((k) => keywordSet.add(k)));
+      setAllKeywords([...keywordSet]);
+    };
+
+    fetchData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const input = e.target.value.toLowerCase();
+    setKeywordInput(input);
+    if (input) {
+      const filtered = allKeywords.filter(
+        (k) => k.includes(input) && !selectedTags.includes(k)
       );
-      if (response.data.type === 'success') {
-        setImageUrl(response.data.imageUrl);
-        setSelectedRefrenceImages([]);
-        const userData = await getUserDetails(dispatch, post, setImageLoading);
-        if (userData) {
-          dispatch(setImages(userData.generateImages));
-          dispatch(setCredits(userData.creditScore || 0)); 
-        }
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Something went wrong');
-    } finally {
-      setLoading(false);
+      setSuggestions(filtered.slice(0, 5));
+    } else {
+      setSuggestions([]);
     }
   };
 
-  const handleDownload = async (imageUrl, imageName) => {
-    setDownloading(true);
-    const encodedUrl = encodeURIComponent(imageUrl);
-    const apiUrl = `https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/downloadTattooImage?url=${encodedUrl}`;
+  const handleAddTag = (tag) => {
+    const updatedTags = [...selectedTags, tag];
+    setSelectedTags(updatedTags);
+    setKeywordInput("");
+    setSuggestions([]);
 
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
+    const filtered = allDesigns.filter((design) =>
+      updatedTags.every((tag) => design.keywords.includes(tag))
+    );
+    setFilteredDesigns(filtered);
+  };
 
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
+  const handleRemoveTag = (tagToRemove) => {
+    const updatedTags = selectedTags.filter((tag) => tag !== tagToRemove);
+    setSelectedTags(updatedTags);
 
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = imageName || 'tattoo.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (err) {
-      console.error('Error downloading image:', err);
-      alert('Download failed. Check console for details.');
-    } finally {
-      setDownloading(false);
+    if (updatedTags.length === 0) {
+      setFilteredDesigns(allDesigns);
+    } else {
+      const filtered = allDesigns.filter((design) =>
+        updatedTags.every((tag) => design.keywords.includes(tag))
+      );
+      setFilteredDesigns(filtered);
     }
   };
 
   return (
     <div className="home-container">
-      <h2 className="home-heading">Tattoo Generator</h2>
+      <div className="search-bar">
+        <div className="tags">
+          {selectedTags.map((tag) => (
+            <span key={tag} className="tag">
+              {tag}
+              <FaTimes onClick={() => handleRemoveTag(tag)} />
+            </span>
+          ))}
+        </div>
 
-      <div className="form-group">
         <input
           type="text"
-          placeholder="Describe your tattoo idea..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={keywordInput}
+          onChange={handleInputChange}
+          placeholder="Search tattoo keywords..."
         />
+        <FaSearch className="search-icon" />
 
-        <div className="form-options">
-          <button
-            className="reference-btn"
-            onClick={() => setOpenRefrenceImages(true)}
-          >
-            <span className="btn-text">Reference Images</span>
-          </button>
-
-          <div className="option-selector">
-            <OptionSelector selected={quality} onChange={setQuality} />
-          </div>
-
-          <button className="btn-generate" onClick={handleGenerate} disabled={loading || downloading}>
-            {loading ? <span>Generating <i className="pi pi-spin pi-spinner spinner-icon"> </i> </span> : "Generate" }
-          </button>
-        </div>
+        {suggestions.length > 0 && (
+          <ul className="suggestions">
+            {suggestions.map((s) => (
+              <li key={s} onClick={() => handleAddTag(s)}>
+                {s}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
-      {loading && (
-        <div className="generating-img-loading">
-          <Spinner />
-          <p>Generating Tattoo...</p>
-        </div>
+      {selectedTags.length > 0 && (
+        <button className="create-button">Create with AI</button>
       )}
 
-      {!loading && imageUrl && (
-        <div className="image-wrapper">
-          <img src={imageUrl} alt="Generated tattoo" />
-          {downloading ? (
-            <div
-              className="download-spinner"  >
-              <ProgressSpinner style={{ width: '25px', height: '25px' }}
-                strokeWidth="8"
-                animationDuration=".5s" />
-            </div>
-          ) : (
-            <button
-              onClick={() => handleDownload(imageUrl, `tattoo-design.png`)}
-              rel="noopener noreferrer"
-              className="download-btn"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleGenerate();
-                }
-              }}
-              style={{ marginLeft: '10px' }}
-            >
-              <FaDownload />
-            </button>
-          )}
-        </div>
-      )}
-
-      {!loading && !imageUrl && (
-        <div>
-          <p className="placeholder">No image generated yet.</p>
-          {selectedRefrenceImages.length > 0 && (
-            <p className="placeholder">
-              {selectedRefrenceImages.length} Reference Selected
-            </p>
-          )}
-        </div>
-      )}
-
-      {openRefrenceImages && (
-        <ReferenceImages
-          selectedImages={selectedRefrenceImages}
-          setSelectedImages={setSelectedRefrenceImages}
-          onClose={() => setOpenRefrenceImages(false)}
-        />
-      )}
+      <div className="image-grid">
+        {filteredDesigns.map((design) => (
+          <DesignCard key={design.id} design={design} />
+        ))}
+      </div>
     </div>
   );
 };

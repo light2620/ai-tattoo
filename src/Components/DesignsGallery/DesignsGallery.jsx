@@ -1,4 +1,4 @@
-// Components/DesignsGallery/DesignsGallery.js (Modified)
+//Components/DesignsGallery/DesignsGallery.js (Modified)
 import React from 'react';
 import DesignCard from '../DesignCard/DesignCard';
 import AiImageDisplay from '../AiImageDisplay/AiImageDisplay';
