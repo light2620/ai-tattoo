@@ -85,8 +85,8 @@
 /* --- Download Button --- */
 .card-download-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 45%;
+    left: 45%;
     background: transparent;
     color: white;
     border: none;
@@ -99,6 +99,7 @@
     justify-content: center;
     transition: color 0.2s ease;
     z-index: 12;
+    border: 2px solid rgba(255, 255, 255, 0.5);
 }
 .card-download-btn:hover {
     color: #dddddd;
