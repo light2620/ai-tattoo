@@ -35,7 +35,7 @@ const SearchBar = ({
                     <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder={selectedTags.length > 0 ? "Add more..." : "Generate Tattoo"} // Dynamic placeholder
+                        placeholder={selectedTags.length > 0 ? "Add more..." : "Search Tattoo Options"} // Dynamic placeholder
                         value={currentInput}
                         onChange={onInputChange}
                         onKeyDown={onInputKeyDown}

@@ -260,45 +260,28 @@ const handleInputChange = (e) => {
         <div className="home-container">
             <h1>TATTOO GENERATOR</h1>
 
-            <SearchBar
-                currentInput={currentInput}
-                selectedTags={selectedTags}
-                activeSuggestions={activeSuggestions}
-                showSuggestions={showSuggestions}
-                searchInputRef={searchInputRef}
-                searchAreaContainerRef={searchAreaContainerRef}
-                onInputChange={handleInputChange}
-                onInputKeyDown={handleInputKeyDown}
-                onInputFocus={handleInputFocus}
-                onRemoveTag={removeTag}
-                onSuggestionClick={handleSuggestionClick}
-                onAICreateImage={handleAICreateImage}
-            />
-
-            {/* REMOVE THIS SECTION */}
-            {/* {isAICreating && (
-                <div className="ai-generating-spinner-container">
-                    <Spinner />
-                    <p>Generating Tattoo...</p>
-                </div>
-            )} */}
-            {aiError && <p className="error-message ai-error-message">{aiError}</p>}
-
-            {(loading || isAutoFiltering) && (
+             {loading ? (
                 <div className="loading-reference-image">
                     <Spinner />
-                    <p className="loading-message">Loading designs...</p>
+        
                 </div>
-            )}
-
-            {!(loading || isAutoFiltering) && (
+            ) : (
                 <>
-                    {filteredDesigns.length === 0 && isFiltered && (
-                        <p className="no-results-message">No designs match your current filter.</p>
-                    )}
-                    {allDesigns.length === 0 && !loading && (
-                        <p className="no-results-message">No designs available.</p>
-                    )}
+                    <SearchBar
+                        currentInput={currentInput}
+                        selectedTags={selectedTags}
+                        activeSuggestions={activeSuggestions}
+                        showSuggestions={showSuggestions}
+                        searchInputRef={searchInputRef}
+                        searchAreaContainerRef={searchAreaContainerRef}
+                        onInputChange={handleInputChange}
+                        onInputKeyDown={handleInputKeyDown}
+                        onInputFocus={handleInputFocus}
+                        onRemoveTag={removeTag}
+                        onSuggestionClick={handleSuggestionClick}
+                        onAICreateImage={handleAICreateImage}
+                    />
+                    {aiError && <p className="error-message ai-error-message">{aiError}</p>}
 
                     {filteredDesigns.length > 0 && (
                         <DesignsGallery
@@ -308,13 +291,19 @@ const handleInputChange = (e) => {
                             onImageDownload={handleImageDownload}
                             onAICreateImage={handleAICreateImage}
                             isFiltered={isFiltered}
-                            aiImageUrl={aiImageUrl} // Pass the AI image URL
-                            isAiLoading={isAiLoading} // Pass the AI loading state
-                            aiError={aiError} // Pass the AI error state
+                            aiImageUrl={aiImageUrl}
+                            isAiLoading={isAiLoading}
+                            aiError={aiError}
                         />
+                    )}
+                      {filteredDesigns.length === 0 && isFiltered && (
+                        <p className="no-results-message">No designs match your current filter.</p>
                     )}
                 </>
             )}
+             {allDesigns.length === 0 && !loading && (
+                        <p className="no-results-message">No designs available.</p>
+                    )}
         </div>
     );
 };

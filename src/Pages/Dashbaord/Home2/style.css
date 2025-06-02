@@ -52,7 +52,18 @@
    flex-direction:column;
    align-items: center;
    justify-content: center;
+
+   height: 60vh;
 }
+
+.loading-reference-image .spinner{
+
+
+
+    width: 60px;
+    height: 60px;
+
+}..
 
 /* Optional: Media queries for general layout */
 @media (max-width: 768px) {

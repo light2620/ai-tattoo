@@ -26,8 +26,8 @@
 }
 
 .prompt-style-input-container:focus-within {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+    border-color: #FFCC4A;
+    box-shadow: 0 0 0 0.2remrgba(255, 204, 74, 0.45);
 }
 
 /* == TAG STYLES - Reverting to original logic slightly adjusted == */
