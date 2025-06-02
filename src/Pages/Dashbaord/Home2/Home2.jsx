@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getDesignsFromFirebase } from '../../../utils/firebaseService';
-// ProgressSpinner is not used, consider removing if not needed elsewhere.
-// import { ProgressSpinner } from 'primereact/progressspinner'; 
 import './style.css';
 import { useApi } from '../../../Api/apiProvider';
 import Spinner from '../../../utils/Spinner/Spinner';
@@ -11,38 +9,32 @@ import { setImages, setImageLoading } from '../../../Redux/ImagesSlice';
 import { getUserDetails } from '../../../Api/getUserDataApi';
 
 import SearchBar from '../../../Components/SearchBar/SearchBar';
-import GeneratedImageView from '../../../Components/GeneratedImageView/GeneratedImageView';
-import PinnedReferencesDisplay from '../../../Components/PinnedReferencesDisplay/PinnedReferencesDisplay';
 import DesignsGallery from '../../../Components/DesignsGallery/DesignsGallery';
 
 const Home = () => {
-    // ... (all existing state variables)
     const [allDesigns, setAllDesigns] = useState([]);
     const [filteredDesigns, setFilteredDesigns] = useState([]);
     const [currentInput, setCurrentInput] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
-    const [loading, setLoading] = useState(true); // For initial data loading
+    const [loading, setLoading] = useState(true);
     const [isAutoFiltering, setIsAutoFiltering] = useState(false);
     const [hoveredImageId, setHoveredImageId] = useState(null);
     const [allAvailableKeywords, setAllAvailableKeywords] = useState(new Set());
     const [activeSuggestions, setActiveSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [isDownloadingGlobal, setIsDownloadingGlobal] = useState(false);
+    const [isDownloadingGlobal, setIsDownloadingGlobal] = useState('');
     const [globalDownloadError, setGlobalDownloadError] = useState('');
+    const [aiImageUrl, setAiImageUrl] = useState(null); // State for the generated AI image URL
+    const [isAiLoading, setIsAiLoading] = useState(false); // State for loading the AI image
+    const [aiError, setAiError] = useState(''); // State for AI image generation errors
 
     const { post } = useApi();
     const dispatch = useDispatch();
 
-    const [selectedReferenceImageUrls, setSelectedReferenceImageUrls] = useState([]);
-    const [pinnedReferenceDesigns, setPinnedReferenceDesigns] = useState([]);
-    const [generatedImageUrl, setGeneratedImageUrl] = useState('');
-    const [isAICreating, setIsAICreating] = useState(false);
-    const [aiError, setAiError] = useState('');
-
+    // REMOVED: Reference image states and refs
     const searchInputRef = useRef(null);
     const searchAreaContainerRef = useRef(null);
-
-    // ... (all existing useEffect hooks and handler functions remain the same)
+    const isFiltered = selectedTags.length > 0;
 
     // --- Effect 1: Fetch initial data ---
     useEffect(() => {
@@ -87,19 +79,7 @@ const Home = () => {
         setIsAutoFiltering(false);
     }, [selectedTags, allDesigns, loading]);
 
-    // --- Effect 3: Update pinnedReferenceDesigns ---
-    useEffect(() => {
-        if (allDesigns.length > 0) {
-            const pinned = selectedReferenceImageUrls
-                .map(url => allDesigns.find(design => design.image_link === url))
-                .filter(Boolean);
-            setPinnedReferenceDesigns(pinned);
-        } else {
-            setPinnedReferenceDesigns([]);
-        }
-    }, [selectedReferenceImageUrls, allDesigns]);
-
-    // --- Effect 4: Click outside suggestions ---
+    // --- Effect 3: Click outside suggestions ---
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchAreaContainerRef.current && !searchAreaContainerRef.current.contains(event.target)) {
@@ -112,7 +92,7 @@ const Home = () => {
 
     // --- Input and Tag Management ---
 
-    const handleInputChange = (e) => {
+const handleInputChange = (e) => {
         const query = e.target.value;
         setCurrentInput(query);
         if (!query.trim()) {
@@ -121,7 +101,7 @@ const Home = () => {
             return;
         }
         const lowerQuery = query.toLowerCase();
-        const queryWords = lowerQuery.split(/\s+/).filter(w => w);
+        const queryWords = query.split(/\s+/).filter(w => w);  // Fixed whitespace split
         let potential = new Set();
         queryWords.forEach(qw => {
             const found = Array.from(allAvailableKeywords).find(ak => ak.toLowerCase() === qw);
@@ -133,6 +113,7 @@ const Home = () => {
             const lastSeg = queryWords.length > 0 ? queryWords[queryWords.length - 1] : "";
             if (lastSeg) {
                 Array.from(allAvailableKeywords).forEach(ak => {
+                      const found = Array.from(allAvailableKeywords).find(ak => ak.toLowerCase() === lastSeg);
                     if (ak.toLowerCase().startsWith(lastSeg) && !selectedTags.map(t => t.toLowerCase()).includes(ak.toLowerCase())) {
                         potential.add(ak);
                     }
@@ -187,18 +168,18 @@ const Home = () => {
         }
     };
 
-    // --- Reference Image Selection ---
-    const handleToggleReferenceImage = (imageUrl) => {
-        setSelectedReferenceImageUrls(prev => {
-            if (prev.includes(imageUrl)) {
-                return prev.filter(url => url !== imageUrl);
-            }
-            return prev.length < 2 ? [...prev, imageUrl] : prev;
-        });
-    };
-
     // --- AI Image Creation ---
     const handleAICreateImage = async () => {
+        // Check if there are filtered images
+        if (filteredDesigns.length === 0) {
+            setAiError("No filtered images available to use as reference.");
+            return;
+        }
+
+        // Get a random image from the filtered designs
+        const randomIndex = Math.floor(Math.random() * filteredDesigns.length);
+        const randomReferenceImage = filteredDesigns[randomIndex];
+        console.log("Selected random reference image:", randomReferenceImage);
         let combinedPrompt = selectedTags.join(' ');
         // If currentInput was typed but not yet converted to a tag, include it.
         // Since addTag clears currentInput, this will mostly be relevant if the user types
@@ -212,30 +193,26 @@ const Home = () => {
             return;
         }
         setAiError('');
-        setIsAICreating(true);
-        setGeneratedImageUrl('');
+        setIsAiLoading(true); // Set AI loading state to true
+        setAiImageUrl(null); // Clear any previous image URL
 
-        let referencesForAPI = [...selectedReferenceImageUrls];
-        if (referencesForAPI.length === 0 && allDesigns.length > 0) {
-            const sourceForRandom = filteredDesigns.length > 0 ? filteredDesigns : allDesigns;
-            if (sourceForRandom.length > 0) {
-                referencesForAPI = [...sourceForRandom].sort(() => 0.5 - Math.random()).slice(0, Math.min(2, sourceForRandom.length)).map(img => img.image_link);
-            }
-        }
-        console.log("AI Create - Prompt:", combinedPrompt, "References:", referencesForAPI);
+        console.log("AI Create - Prompt:", combinedPrompt, "Reference Image:", randomReferenceImage.image_link);
 
         try {
             const response = await post('https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/generateImage', {
                 prompt: combinedPrompt,
-                referenceImages: referencesForAPI,
+                referenceImages: [randomReferenceImage.image_link] // Ensure this exists!
             });
 
             if (response.data.type === 'success' && response.data.imageUrl) {
-                setGeneratedImageUrl(response.data.imageUrl);
-                setSelectedReferenceImageUrls([]); // Clear selected references after generation
+                // DO NOT CLEAR INPUT AND TAGS!
                 // Clear input and tags if they were used in the prompt
-                setCurrentInput(''); 
-                setSelectedTags([]); 
+               // setCurrentInput('');
+                //setSelectedTags([]);
+
+                console.log("AI Generation Success:", response.data.imageUrl);
+                setAiImageUrl(response.data.imageUrl); // Set the AI image URL
+                setAiError(''); // Clear any previous errors
 
                 const userData = await getUserDetails(dispatch, post, setImageLoading);
                 if (userData) {
@@ -244,21 +221,17 @@ const Home = () => {
                 }
             } else {
                 setAiError(response.data.message || 'AI generation failed or returned an unexpected response.');
+                setAiImageUrl(null);
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message || 'Error calling AI generation service.';
             console.error("AI Generation Error:", err);
             setAiError(errorMessage);
+            setAiImageUrl(null);
         } finally {
-            setIsAICreating(false);
+            setIsAiLoading(false); // Set AI loading state to false
         }
     };
-
-    const designsForGrid = filteredDesigns.filter(
-        design => !pinnedReferenceDesigns.find(pinned => pinned.id === design.id)
-    );
-
-    const canSelectMoreReferences = selectedReferenceImageUrls.length < 2;
 
     const handleImageDownload = async (imageUrl, imageName) => {
         const encodedUrl = encodeURIComponent(imageUrl);
@@ -292,8 +265,6 @@ const Home = () => {
                 selectedTags={selectedTags}
                 activeSuggestions={activeSuggestions}
                 showSuggestions={showSuggestions}
-                isAICreating={isAICreating}
-                loading={loading}
                 searchInputRef={searchInputRef}
                 searchAreaContainerRef={searchAreaContainerRef}
                 onInputChange={handleInputChange}
@@ -304,65 +275,42 @@ const Home = () => {
                 onAICreateImage={handleAICreateImage}
             />
 
-            {isAICreating && (
+            {/* REMOVE THIS SECTION */}
+            {/* {isAICreating && (
                 <div className="ai-generating-spinner-container">
                     <Spinner />
                     <p>Generating Tattoo...</p>
                 </div>
-            )}
+            )} */}
             {aiError && <p className="error-message ai-error-message">{aiError}</p>}
 
-            <GeneratedImageView
-                generatedImageUrl={generatedImageUrl}
-                isAICreating={isAICreating}
-                onImageDownload={handleImageDownload}
-                isDownloading={isDownloadingGlobal}
-                setIsDownloading={setIsDownloadingGlobal}
-                downloadError={globalDownloadError}
-                setDownloadError={setGlobalDownloadError}
-            />
-
-            {!loading && pinnedReferenceDesigns.length > 0 && (
-                <PinnedReferencesDisplay
-                    pinnedReferenceDesigns={pinnedReferenceDesigns}
-                    onToggleReferenceImage={handleToggleReferenceImage}
-                />
-            )}
-
-            {(loading || (isAutoFiltering && !isAICreating && !generatedImageUrl)) && !isAICreating &&
+            {(loading || isAutoFiltering) && (
                 <div className="loading-reference-image">
                     <Spinner />
                     <p className="loading-message">Loading designs...</p>
                 </div>
-            }
+            )}
 
-            {!(loading || isAutoFiltering || isAICreating) && (
+            {!(loading || isAutoFiltering) && (
                 <>
-                    {allDesigns.length > 0 && selectedReferenceImageUrls.length === 0 && pinnedReferenceDesigns.length === 0 && !generatedImageUrl && (
-                        <p className="reference-info">Click on an image to select it as a reference for AI creation (max 2).</p>
+                    {filteredDesigns.length === 0 && isFiltered && (
+                        <p className="no-results-message">No designs match your current filter.</p>
                     )}
-                    {designsForGrid.length === 0 && (selectedTags.length > 0 || currentInput.trim() !== '') && !generatedImageUrl && (
-                        <p className="no-results-message">No further designs match your current filter.</p>
-                    )}
-                    {designsForGrid.length === 0 && selectedTags.length === 0 && currentInput.trim() === '' && allDesigns.length > 0 && pinnedReferenceDesigns.length === allDesigns.length && !generatedImageUrl && (
-                        <p className="no-results-message">All available designs are selected as references. Deselect or search to see more.</p>
-                    )}
-                    {designsForGrid.length === 0 && selectedTags.length === 0 && currentInput.trim() === '' && allDesigns.length > 0 && pinnedReferenceDesigns.length < allDesigns.length && pinnedReferenceDesigns.length > 0 && !generatedImageUrl &&(
-                        <p className="no-results-message">All matching designs are shown above as pinned. Deselect or search to see more here.</p>
-                    )}
-                    {allDesigns.length === 0 && !loading && !generatedImageUrl &&(
+                    {allDesigns.length === 0 && !loading && (
                         <p className="no-results-message">No designs available.</p>
                     )}
 
-                    {designsForGrid.length > 0 && !generatedImageUrl && (
+                    {filteredDesigns.length > 0 && (
                         <DesignsGallery
-                            designs={designsForGrid}
-                            selectedReferenceImageUrls={selectedReferenceImageUrls}
+                            designs={filteredDesigns}
                             hoveredImageId={hoveredImageId}
-                            onToggleReferenceImage={handleToggleReferenceImage}
                             onSetHoveredImageId={setHoveredImageId}
-                            canSelectMoreReferences={canSelectMoreReferences}
                             onImageDownload={handleImageDownload}
+                            onAICreateImage={handleAICreateImage}
+                            isFiltered={isFiltered}
+                            aiImageUrl={aiImageUrl} // Pass the AI image URL
+                            isAiLoading={isAiLoading} // Pass the AI loading state
+                            aiError={aiError} // Pass the AI error state
                         />
                     )}
                 </>

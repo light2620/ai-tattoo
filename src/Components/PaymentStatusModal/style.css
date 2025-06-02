@@ -1,0 +1,79 @@
+.payment-status-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); /* Slightly darker overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050; /* Ensure it's above other elements */
+  padding: 15px;
+}
+
+.payment-status-modal-content {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 12px; /* More rounded corners */
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 400px; /* Max width for the modal */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-icon-container {
+ 
+}
+
+/* Spinner specific styling if it's not already centered or sized appropriately */
+.payment-status-modal-content .spinner-container { /* If your Spinner has a container */
+  margin-bottom: 20px;
+}
+
+.status-icon {
+  font-size: 48px; /* Larger icon */
+  margin-bottom: 15px;
+}
+
+.status-icon.success {
+  color: #28a745; /* Green for success */
+}
+
+.status-icon.failure {
+  color: #dc3545; /* Red for failure */
+}
+
+.modal-plan-name {
+  font-size: 1.4em;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.modal-message {
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Optional: Add animations */
+.payment-status-modal-content.success .status-icon.success,
+.payment-status-modal-content.failure .status-icon.failure {
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

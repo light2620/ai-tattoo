@@ -49,13 +49,6 @@ const SearchBar = ({
                     />
                 </div>
             </div>
-            <button
-                onClick={onAICreateImage}
-                className="ai-create-button-inline"
-                disabled={isAICreating || loading || isPromptEmpty} // <--- MODIFIED THIS LINE
-            >
-                {isAICreating ? 'Creating...' : <><FiZap size={16} /> Create with AI</>}
-            </button>
         </div>
     );
 };

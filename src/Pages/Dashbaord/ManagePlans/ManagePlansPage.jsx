@@ -1,28 +1,38 @@
 // src/Pages/Dashbaord/ManagePlans/ManagePlansPage.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useApi } from '../../../Api/apiProvider';
-import SlimPlanCard from '../../../Components/PlanCard/PlanCard'; // Renamed for clarity
+import SlimPlanCard from '../../../Components/PlanCard/PlanCard';
 import Spinner from '../../../utils/Spinner/Spinner';
 import './style.css';
 import toast from 'react-hot-toast';
 import { useUser } from '../../../Context/userContext';
-import { FaCheckCircle, FaExclamationCircle, FaGift, FaRedo, FaTimesCircle } from 'react-icons/fa'; // Example icons
+import { FaCheckCircle, FaExclamationCircle, FaGift, FaRedo } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { setCredits } from '../../../Redux/creditSlice';
+import PaymentStatusModal from '../../../Components/PaymentStatusModal/PaymentStatusModal';
 
 const ManagePlansPage = () => {
-  const { get } = useApi();
-  const { user } = useUser();
+  const { get, post } = useApi();
+  const { user, fetchUserData } = useUser();
+  const dispatch = useDispatch();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPlanId, setCurrentPlanId] = useState(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentModalMessage, setPaymentModalMessage] = useState('');
+  const [paymentModalStatus, setPaymentModalStatus] = useState('loading');
+  const paymentCheckIntervalRef = useRef(null);
+  const selectedPlanRef = useRef(null);
+  const CHECKING_PAYMENT_BASE_MESSAGE = "Payment Processing....";
 
-  const [currentPlanId, setCurrentPlanId] = useState("HP8Ca2LRPpk9UptgCygT"); // Static for example
-  // useEffect(() => {
-  //   if (user && user.subscription && user.subscription.planId) {
-  //     setCurrentPlanId(user.subscription.planId);
-  //   } else {
-  //     setCurrentPlanId(null);
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user && user.subscription && user.subscription.planId) {
+      setCurrentPlanId(user.subscription.planId);
+    } else {
+      setCurrentPlanId(null);
+    }
+  }, [user]);
 
   const currentPlanDetails = plans.find(p => p.id === currentPlanId);
   const availablePlans = plans.filter(p => p.id !== currentPlanId);
@@ -49,24 +59,103 @@ const ManagePlansPage = () => {
     fetchPlansData();
   }, [get]);
 
+  const stopPaymentCheck = useCallback(() => {
+    if (paymentCheckIntervalRef.current) {
+      clearInterval(paymentCheckIntervalRef.current);
+      paymentCheckIntervalRef.current = null;
+    }
+  }, []);
+
+  const checkPaymentStatus = useCallback(async () => {
+    if (!selectedPlanRef.current) {
+      console.error("No selected plan to check payment for. Stopping check.");
+      stopPaymentCheck();
+      setIsPaymentModalOpen(false);
+      return;
+    }
+
+    try {
+      const response = await post('https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/checkPaymentStatus');
+      console.log("Payment status API response:", response);
+
+      if (response.data && response.data.hasNewPayment && response.data.newPayments.length > 0) {
+        const payment = response.data.newPayments[0];
+
+        if (payment.payment_status === 'succeeded') {
+          stopPaymentCheck();
+          setPaymentModalStatus('success');
+          setPaymentModalMessage(`Your subscription is now active!`);
+          toast.success(`Successfully subscribed to ${selectedPlanRef.current.planName}!`);
+
+          dispatch(setCredits(selectedPlanRef.current.creditScore));
+          if (fetchUserData) {
+            await fetchUserData();
+          } else {
+            setCurrentPlanId(selectedPlanRef.current.id);
+          }
+
+          setTimeout(() => {
+            setIsPaymentModalOpen(false);
+            setPaymentModalStatus('loading');
+          }, 3000);
+        } else if (payment.payment_status === 'failed' || payment.payment_status === 'canceled') {
+          stopPaymentCheck();
+          setPaymentModalStatus('failure');
+          setPaymentModalMessage(`Payment ${payment.payment_status}. Please try again or contact support.`);
+          toast.error(`Payment ${payment.payment_status}. Please try again.`);
+
+          setTimeout(() => {
+            setIsPaymentModalOpen(false);
+            setPaymentModalStatus('loading');
+          }, 4000);
+        }
+      }
+    } catch (err) {
+      console.error("Error calling checkPaymentStatus API:", err);
+    }
+  }, [post, stopPaymentCheck, dispatch, fetchUserData]);
+
   const handlePurchasePlan = (plan) => {
-    
-     window.open("https://app.cercus.app/v2/preview/2GKjR6WbRpwQ8SmMzvLe", '_blank');
-    // if (plan.purchaseUrl) {
-    //   window.open(plan.purchaseUrl, '_blank');
-    // } else {
-    //   toast.error("Purchase URL not available.");
-    // }
+    if (!user || !user.displayName || !user.email) {
+      toast.error("User details not available. Please log in again.");
+      return;
+    }
+    if (plan.purchaseUrl) {
+      selectedPlanRef.current = plan;
+      setPaymentModalStatus('loading');
+      setPaymentModalMessage(`${CHECKING_PAYMENT_BASE_MESSAGE}`);
+      setIsPaymentModalOpen(true);
+
+      const paymentWindow = window.open(`${plan.purchaseUrl}?full_name=${encodeURIComponent(user.displayName)}&email=${encodeURIComponent(user.email)}`, '_blank');
+
+      if (paymentWindow) {
+        stopPaymentCheck();
+        checkPaymentStatus();
+        paymentCheckIntervalRef.current = setInterval(checkPaymentStatus, 3000);
+      } else {
+        setIsPaymentModalOpen(false);
+        toast.error("Could not open payment window. Please ensure pop-ups are not blocked.");
+        selectedPlanRef.current = null;
+      }
+    } else {
+      toast.error("Purchase URL not available for this plan.");
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      stopPaymentCheck();
+    };
+  }, [stopPaymentCheck]);
 
   const formatDate = (timestamp) => {
     if (!timestamp || !timestamp._seconds) return 'N/A';
     return new Date(timestamp._seconds * 1000).toLocaleDateString();
   };
 
-  if (loading) {
+  if (loading && plans.length === 0) {
     return (
-      <div className="manage-plans-page-container is-loading">
+      <div className="manage-plans-page-container loading">
         <Spinner />
       </div>
     );
@@ -74,54 +163,49 @@ const ManagePlansPage = () => {
 
   return (
     <div className="manage-plans-page-container">
-      <header className="manage-plans-header">
-        <h1>Manage Your Subscription</h1>
-        <p>Review your current plan or explore other options available to you.</p>
+      <PaymentStatusModal
+        isOpen={isPaymentModalOpen}
+        status={paymentModalStatus}
+        message={paymentModalMessage}
+        planName={selectedPlanRef.current?.planName}
+      />
+
+      <header className="page-header">
+        <h1>Manage Your Plan</h1>
+        <p>Review or change your current subscription.</p>
       </header>
 
-      <section className="current-plan-info-section">
-        <h2>Current Subscription Details</h2>
+      <section className="current-plan-section">
+        <h2>Current Plan</h2>
         {error && (
-            <div className="plan-message error">
-                <FaExclamationCircle /> {error} <button onClick={() => window.location.reload()} className="retry-button"><FaRedo/> Retry</button>
-            </div>
+          <div className="error-message">
+            <FaExclamationCircle /> {error}
+            <button onClick={() => window.location.reload()} className="retry-button">
+              <FaRedo /> Retry
+            </button>
+          </div>
         )}
         {!error && currentPlanDetails && (
-          <div className="current-plan-details">
-            <div className="detail-item">
-              <span className="detail-label">Plan Name:</span>
-              <span className="detail-value plan-name-highlight">{currentPlanDetails.planName} <FaCheckCircle className="success-icon" /></span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Monthly Cost:</span>
-              <span className="detail-value">${currentPlanDetails.amount}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Credits:</span>
-              <span className="detail-value">{currentPlanDetails.creditScore} per month</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Activated On:</span>
-              <span className="detail-value">{formatDate(currentPlanDetails.createdAt)}</span>
-            </div>
-            {/* Add more relevant details like next billing date, status, etc. */}
-            <div className="plan-actions">
-                {/* <button className="action-button cancel-plan">Cancel Subscription</button> */}
-                {/* <button className="action-button view-billing">View Billing History</button> */}
+          <div className="plan-details">
+            <div className="plan-info">
+              <span className="plan-name">{currentPlanDetails.planName} <FaCheckCircle className="success-icon" /></span>
+              <span>${currentPlanDetails.amount} / month</span>
+              <span>{currentPlanDetails.creditScore} Credits</span>
+              <span>Activated: {formatDate(currentPlanDetails.createdAt)}</span>
             </div>
           </div>
         )}
         {!error && !currentPlanDetails && !loading && (
-          <div className="plan-message info">
-            <FaGift /> You currently do not have an active subscription. Choose a plan below to get started!
+          <div className="no-plan-message">
+            <FaGift /> No active subscription.
           </div>
         )}
       </section>
 
       {availablePlans.length > 0 && (
         <section className="available-plans-section">
-          <h2>Explore Other Plans</h2>
-          <div className="slim-plans-grid">
+          <h2>Available Plans</h2>
+          <div className="plan-grid">
             {availablePlans.map((plan) => (
               <SlimPlanCard
                 key={plan.id}
@@ -133,10 +217,8 @@ const ManagePlansPage = () => {
         </section>
       )}
 
-      {availablePlans.length === 0 && !loading && !error && (
-        <section className="no-other-plans-section">
-          <p>There are no other plans available at this time.</p>
-        </section>
+      {availablePlans.length === 0 && !loading && !error && currentPlanDetails && (
+        <div className="no-plans-available">No other plans available at this time.</div>
       )}
     </div>
   );

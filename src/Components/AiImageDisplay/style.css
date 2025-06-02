@@ -1,0 +1,105 @@
+/* Components/AiImageDisplay/style.css */
+
+/* Container with fixed aspect ratio */
+.image-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Image styling */
+.tattoo-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay container for buttons */
+.button-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.button-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.btn-download {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 0;
+}
+
+.btn-download:hover {
+  transform: scale(1.1);
+}
+
+.btn-preview {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+}
+
+.btn-preview:hover {
+  transform: scale(1.1);
+}
+
+/* Loading state */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fafafa;
+}
+
+.loading-overlay {
+  text-align: center;
+}
+
+.loading-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Error state */
+.error-message {
+  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+/*Responsiveness */
+@media (max-width: 768px) {
+ .image-box{
+   height: 300px;
+ }
+}
