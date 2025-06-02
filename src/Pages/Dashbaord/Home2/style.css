@@ -58,14 +58,12 @@
 
 .loading-reference-image .spinner{
 
+    width: 40px;
+    height: 40px;
 
-
-    width: 60px;
-    height: 60px;
-
-}..
+}
 
 /* Optional: Media queries for general layout */
 @media (max-width: 768px) {
-    .home-container h1 { font-size: 1.5em; }
+    .home-container h1 { font-size: 1.5rem; }
 }
