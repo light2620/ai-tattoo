@@ -30,7 +30,7 @@ const AiImageDisplay = ({ imageUrl, isLoading, error, onImageDownload }) => {
         return <div className="image-box error-message">{error}</div>;
     }
 
-    if (true) {
+    if (isLoading) {
         return (
             <div className="image-box loading-state">
                 <div className="loading-overlay">
