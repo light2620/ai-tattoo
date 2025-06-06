@@ -102,7 +102,7 @@ export const UserProvider = ({ children }) => {
           setRole(userData.role);
           setIsLoggedIn(true);
           dispatch(setImages(userData.generateImages || []));
-          
+          dispatch(setCredits(userData.creditScore || 0));
           setCredentials({ email: "", password: "" });
           toast.success("Login successful");
           
