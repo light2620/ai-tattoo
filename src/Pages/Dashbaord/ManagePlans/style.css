@@ -2,11 +2,11 @@
 
 /* General Container */
 .manage-plans-page-container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 20px;
     with: 100%;
+    padding: 0 20px;
     margin: 0 auto;
     color: #333;
+
 }
 
 /* Loading State */
@@ -125,6 +125,11 @@
     color: #777;
     font-style: italic;
     text-align: center;
+}
+
+.plan-loading, .plans-loading {
+    display: flex;
+    min-height: 100px; /* Adjust as needed to fit the spinner */
 }
 
 /*  Responsiveness  */

@@ -129,15 +129,8 @@ const GenratedImages = () => {
           return (
             <div key={img.id || `gen-img-orig-${originalIndex}`} className="image-card">
               {currentImageState === 'loading' && (
-                <div className="image-status-overlay image-loading-placeholder">
-                  <ProgressSpinner
-                    style={{ width: '50px', height: '50px' }}
-                    strokeWidth="5"
-                    fill="transparent"
-                    animationDuration="1s"
-                  />
-                </div>
-              )}
+  <div className="image-skeleton-placeholder" />
+)}
 
               {currentImageState === 'error' && (
                 <div className="image-status-overlay image-error-placeholder">
@@ -147,13 +140,14 @@ const GenratedImages = () => {
 
               {img && img.url && (
                 <img
-                  src={img.url}
-                  alt={img.altText || `Generated Design ${originalImages.length - originalIndex}`} // Display user-friendly number
-                  className="image"
-                  style={{ visibility: currentImageState === 'loaded' ? 'visible' : 'hidden' }}
-                  onLoad={() => handleImageLoaded(originalIndex)}
-                  onError={() => handleImageError(originalIndex, img.url)}
-                />
+  src={img.url}
+  alt={img.altText || `Generated Design ${originalImages.length - originalIndex}`}
+  className="image"
+  style={{ visibility: currentImageState === 'loaded' ? 'visible' : 'hidden' }}
+  onLoad={() => handleImageLoaded(originalIndex)}
+  onError={() => handleImageError(originalIndex, img.url)}
+  loading="lazy" // ✅ Native lazy loading
+/>
               )}
 
               {img && img.url && (

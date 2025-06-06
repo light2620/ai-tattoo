@@ -16,7 +16,7 @@ const ManagePlansPage = () => {
   const { user, fetchUserData } = useUser();
   const dispatch = useDispatch();
   const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -35,7 +35,6 @@ const ManagePlansPage = () => {
   }, [user]);
 
   const currentPlanDetails = plans.find(p => p.id === currentPlanId);
-  const availablePlans = plans.filter(p => p.id !== currentPlanId);
 
   useEffect(() => {
     const fetchPlansData = async () => {
@@ -43,6 +42,7 @@ const ManagePlansPage = () => {
       setError(null);
       try {
         const response = await get('https://us-central1-tattoo-shop-printing-dev.cloudfunctions.net/getPlans');
+
         if (response.data && response.data.plans) {
           setPlans(response.data.plans);
         } else {
@@ -153,14 +153,6 @@ const ManagePlansPage = () => {
     return new Date(timestamp._seconds * 1000).toLocaleDateString();
   };
 
-  if (loading && plans.length === 0) {
-    return (
-      <div className="manage-plans-page-container loading">
-        <Spinner />
-      </div>
-    );
-  }
-
   return (
     <div className="manage-plans-page-container">
       <PaymentStatusModal
@@ -177,49 +169,65 @@ const ManagePlansPage = () => {
 
       <section className="current-plan-section">
         <h2>Current Plan</h2>
-        {error && (
-          <div className="error-message">
-            <FaExclamationCircle /> {error}
-            <button onClick={() => window.location.reload()} className="retry-button">
-              <FaRedo /> Retry
-            </button>
+        {loading ? (
+          <div className="plan-loading">
+            <Spinner />
           </div>
-        )}
-        {!error && currentPlanDetails && (
-          <div className="plan-details">
-            <div className="plan-info">
-              <span className="plan-name">{currentPlanDetails.planName} <FaCheckCircle className="success-icon" /></span>
-              <span>${currentPlanDetails.amount} / month</span>
-              <span>{currentPlanDetails.creditScore} Credits</span>
-              <span>Activated: {formatDate(currentPlanDetails.createdAt)}</span>
-            </div>
-          </div>
-        )}
-        {!error && !currentPlanDetails && !loading && (
-          <div className="no-plan-message">
-            <FaGift /> No active subscription.
-          </div>
+        ) : (
+          <>
+            {error && (
+              <div className="error-message">
+                <FaExclamationCircle /> {error}
+                <button onClick={() => window.location.reload()} className="retry-button">
+                  <FaRedo /> Retry
+                </button>
+              </div>
+            )}
+            {!error && currentPlanDetails && (
+              <div className="plan-details">
+                <div className="plan-info">
+                  <span className="plan-name">{currentPlanDetails.planName} <FaCheckCircle className="success-icon" /></span>
+                  <span>${currentPlanDetails.amount} / month</span>
+                  <span>{currentPlanDetails.creditScore} Credits</span>
+                  <span>Activated: {formatDate(currentPlanDetails.createdAt)}</span>
+                </div>
+              </div>
+            )}
+            {!error && !currentPlanDetails && (
+              <div className="no-plan-message">
+                <FaGift /> No active subscription.
+              </div>
+            )}
+          </>
         )}
       </section>
 
-      {availablePlans.length > 0 && (
-        <section className="available-plans-section">
-          <h2>Available Plans</h2>
-          <div className="plan-grid">
-            {availablePlans.map((plan) => (
-              <SlimPlanCard
-                key={plan.id}
-                plan={plan}
-                onSelect={() => handlePurchasePlan(plan)}
-              />
-            ))}
+      <section className="available-plans-section">
+        <h2>Available Plans</h2>
+        {loading ? (
+          <div className="plans-loading">
+            <Spinner />
           </div>
-        </section>
-      )}
+        ) : (
+          <>
+            {plans.length > 0 && (
+              <div className="plan-grid">
+                {plans.map((plan) => (
+                  <SlimPlanCard
+                    key={plan.id}
+                    plan={plan}
+                    onSelect={() => handlePurchasePlan(plan)}
+                  />
+                ))}
+              </div>
+            )}
 
-      {availablePlans.length === 0 && !loading && !error && currentPlanDetails && (
-        <div className="no-plans-available">No other plans available at this time.</div>
-      )}
+            {plans.length === 0 && !loading && !error && currentPlanDetails && (
+              <div className="no-plans-available">No other plans available at this time.</div>
+            )}
+          </>
+        )}
+      </section>
     </div>
   );
 };
