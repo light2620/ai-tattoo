@@ -25,7 +25,8 @@ const User = lazy(() => import("../Pages/Dashbaord/Users/User"));
 const ProfilePage = lazy(() => import("../Pages/Dashbaord/ProfilePage/Profile"));
 const Plans = lazy(() => import('../Pages/Dashbaord/Plans/Plans'));
 const CreateNewUserPage = lazy(() => import('../Components/AddNewUser/CreateNewUserPage')); 
-const ManagePlansPage = lazy(() => import('../Pages/Dashbaord/ManagePlans/ManagePlansPage'))
+const ManagePlansPage = lazy(() => import('../Pages/Dashbaord/ManagePlans/ManagePlansPage'));
+const SingleUserDetails = lazy(() => import("../Pages/Dashbaord/SingleUser/SingleUser.jsx"));
 
 const NotFound = lazy(() => import("../Pages/NotFound/NotFound"));
 
@@ -85,6 +86,7 @@ export const router = createBrowserRouter([
                   { path: "users", element: <User /> },
                   { path: "users/new", element: <CreateNewUserPage /> },
                   { path: "plans", element: <Plans /> }, 
+                  { path:"users/userDetail/:uid",element: <SingleUserDetails />}
                 ]
               }
             ]

@@ -4,11 +4,13 @@ import "./style.css";
 import { useApi } from "../../../Api/apiProvider";
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import { IoMdAdd } from "react-icons/io";
 import { FiSearch, FiEdit3 } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { IoIosArrowForward } from "react-icons/io";
 
 import Spinner from "../../../utils/Spinner/Spinner";
 import EditUserModal from "../../../Components/Modals/EditAndDeleteUserModals/EditUserModal";
@@ -53,7 +55,6 @@ const User = () => {
         setOriginalUsers([]);
       }
     } catch (err) {
-      console.error("Error fetching user list:", err);
       toast.error("An error occurred while fetching users.");
       setOriginalUsers([]);
     } finally {
@@ -76,7 +77,6 @@ const User = () => {
         toast.error(response.data.message || "Failed to delete user.");
       }
     } catch (err) {
-      console.error("Error deleting user:", err);
       toast.error("An error occurred while deleting the user.");
     } finally {
       setActionLoading(false);
@@ -229,7 +229,7 @@ const User = () => {
                 currentUsersToDisplay.map((user) => ( // Now mapping over the paginated subset of processed (filtered & reversed) users
                   <tr key={user.uid}>
                     <td>
-                      <div className="user-name">{user.displayName || "N/A"}</div>
+                      <Link to={`/users/userDetail/${user.uid}`} className="user-name">{user.displayName || "N/A"}</Link>
                       <div className="user-email">{user.email || "N/A"}</div>
                     </td>
                     <td>{user.phoneNumber || "N/A"}</td>
@@ -246,6 +246,7 @@ const User = () => {
                       </span>
                     </td>
                     <td className="actions-cell">
+                        
                       <button
                         className="action-button edit-action-icon"
                         onClick={() => handleEditModalOpen(user)}
@@ -260,6 +261,13 @@ const User = () => {
                       >
                         <MdDelete size={18} />
                       </button>
+                      <Link
+                          to={`/users/userDetail/${user.uid}`}
+                          className="action-button info-action-icon"
+                          aria-label="View user details"
+                        >
+                            <IoIosArrowForward size={18} />
+                        </Link>
                     </td>
                   </tr>
                 ))
